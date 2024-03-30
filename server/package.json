@@ -1,0 +1,19 @@
+{
+  "name": "ya-hack",
+  "version": "1.0.0",
+  "description": "Сервер мессенджера Kilogram",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-session": "1.18.0",
+    "nodemon": "^3.1.0",
+    "passport": "0.7.0",
+    "passport-github": "1.1.0"
+  }
+}

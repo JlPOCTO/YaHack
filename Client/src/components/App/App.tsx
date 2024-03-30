@@ -9,6 +9,10 @@ function App() {
   return (
 
     <div className="App">
+        <button>
+            <a href="/auth/github">зарегистрируйтесь через GitHub</a>.
+        </button>
+
         <SideBar/>
         <Body/>
     </div>
