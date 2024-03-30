@@ -8,9 +8,8 @@ const { myPassport } = require('./myPassport');
 
 const app = express();
 
-// TODO Вьюшки
-app.use(express.static('../Client/build/static'));
 
+app.use(express.static('../Client/build/static'));
 
 // app.set('view engine', 'hbs');
 // app.set('views', './src/views');

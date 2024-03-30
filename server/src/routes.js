@@ -5,16 +5,12 @@ const {generateHTML} = require("./generateHTML");
 
 const routers = express.Router();
 
-
-
-
-// TODO Отрисовка главной страницы
-// res.render('home', { user: req.user })
+// TODO Доставание названий статических элементов
 routers.get(
     '/',
     (req, res) => {
         res.set('Content-Type', 'text/html');
-        res.send(Buffer.from(generateHTML()));
+        res.send(Buffer.from(generateHTML(["453.e5b00392.chunk.js", "main.a338b30a.js"], ["main.9e01f05b.css"])));
     }
 );
 
@@ -23,7 +19,6 @@ routers.get(
     passport.authenticate('github')
 );
 
-// Маршрут, на который пользователь будет возвращён после авторизации на GitHub
 routers.get(
     '/auth/github/callback',
     passport.authenticate('github', { failureRedirect: '/' }),
@@ -39,7 +34,7 @@ routers.get(
 //     (req, res) => res.render('user', { user: req.user })
 // );
 
-// TODO Выход пользователя
+// TODO Выход из профиля
 // routers.get(
 //     '/logout',
 //     (req, res) => {
