@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from '../../logo.svg';
 import '../../css/SideBar.css';
 import SideBarBody from "../SideBarBody/SideBarBody";
 import SideBarHeader from "../SideBarHeader/SideBarHeader";
