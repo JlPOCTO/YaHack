@@ -1,11 +1,12 @@
 import React from 'react';
 import '../../css/BodyMain.css';
+// import picture from '../../picture1.jpg';
 
 
 function BodyMain() {
   return (
     <div className="body-main">
-        Body_Main
+        {/* <img src={picture} className="Settings" alt="settings" /> */}
     </div>
   );
 }

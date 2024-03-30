@@ -1,10 +1,9 @@
 .SideBarHeader {
     text-align: center;
     height: 60px;
-    /* background-color : yellow; */
   }
     
-  .HeaderMenu {
+  .BodyMenu {
     align-self: stretch;
     display: flex;
     justify-content: space-between;
@@ -14,26 +13,12 @@
     padding: 20px 20px;
     margin: 0;
   }
-  .HeaderNav {
+  .BodyNav {
     justify-content: center;
     display: flex;
     align-items: center;
     align-self: stretch;
     gap: 8px;
    }
-   input {
-    border-radius: 7px;
-    border: 1px solid rgb(52, 73, 94);
-    background: #FFF;
-    height: 30px;
-    padding: 0px 16px;
-    justify-content: center;
-    align-items: center;
-    align-self: stretch;
-    overflow: hidden;
-    display: inline-flex;
-    outline: none;
-   }
-
 
   

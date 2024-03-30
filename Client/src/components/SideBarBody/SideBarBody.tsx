@@ -1,12 +1,15 @@
 import React from 'react';
-import '../../css/App.css';
-
+import '../../css/SideBarBody.css';
 
 function SideBarBody() {
-  return (
-    <div className="side-bar-body">
-        Body
-    </div>
-  );
+    return (  
+        <header className='SideBarHeader'>
+        <menu className='BodyMenu'>
+            <nav className='BodyNav'>
+                
+            </nav>
+        </menu>
+    </header>
+    ); 
 }
 export default SideBarBody;
