@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const {isAuthenticatedMiddleware} = require('./middlewares/isAuthenticatedMiddleware');
-const {generateHTML} = require("./generateHTML");
+const {generateHTML} = require("./statics/generateHTML");
 
 const routers = express.Router();
 
@@ -10,7 +10,7 @@ routers.get(
     '/',
     (req, res) => {
         res.set('Content-Type', 'text/html');
-        res.send(Buffer.from(generateHTML(["453.e5b00392.chunk.js", "main.a338b30a.js"], ["main.9e01f05b.css"])));
+        res.send(Buffer.from(generateHTML()));
     }
 );
 
