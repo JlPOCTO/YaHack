@@ -11,9 +11,11 @@ server/.env
 
 # testing
 /coverage
+/server/src/test*
 
 # production
 /build
+.vs
 
 # misc
 .DS_Store
