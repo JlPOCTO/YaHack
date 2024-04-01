@@ -12,6 +12,7 @@ server/.env
 # testing
 /coverage
 /server/src/test*
+/server/src/database/DB
 
 # production
 /build
