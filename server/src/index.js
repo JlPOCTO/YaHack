@@ -8,6 +8,73 @@ const { myPassport } = require('./myPassport');
 
 const app = express();
 
+const bodyParser = require('body-parser');
+const cors = require('cors');
+
+const me = {
+    id: 1,
+    name: 'Иванов И И'
+};
+
+const students = [
+    {
+        id: 2,
+        name: 'Петров П П'
+    },
+    {
+        id: 3,
+        name: 'やめてください'
+    }
+];
+
+const studentDialogs = [1, 2]
+
+const dialogs = [
+    {
+        id: 1,
+        messages: [{ idFrom: 1, time: Date(2024, 1, 10, 10, 5, 20), message: "Hi!" },
+            { idFrom: 2, time: Date(2024, 1, 11, 12), message: "Yo" },
+            { idFrom: 1, time: Date(2024, 2, 1), message: "Ohayo" }]
+    },
+    {
+        id: 2,
+        messages: [{ idFrom: 2, time: Date(2024, 3, 1, 10, 7), message: "Here" },
+            { idFrom: 2, time: Date(2024, 3, 1, 11), message: "아니요" },
+            { idFrom: 3, time: Date(2024, 2, 1), message: "مداح" }]
+    }
+]
+
+app.use(bodyParser.json());
+app.use(cors());
+
+app.get('/dialogs', (req, res) => {
+    res.send(students);
+});
+
+app.get('/myInfo', (req, res) => {
+    res.send(me);
+});
+
+app.get('/messages', (req, res) => {
+    const dialogID = req.body.dialogID;
+    for (let dialog in dialogs) {
+        if (dialog.id == dialogID) {
+            res.send(dialog)
+            break;
+        }
+    }
+});
+
+app.post('/addMessage', (req, res) => {
+    const dialogID = req.body.dialogID;
+    for (let dialog in dialogs) {
+        if (dialog.id == dialogID) {
+            dialog.messages.push(req.body.message);
+            res.send(dialog)
+            break;
+        }
+    }
+})
 
 app.use(express.static('../Client/build/static'));
 
