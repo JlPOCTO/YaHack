@@ -18,16 +18,16 @@ const me = {
 
 const students = [
     {
-        id: 2,
+        idStudent: 2,
+        idDialog: 1,
         name: 'Петров П П'
     },
     {
-        id: 3,
+        idStudent: 3,
+        idDialog: 2,
         name: 'やめてください'
     }
 ];
-
-const studentDialogs = [1, 2]
 
 const dialogs = [
     {
