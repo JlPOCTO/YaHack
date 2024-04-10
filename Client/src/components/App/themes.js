@@ -14,10 +14,15 @@ export const darkTheme = {
 
 export const GlobalStyles = createGlobalStyle`
 
-body, .profile {
+body {
    background: ${(props) => props.theme.body};
    color: ${(props) => props.theme.text};
 }
+
+.profile {
+    background: ${(props) => props.theme.body};
+    color: ${(props) => props.theme.text};
+ }
 
 .userPhoto {
    border: ${(props) => props.theme.border};
@@ -26,5 +31,4 @@ body, .profile {
 .switchButton {
     border: ${(props) => props.theme.border};
 }
-
 `
