@@ -11,11 +11,8 @@ routers.get(
 
 routers.get(
     '/auth/github/callback',
-    passport.authenticate('github'),
+    passport.authenticate('github', {failureRedirect : '/'}),
     (req, res) => {
-        if (req.redirect === "error") {
-            res.redirect('/')
-        }
         res.redirect('/home')
     }
 );
