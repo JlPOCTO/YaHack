@@ -107,13 +107,4 @@ app.use(myPassport.initialize());
 app.use(myPassport.session());
 
 app.use(routers);
-<<<<<<< HEAD
 app.listen(3000);
-=======
-
-if (process.env.SERVER_PORT) {
-    app.listen(process.env.SERVER_PORT);
-} else {
-    app.listen(3000);
-}
->>>>>>> 307c571445b108ebe0961c2d3f5714efe09836d1
