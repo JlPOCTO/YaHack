@@ -1,33 +1,35 @@
-const db = {};
+const sqlite3 = require('sqlite3');
+const sqlite = require('sqlite');
 
-function getChats(userID) {
+//UsersDB - хранилище всех пользователей
+//Столбцы: userID (autoincrement), name, login, avatarIMGPath
 
+async function addUser(db, userName, userNickname) {
+    //TODO const IMGPath = generateIMG();
+    const IMGPath = "";
+    await db.exec(`INSERT INTO UsersDB(name, login, avatarIMGPath) VALUES(${userName}, ${userNickname}, ${IMGPath})`);
 }
 
-function addUser(userID, userNickname) {
-
+//Или не нада?..
+async function deleteUser(db, userID) {
+    await db.exec(`DELETE FROM UsersDB WHERE userID = ${userID}`);
 }
 
-function deleteUser(userID) {
-
+async function findByID(db, userID) {
+    const res = await db.get(`SELECT name, login FROM UsersDB WHERE userID = ${userID}`);
+    if (res === undefined) return "";
+    return res;
 }
 
-function findID(userID) {
-
-}
-
-function findNickname(nickname) {
-
-}
-
-function createDB() {
-
+async function findByNickname(db, nickname) {
+    const res = await db.get(`SELECT userID FROM UsersDB WHERE login = ${nickname}`);
+    if (res === undefined) return "";
+    return res;
 }
 
 module.exports = {
-    getChats,
     addUser,
     deleteUser,
-    findID,
-    findNickname,
+    findByID,
+    findByNickname,
 }

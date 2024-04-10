@@ -1,6 +1,7 @@
 const fs = require('fs');
 const sqlite3 = require('sqlite3');
 const sqlite = require('sqlite');
+
 async function checkDB(dbPath, dbName, params) {
     console.log("creating");
     const db = await sqlite.open({

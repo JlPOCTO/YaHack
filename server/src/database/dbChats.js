@@ -1,49 +1,60 @@
 const sqlite3 = require('sqlite3');
 const sqlite = require('sqlite');
 
-async function getMessages(db, userID1, userID2) {
-	const ID1 = Math.min(userID1, userID2);
-	const ID2 = Math.max(userID1, userID2);
-
-	const res = await db.get(`SELECT messages FROM MessageDB WHERE id1 = ${ID1} AND id2 = ${ID2}`);
+//MessageDB - хранилище всех сообщений
+//Столбцы: chatID, fromID, message, time
+//ChatsUsersDB - хранилище пар пользователь-чат
+//Столбцы: userID, chatID
+//ChatsDB - хранилище чатов
+//Столбцы: chatID (autoincrement), name
+async function getMessages(db, chatID) {
+	const res = await db.get(`SELECT message, time, fromID FROM MessageDB WHERE chatID = ${chatID} ORDER BY time`);
 	if (res === undefined) return [];
-	return res['messages'].split("$&%");
+	return res;
 }
 
-async function addChat(db, userID1, userID2) {
-	const ID1 = Math.min(userID1, userID2);
-	const ID2 = Math.max(userID1, userID2);
-
-	const res = await db.get(`SELECT * FROM MessageDB WHERE id1 = ${ID1} AND id2 = ${ID2}`);
-	if (res === undefined) {
-		await db.exec(`INSERT INTO MessageDB VALUES (${ID1}, ${ID2},"")`);
-	}
-}
-
-async function addMessage(db, userIDFrom, userIDTo, message) {
-	const ID1 = Math.min(userIDFrom, userIDTo);
-	const ID2 = Math.max(userIDFrom, userIDTo);
-
-	await addChat(db, userIDFrom, userIDTo);
-
-	const row = await db.get(`SELECT messages FROM MessageDB WHERE id1 = ${ID1} AND id2 = ${ID2}`,
-		(err, row) => {
-			if (err) {
-				return "ERROR";
-			}
-			return row;
-		});
-	if (row != "ERROR") {
-		if (row['messages'] == "") {
-			await db.exec(`UPDATE MessageDB SET messages = "${userIDFrom}:${message}" WHERE id1 = ${ID1} AND id2 = ${ID2}`);
-		} else {
-			await db.exec(`UPDATE MessageDB SET messages = "${row['messages']}$&%${userIDFrom}:${message}"
-			WHERE id1 = ${ID1} AND id2 = ${ID2}`);
+async function addChat(db, users, name) {
+	if (name === undefined) {
+		for (let user in users) {
+			name += String(user) + " ";
 		}
 	}
+	let newID = -1;
+	db.serialize(function () {
+		db.run('BEGIN TRANSACTION');
+		db.run(`INSERT INTO ChatsDB(name) VALUES (${name})`, function (err) {
+			if (err) {
+				db.run('ROLLBACK');
+			} else {
+				newID = this.lastID; 
+				db.run('COMMIT');
+			}
+		});
+	});
+	if (newID != -1) {
+		for (let user in users) {
+			db.exec(`INSERT INTO ChatsUsersDB(userID, chatID) VALUES(${user}, ${newID})`);
+		}
+	}
+	return newID;
+}
+async function getChats(db, userID) {
+	const res = await db.get(`SELECT chats.chatID, chats.name
+                              FROM ChatsUsersDB cuDB
+                              JOIN ChatsDB chats ON cuDB.chatID = chats.chatID
+                              WHERE cuDB.userID = ${userID}`);
+	if (res === undefined) return [];
+	return res;
+}
+
+
+async function addMessage(db, chatID, fromID, message, time) {
+	await db.exec(`INSERT INTO MessageDB(message, time, fromID, chatID) VALUES (${message}, ${time}, ${fromID}, ${chatID})`;
 }
 
 module.exports = {
+	getChats,
 	getMessages,
+	addChat,
 	addMessage,
 }
