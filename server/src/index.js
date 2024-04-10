@@ -1,12 +1,11 @@
-// const cookieParser = require('cookie-parser');
 const express = require('express');
 const expressSession = require('express-session');
+const cookieParser = require("cookie-parser");
+
 require('dotenv').config()
 
 const { routers } = require('./routes');
 const { myPassport } = require('./myPassport');
-
-const app = express();
 
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -75,15 +74,9 @@ app.post('/addMessage', (req, res) => {
         }
     }
 })
+const app = express()
 
 app.use(express.static('../Client/build/static'));
-
-// app.set('view engine', 'hbs');
-// app.set('views', './src/views');
-
-// TODO Понять зачем и как
-// // Подключаем библиотеку для парсинга кук, чтобы получить доступ к сессионной куке
-// app.use(cookieParser());
 
 // Подключаем библиотеку, чтобы управлять сессиями аутентифицированных пользователей.
 app.use(expressSession({
@@ -102,9 +95,7 @@ app.use(expressSession({
     // Если есть, то считаем пользователя уже аутентифицированным.
 
     secret: process.env.EXPRESS_SESSION_SECRET,
-    // TODO Понять что делать с сессиями
     resave: false,
-    // TODO Понять что делать с сессиями
     saveUninitialized: false,
     // TODO Понять что делать с сессиями. Что делать с хранилищем
     // store: new require('connect-mongo')(expressSession)(options)
@@ -116,5 +107,4 @@ app.use(myPassport.initialize());
 app.use(myPassport.session());
 
 app.use(routers);
-
 app.listen(3000);

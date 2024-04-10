@@ -1,6 +1,6 @@
 const fetching = require("./fetchNames")
 
-function generateHTML() {
+function getBasePage() {
     const names = fetching.fetchNames()
     return `
 <!DOCTYPE html>
@@ -14,7 +14,6 @@ function generateHTML() {
     </head>
     <body>
         <div id="root"/> 
-        Hello
     </body>
 ${names.js.map(name => {
     return `<script src="/js/${name}">\n</script>`
@@ -22,8 +21,4 @@ ${names.js.map(name => {
 </html>`
 }
 
-// ${names.media.map(name => {
-//         return `<object data="media/${name}" type="image/svg+xml"></object>`
-// }).join("\n")}
-
-module.exports = {generateHTML}
+module.exports = {getBasePage}
