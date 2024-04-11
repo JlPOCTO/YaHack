@@ -8,8 +8,6 @@ const githubStrategy = new passportGithub.Strategy(
     },
     (accessToken, refreshToken, profile, done) => {
         // TODO Добавление в базу данных или обновление
-        console.log("Authorization")
-
         done(null, profile)
 
         // TODO Возможно отмена: done(null, false)

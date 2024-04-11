@@ -80,6 +80,7 @@ app.post('/addMessage', (req, res) => {
 
 
 app.use(express.static('../Client/build/static'));
+app.use(express.static('../Client/static'))
 
 app.use(expressSession({
     secret: process.env.EXPRESS_SESSION_SECRET,
