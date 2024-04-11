@@ -15,7 +15,6 @@ function App() {
 
   const handleSetTheme = () => {
     const nextTheme = theme === 'light' ? 'dark' : 'light'
-    console.log(nextTheme)
     setTheme(nextTheme)
     localStorage.setItem('theme', nextTheme)
   }
