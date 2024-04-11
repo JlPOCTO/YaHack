@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const {getBasePage} = require("./statics/getBasePage");
+const {isAuthenticatedMiddleware} = require("./middlewares/isAuthenticatedMiddleware")
 
 const routers = express.Router();
 
@@ -11,31 +12,39 @@ routers.get(
 
 routers.get(
     '/auth/github/callback',
-    passport.authenticate('github', {failureRedirect : '/'}),
+    passport.authenticate('github', {failureRedirect: '/'}),
     (req, res) => {
         res.redirect('/home')
     }
 );
 
-// TODO Выйти из профиля
-// routers.get(
-//     '/logout',
-//     (req, res) => {
-//         // Удаляем сессию пользователя из хранилища
-//         req.logout(function(err) {
-//             if (err) { return next(err); }
-//             // И отправляем на /
-//             res.redirect('/');
-//         });
-//     }
-// );
+routers.get(
+    '/logout',
+    (req, res, next) => {
+        req.logout(function (err) {
+            if (err) {
+                return next(err);
+            }
+            res.redirect('/');
+        });
+    }
+);
+
+routers.get(
+    '/',
+    (req, res) => {
+        res.set('Content-Type', 'text/html');
+        res.send(Buffer.from(getBasePage()));
+    }
+)
 
 routers.get(
     '*',
+    isAuthenticatedMiddleware,
     (req, res) => {
         res.set('Content-Type', 'text/html');
         res.send(Buffer.from(getBasePage()));
     }
 );
 
-module.exports = { routers }
+module.exports = {routers}
