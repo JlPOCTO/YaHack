@@ -14,4 +14,4 @@ const githubStrategy = new passportGithub.Strategy(
     }
 );
 
-module.exports = { githubStrategy }
+module.exports = {githubStrategy}

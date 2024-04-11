@@ -28,7 +28,7 @@ server/.env
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-Client/.idea
-Client/node_modules
-Client/build/
+client/.idea
+client/node_modules
+client/build/
 .idea
