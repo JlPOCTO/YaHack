@@ -1,5 +1,5 @@
 const myPassport = require('passport');
-const { githubStrategy } = require('./strategies/github');
+const {githubStrategy} = require('./strategies/github');
 
 myPassport.use(githubStrategy);
 
@@ -13,4 +13,4 @@ myPassport.deserializeUser((profile, done) => {
     done(null, profile);
 });
 
-module.exports = { myPassport };
+module.exports = {myPassport};

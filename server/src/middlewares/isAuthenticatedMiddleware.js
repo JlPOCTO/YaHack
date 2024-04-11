@@ -5,4 +5,4 @@ const isAuthenticatedMiddleware = (req, res, next) => {
     next();
 }
 
-module.exports = { isAuthenticatedMiddleware };
+module.exports = {isAuthenticatedMiddleware};
