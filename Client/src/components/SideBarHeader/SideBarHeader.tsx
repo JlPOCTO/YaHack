@@ -5,15 +5,15 @@ import ProfileModalWindow from "../ProfileModalWindow/ProfileModalWindow";
 function SideBarHeader() {
   return (
     <header className='SideBarHeader'>
-        <menu className='HeaderMenu'>
-            <nav className='HeaderNav'>
-                    <ProfileModalWindow/>
-                <form method='get'>
-                  <input type="text" id="search-messenger" placeholder='Search' name='searchMessage'>
-                  </input>
-                </form>
-            </nav>
-        </menu>
+      <menu className='HeaderMenu'>
+        <nav className='HeaderNav'>
+          <ProfileModalWindow />
+          <form method='get'>
+            <input type="text" id="search-messenger" placeholder='Search' name='searchMessage'>
+            </input>
+          </form>
+        </nav>
+      </menu>
     </header>
   );
 }

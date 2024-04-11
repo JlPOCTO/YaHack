@@ -1,12 +1,15 @@
-.profile-modal-window{
-    margin: 0 auto;
-    /* background: lightcyan; */
+.profile-modal-window {
+  margin: 0 auto;
+  /* background: lightcyan; */
 }
+
 .Settings {
-    width: 30px;
-    height: 30px;
-   }
-  
-  .modal-button {
-    background: #000;
-  }
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.modal-button {
+  background: #000;
+}
