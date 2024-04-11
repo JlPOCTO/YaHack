@@ -33,6 +33,9 @@ routers.get(
 routers.get(
     '/',
     (req, res) => {
+        if (req.isAuthenticated()) {
+            return res.redirect('/home');
+        }
         res.set('Content-Type', 'text/html');
         res.send(Buffer.from(getBasePage()));
     }
