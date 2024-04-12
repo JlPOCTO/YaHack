@@ -50,7 +50,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.get('/dialogs', (req, res) => {
-    res.send(students);
+    res.send(dialogs);
 });
 
 app.get('/myInfo', (req, res) => {
