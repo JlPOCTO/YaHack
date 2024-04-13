@@ -3,7 +3,8 @@ const passport = require('passport');
 const {getBasePage} = require("./statics/getBasePage");
 const { isAuthenticatedMiddleware } = require("./middlewares/isAuthenticatedMiddleware")
 const dbChats = require('./database/dbChats');
-const dbUsers = require('./database/dbUsers');  
+const dbUsers = require('./database/dbUsers');
+const { db } = require('./database/db');
 
 const routers = express.Router();
 
