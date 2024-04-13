@@ -8,8 +8,6 @@
 
     const sqlite3 = require('sqlite3');
     const sqliteStore = require('express-session-sqlite');
-    const dbUsers = require('./database/dbUsers');
-    const dbChats = require('./database/dbChats');
 
     const { routers } = require('./routes');
     const { myPassport } = require('./myPassport');
@@ -28,7 +26,7 @@
     app.use(bodyParser.json());
     app.use(cors());
 
-    app.use(express.static('../client/build/static'));
+    app.use(express.static('../client/build/assets'));
     app.use(express.static('../client/static'))
 
     app.use(expressSession({
@@ -43,5 +41,5 @@
     app.use(myPassport.initialize());
     app.use(myPassport.session({}));
     app.use(routers);
-    app.listen(80);
+    app.listen(process.env.PORT);
 })();
