@@ -7,16 +7,16 @@ const dbCreate = require('./dbCreate');
 //ChatsUsersDB - хранилище пар пользователь-чат
 //Столбцы: userID, chatID
 //ChatsDB - хранилище чатов
-//Столбцы: chatID (autoincrement), name
+//Столбцы: chatID (autoincrement), name, pathToIMG, type
 async function getMessages(db, chatID) {
 	const res = await db.get(`SELECT message, time, fromID FROM MessageDB WHERE chatID = ${chatID} ORDER BY time`);
 	if (res === undefined) return [];
 	return res;
 }
 
-async function addChat(db, users, name) {
+async function addChat(db, users, type, name) {
 	//TODO check existing chat
-	if (name === undefined) {
+	if (type === 'direct') {
 		name = "";
 		for (let user of users) {
 			name += user + "_";
@@ -25,8 +25,8 @@ async function addChat(db, users, name) {
 	name += "AUTO";
 	let newID = -1;
 
-	const res = await db.get(`INSERT INTO ChatsDB(name)\
-	VALUES(\"${name}\")\
+	const res = await db.get(`INSERT INTO ChatsDB(name, pathToIMG, type)\
+	VALUES(\"${name}\", \"\", \"${type}\")\
 	RETURNING *`);
 
 	if (res !== undefined) {
@@ -70,7 +70,9 @@ async function createTables() {
 		);");
 	await dbCreate.checkDB("./DB/Chats.db", "ChatsDB", "(\
 		chatID INTEGER PRIMARY KEY,\
-		name VARCHAR(255)\
+		name VARCHAR(255),\
+		pathToIMG VARCHAR(255),\
+		type VARCHAR(\
 		);");
 }
 

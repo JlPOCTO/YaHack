@@ -51,16 +51,9 @@ routers.get(
 );
 
 routers.post(
-    version + '/createDialog',
-    (req, res) => {
-        dbChats.addChat(chats, [req.body.idFirst, req.body.idSecond]);
-    }
-);
-
-routers.post(
     version + '/createChat',
     (req, res) => {
-        dbChats.addChat(chats, [req.body.idFirst], req.body.chatName);
+        dbChats.addChat(chats, [req.body.ids], req.body.type, req.body.chatName);
     }
 );
 
