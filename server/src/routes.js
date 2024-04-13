@@ -79,7 +79,8 @@ routers.post(
         const fromID = req.body.fromID;
         const message = req.body.message;
         const time = req.body.time;
-        dbChats.addMessage(chats, dialogID, fromID, message, time);
+        const IMGPath = ""; //TODO IMG
+        dbChats.addMessage(chats, dialogID, fromID, message, time, IMGPath);
     }
 )
 

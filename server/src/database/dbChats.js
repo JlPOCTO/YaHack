@@ -3,13 +3,13 @@ const sqlite = require('sqlite');
 const dbCreate = require('./dbCreate');
 
 //MessageDB - хранилище всех сообщений
-//Столбцы: chatID, fromID, message, time
+//Столбцы: chatID, fromID, message, time, IMGPath
 //ChatsUsersDB - хранилище пар пользователь-чат
 //Столбцы: userID, chatID
 //ChatsDB - хранилище чатов
 //Столбцы: chatID (autoincrement), name, pathToIMG, type
 async function getMessages(db, chatID) {
-	const res = await db.get(`SELECT message, time, fromID FROM MessageDB WHERE chatID = ${chatID} ORDER BY time`);
+	const res = await db.get(`SELECT message, time, fromID, IMGPath FROM MessageDB WHERE chatID = ${chatID} ORDER BY time`);
 	if (res === undefined) return [];
 	return res;
 }
@@ -50,8 +50,9 @@ async function getChats(db, userID) {
 }
 
 
-async function addMessage(db, chatID, fromID, message, time) {
-	await db.exec(`INSERT INTO MessageDB(message, time, fromID, chatID) VALUES (\"${message}\", \"${time}\", ${fromID}, ${chatID})`);
+async function addMessage(db, chatID, fromID, message, time, IMGPath) {
+	await db.exec(`INSERT INTO MessageDB(message, time, fromID, chatID, IMGPath)\
+	VALUES (\"${message}\", \"${time}\", ${fromID}, ${chatID}, \"${IMGPath}\")`);
 }
 
 async function createTables() {
@@ -60,6 +61,7 @@ async function createTables() {
 		fromID INTEGER,\
 		message TEXT,\
 		time VARCHAR(255),\
+		IMGPath VARCHAR(255),\
 		FOREIGN KEY(chatID) REFERENCES ChatsDB(chatID)\
 		);");
 	await dbCreate.checkDB("./DB/Chats.db", "ChatsUsersDB", "(\
