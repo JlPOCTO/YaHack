@@ -2,8 +2,8 @@ const sqlite3 = require('sqlite3');
 const sqlite = require('sqlite');
 const dbCreate = require('./dbCreate');
 
-//UsersDB - хранилище всех пользователей
-//Столбцы: userID (autoincrement), name, login, avatarIMGPath
+//UsersDB - С…СЂР°РЅРёР»РёС‰Рµ РІСЃРµС… РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№
+//РЎС‚РѕР»Р±С†С‹: userID (autoincrement), name, login, avatarIMGPath
 
 async function addUser(db, userID, userName, userNickname) {
     //TODO const IMGPath = generateIMG();
@@ -12,7 +12,7 @@ async function addUser(db, userID, userName, userNickname) {
                 VALUES(${userID}, \"${userName}\", \"${userNickname}\", \"${IMGPath}\")`);
 }
 
-//Или не нада?..
+//Р° РЅР°РґРѕ Р»Рё?...
 async function deleteUser(db, userID) {
     await db.exec(`DELETE FROM UsersDB WHERE userID = ${userID}`);
 }

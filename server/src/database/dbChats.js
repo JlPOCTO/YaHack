@@ -2,12 +2,12 @@ const sqlite3 = require('sqlite3');
 const sqlite = require('sqlite');
 const dbCreate = require('./dbCreate');
 
-//MessageDB - хранилище всех сообщений
-//Столбцы: chatID, fromID, message, time, IMGPath
-//ChatsUsersDB - хранилище пар пользователь-чат
-//Столбцы: userID, chatID
-//ChatsDB - хранилище чатов
-//Столбцы: chatID (autoincrement), name, pathToIMG, type
+//MessageDB - С…СЂР°РЅРёР»РёС‰Рµ РІСЃРµС… СЃРѕРѕР±С‰РµРЅРёР№
+//РЎС‚РѕР»Р±С†С‹: chatID, fromID, message, time, IMGPath
+//ChatsUsersDB - С…СЂР°РЅРёР»РёС‰Рµ РїР°СЂ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ-С‡Р°С‚
+//РЎС‚РѕР»Р±С†С‹: userID, chatID
+//ChatsDB - С…СЂР°РЅРёР»РёС‰Рµ С‡Р°С‚РѕРІ
+//РЎС‚РѕР»Р±С†С‹: chatID (autoincrement), name, pathToIMG, type
 async function getMessages(db, chatID) {
 	const res = await db.get(`SELECT message, time, fromID, IMGPath FROM MessageDB WHERE chatID = ${chatID} ORDER BY time`);
 	if (res === undefined) return [];
