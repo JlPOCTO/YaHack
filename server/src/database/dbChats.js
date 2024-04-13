@@ -1,5 +1,6 @@
 const sqlite3 = require('sqlite3');
 const sqlite = require('sqlite');
+const dbCreare = require('./dbCreate');
 
 //MessageDB - хранилище всех сообщений
 //Столбцы: chatID, fromID, message, time
@@ -52,9 +53,30 @@ async function addMessage(db, chatID, fromID, message, time) {
 	await db.exec(`INSERT INTO MessageDB(message, time, fromID, chatID) VALUES (${message}, ${time}, ${fromID}, ${chatID})`;
 }
 
+async function createTables() {
+	dbCreare.checkDB("./DB/Chats.db", "MessageDB", "(\
+		chatID INTEGER,\
+		fromID INTEGER,\
+		message TEXT,\
+		time DATE,\
+		FOREIGN KEY(chatID) REFERENCES ChatsDB(chatID)\
+		);");
+	dbCreare.checkDB("./DB/Chats.db", "ChatsUsersDB", "(\
+		chatID INTEGER,\
+		userID INTEGER,\
+		PRIMARY KEY (chatID, userID),\
+		FOREIGN KEY(chatID) REFERENCES ChatsDB(chatID)\
+		);");
+	dbCreare.checkDB("./DB/Chats.db", "ChatsDB", "(\
+		chatID INTEGER PRIMARY KEY,\
+		name TEXT\
+		);");
+}
+
 module.exports = {
 	getChats,
 	getMessages,
 	addChat,
 	addMessage,
+	createTables,
 }

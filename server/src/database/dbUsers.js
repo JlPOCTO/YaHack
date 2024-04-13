@@ -27,9 +27,19 @@ async function findByNickname(db, nickname) {
     return res;
 }
 
+async function createTables() {
+	dbCreare.checkDB("./DB/Users.db", "UsersDB", "(\
+		userID INTEGER PRIMARY KEY,\
+		name TEXT,\
+		login TEXT,\
+		avatarIMGPath VARCHAR(255)\
+		);");
+}
+
 module.exports = {
     addUser,
     deleteUser,
     findByID,
-    findByNickname,
+	findByNickname,
+	createTables,
 }

@@ -8,7 +8,7 @@ async function checkDB(dbPath, dbName, params) {
         filename: dbPath,
         driver: sqlite3.Database
     });
-
+    await db.exec("PRAGMA foreign_keys = ON;");
     await db.exec("CREATE TABLE IF NOT EXISTS " + dbName + " " + params);
     await db.close();
 }
