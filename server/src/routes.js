@@ -50,4 +50,51 @@ routers.get(
     }
 );
 
+routers.get(
+    '/dialogs',
+    (req, res) => {
+        res.send(dbChats.getChats(chats, req.body.id));
+    }
+);
+
+routers.post(
+    '/createDialog',
+    (req, res) => {
+        dbChats.addChat(chats, [req.body.idFirst, req.body.idSecond]);
+    }
+);
+
+routers.post(
+    '/createChat',
+    (req, res) => {
+        dbChats.addChat(chats, [req.body.idFirst], req.body.chatName);
+    }
+);
+
+routers.get(
+    '/myInfo',
+    (req, res) => {
+     res.send(dbUsers.findByID(users, req.body.id));
+    }
+);
+
+routers.get(
+    '/messages',
+    (req, res) => {
+    const dialogID = req.body.dialogID;
+        res.send(dbChats.getMessages(chats, dialogID));
+    }
+);
+
+routers.post(
+    '/addMessage',
+    (req, res) => {
+        const dialogID = req.body.dialogID;
+        const fromID = req.body.fromID;
+        const message = req.body.message;
+        const time = req.body.time;
+        dbChats.addMessage(chats, dialogID, fromID, message, time);
+    }
+)
+
 module.exports = {routers}

@@ -1,6 +1,6 @@
 const sqlite3 = require('sqlite3');
 const sqlite = require('sqlite');
-const dbCreare = require('./dbCreate');
+const dbCreate = require('./dbCreate');
 
 //MessageDB - хранилище всех сообщений
 //Столбцы: chatID, fromID, message, time
@@ -16,25 +16,20 @@ async function getMessages(db, chatID) {
 
 async function addChat(db, users, name) {
 	if (name === undefined) {
-		for (let user in users) {
-			name += String(user) + " ";
+		name = "";
+		for (let user of users) {
+			name += user + "_";
 		}
 	}
+	name += "AUTO";
 	let newID = -1;
-	db.serialize(function () {
-		db.run('BEGIN TRANSACTION');
-		db.run(`INSERT INTO ChatsDB(name) VALUES (${name})`, function (err) {
-			if (err) {
-				db.run('ROLLBACK');
-			} else {
-				newID = this.lastID; 
-				db.run('COMMIT');
-			}
-		});
-	});
+
+	const ress = await db.get(`INSERT INTO ChatsDB(name) VALUES(\"${name}\")`);
+
+	console.log(ress);
 	if (newID != -1) {
 		for (let user in users) {
-			db.exec(`INSERT INTO ChatsUsersDB(userID, chatID) VALUES(${user}, ${newID})`);
+			await db.exec(`INSERT INTO ChatsUsersDB(userID, chatID) VALUES(${user}, ${newID})`);
 		}
 	}
 	return newID;
@@ -50,26 +45,26 @@ async function getChats(db, userID) {
 
 
 async function addMessage(db, chatID, fromID, message, time) {
-	await db.exec(`INSERT INTO MessageDB(message, time, fromID, chatID) VALUES (${message}, ${time}, ${fromID}, ${chatID})`;
+	await db.exec(`INSERT INTO MessageDB(message, time, fromID, chatID) VALUES (\"${message}\", \"${time}\", ${fromID}, ${chatID})`);
 }
 
 async function createTables() {
-	dbCreare.checkDB("./DB/Chats.db", "MessageDB", "(\
+	await dbCreate.checkDB("./DB/Chats.db", "MessageDB", "(\
 		chatID INTEGER,\
 		fromID INTEGER,\
 		message TEXT,\
-		time DATE,\
+		time VARCHAR(255),\
 		FOREIGN KEY(chatID) REFERENCES ChatsDB(chatID)\
 		);");
-	dbCreare.checkDB("./DB/Chats.db", "ChatsUsersDB", "(\
+	await dbCreate.checkDB("./DB/Chats.db", "ChatsUsersDB", "(\
 		chatID INTEGER,\
 		userID INTEGER,\
 		PRIMARY KEY (chatID, userID),\
 		FOREIGN KEY(chatID) REFERENCES ChatsDB(chatID)\
 		);");
-	dbCreare.checkDB("./DB/Chats.db", "ChatsDB", "(\
+	await dbCreate.checkDB("./DB/Chats.db", "ChatsDB", "(\
 		chatID INTEGER PRIMARY KEY,\
-		name TEXT\
+		name VARCHAR(255)\
 		);");
 }
 
