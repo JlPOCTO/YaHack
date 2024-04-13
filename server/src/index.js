@@ -13,11 +13,11 @@
     const { routers } = require('./routes');
     const { myPassport } = require('./myPassport');
 
-    users = await sqlite.open({
+    let users = await sqlite.open({
         filename: "./DB/Users.db",
         driver: sqlite3.Database
     });
-    chats = await sqlite.open({
+    let chats = await sqlite.open({
         filename: "./DB/Chats.db",
         driver: sqlite3.Database
     });
