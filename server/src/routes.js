@@ -55,7 +55,7 @@ routers.get(
 routers.post(
     version + '/createChat',
     (req, res) => {
-        dbChats.addChat(chats, [req.body.userIDs], req.body.chatType, req.body.chatName);
+        res.send(dbChats.addChat(chats, [req.body.userIDs], req.body.chatType, req.body.chatName));
     }
 );
 
