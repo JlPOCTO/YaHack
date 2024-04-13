@@ -7,6 +7,7 @@
     require('dotenv').config()
 
     const sqlite3 = require('sqlite3');
+    const sqlite = require('sqlite');
     const sqliteStore = require('express-session-sqlite');
 
     const { routers } = require('./routes');
