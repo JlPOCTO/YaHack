@@ -33,7 +33,6 @@ async function addChat(db, users, name) {
 		newID = res.chatID;
 	}
 
-	console.log(newID);
 	if (newID != -1) {
 		for (let user of users) {
 			await db.exec(`INSERT INTO ChatsUsersDB(userID, chatID) VALUES(${user}, ${newID})`);
