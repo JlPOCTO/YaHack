@@ -4,7 +4,7 @@ const githubStrategy = new passportGithub.Strategy(
     {
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        callbackURL: `http://127.0.0.1:3000/auth/github/callback`
+        callbackURL: `http://team5.ya-itmo.ru/auth/github/callback`
     },
     (accessToken, refreshToken, profile, done) => {
         // TODO Добавление в базу данных или обновление
