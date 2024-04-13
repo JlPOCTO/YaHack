@@ -49,28 +49,28 @@ routers.get(
 routers.get(
     version + '/dialogs',
     (req, res) => {
-        res.send(dbChats.getChats(db, req.body.chatID));
+        res.send(dbChats.getChats(db, req.query.chatID));
     }
 );
 
 routers.post(
     version + '/createChat',
     (req, res) => {
-        res.send(dbChats.addChat(db, [req.body.userIDs], req.body.chatType, req.body.chatName));
+        res.send(dbChats.addChat(db, [req.query.userIDs], req.query.chatType, req.query.chatName));
     }
 );
 
 routers.get(
     version + '/myInfo',
     (req, res) => {
-        res.send(dbUsers.findByID(db, req.body.userID));
+        res.send(dbUsers.findByID(db, req.query.userID));
     }
 );
 
 routers.get(
     version + '/messages',
     (req, res) => {
-    const dialogID = req.body.dialogID;
+        const dialogID = req.query.dialogID;
         res.send(dbChats.getMessages(db, dialogID));
     }
 );
@@ -78,10 +78,10 @@ routers.get(
 routers.post(
     version + '/addMessage',
     (req, res) => {
-        const dialogID = req.body.dialogID;
-        const fromID = req.body.fromID;
-        const message = req.body.messageText;
-        const time = req.body.messageTime;
+        const dialogID = req.query.dialogID;
+        const fromID = req.query.fromID;
+        const message = req.query.messageText;
+        const time = req.query.messageTime;
         const IMGPath = ""; //TODO IMG
         dbChats.addMessage(db, dialogID, fromID, message, time, IMGPath);
     }
