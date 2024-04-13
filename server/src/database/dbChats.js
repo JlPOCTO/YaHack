@@ -56,7 +56,7 @@ async function addMessage(db, chatID, fromID, message, time, IMGPath) {
 }
 
 async function createTables() {
-	await dbCreate.checkDB("./DB/Chats.db", "MessageDB", "(\
+	await dbCreate.checkDB("./DB/db.db", "MessageDB", "(\
 		chatID INTEGER,\
 		fromID INTEGER,\
 		message TEXT,\
@@ -64,13 +64,14 @@ async function createTables() {
 		IMGPath VARCHAR(255),\
 		FOREIGN KEY(chatID) REFERENCES ChatsDB(chatID)\
 		);");
-	await dbCreate.checkDB("./DB/Chats.db", "ChatsUsersDB", "(\
+	await dbCreate.checkDB("./DB/db.db", "ChatsUsersDB", "(\
 		chatID INTEGER,\
 		userID INTEGER,\
 		PRIMARY KEY (chatID, userID),\
-		FOREIGN KEY(chatID) REFERENCES ChatsDB(chatID)\
+		FOREIGN KEY(chatID) REFERENCES ChatsDB(chatID),\
+		FOREIGN KEY(userID) REFERENCES UsersDB(userID)\
 		);");
-	await dbCreate.checkDB("./DB/Chats.db", "ChatsDB", "(\
+	await dbCreate.checkDB("./DB/db.db", "ChatsDB", "(\
 		chatID INTEGER PRIMARY KEY,\
 		name VARCHAR(255),\
 		pathToIMG VARCHAR(255),\

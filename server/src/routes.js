@@ -48,21 +48,21 @@ routers.get(
 routers.get(
     version + '/dialogs',
     (req, res) => {
-        res.send(dbChats.getChats(chats, req.body.chatID));
+        res.send(dbChats.getChats(db, req.body.chatID));
     }
 );
 
 routers.post(
     version + '/createChat',
     (req, res) => {
-        res.send(dbChats.addChat(chats, [req.body.userIDs], req.body.chatType, req.body.chatName));
+        res.send(dbChats.addChat(db, [req.body.userIDs], req.body.chatType, req.body.chatName));
     }
 );
 
 routers.get(
     version + '/myInfo',
     (req, res) => {
-        res.send(dbUsers.findByID(users, req.body.userID));
+        res.send(dbUsers.findByID(db, req.body.userID));
     }
 );
 
@@ -70,7 +70,7 @@ routers.get(
     version + '/messages',
     (req, res) => {
     const dialogID = req.body.dialogID;
-        res.send(dbChats.getMessages(chats, dialogID));
+        res.send(dbChats.getMessages(db, dialogID));
     }
 );
 
@@ -82,7 +82,7 @@ routers.post(
         const message = req.body.messageText;
         const time = req.body.messageTime;
         const IMGPath = ""; //TODO IMG
-        dbChats.addMessage(chats, dialogID, fromID, message, time, IMGPath);
+        dbChats.addMessage(db, dialogID, fromID, message, time, IMGPath);
     }
 )
 
