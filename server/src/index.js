@@ -79,7 +79,7 @@ app.post('/addMessage', (req, res) => {
 })
 
 
-app.use(express.static('../client/build/static'));
+app.use(express.static('../client/build/assets'));
 app.use(express.static('../client/static'))
 
 app.use(expressSession({
