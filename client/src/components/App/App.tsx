@@ -1,16 +1,17 @@
 import '../../css/App.css';
 import SideBar from '../SideBar/SideBar';
 import Body from '../BodyMain/BodyMain';
-import { useState, useEffect } from 'react';
-import { ThemeProvider } from 'styled-components';
-import { lightTheme, darkTheme, GlobalStyles } from '../App/themes';
+import {useState, useEffect} from 'react';
+import {ThemeProvider} from 'styled-components';
+import {lightTheme, darkTheme, GlobalStyles} from '../App/themes';
 
 const getInitialTheme = () => {
-  console.log(localStorage.getItem('theme'))
-  return localStorage.getItem('theme') || 'light';
+    console.log(localStorage.getItem('theme'))
+    return localStorage.getItem('theme') || 'light';
 }
 
 function App() {
+
   const [theme, setTheme] = useState(getInitialTheme)
   const [idOfShownDialog, setIdDialogWitchIsShown] = useState(null);
   const handleSetTheme = () => {
@@ -38,5 +39,6 @@ function App() {
       </div>
     </ThemeProvider>
   );
+
 }
 export default App;
