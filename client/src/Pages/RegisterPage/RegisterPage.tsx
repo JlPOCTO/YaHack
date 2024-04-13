@@ -15,7 +15,9 @@ function RegisterPage() {
     };
     return (
         <div className="register-page">
-            <button onClick={navigateToContacts}>Вход</button>
+            <button>
+                <a href="/auth/github">зарегистрируйтесь через GitHub</a>.
+            </button>
         </div>
     );
 }

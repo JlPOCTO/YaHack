@@ -57,14 +57,8 @@ app.get('/myInfo', (req, res) => {
     res.send(me);
 });
 
-app.get('/messages', (req, res) => {
-    const dialogID = req.body.dialogID;
-    for (let dialog in dialogs) {
-        if (dialog.id == dialogID) {
-            res.send(dialog)
-            break;
-        }
-    }
+app.get('/dialogs/:id/messages', (req, res) => {
+    res.send(dialogs[0].messages)
 });
 
 app.post('/addMessage', (req, res) => {

@@ -9,24 +9,24 @@ import {Button} from "@gravity-ui/uikit";
 
 const API_HOST = 'http://localhost:3000';
 
-const f = (d: any[]) => {
-    return d.map(dialog => {
-        return dialog
-    })
-
+type SideBarProps = {
+    idOfShownDialog : any;
+    setIdDialogWitchIsShown:any
 }
 
-function SideBarBody() {
+function SideBarBody(props:SideBarProps) {
+    const { idOfShownDialog, setIdDialogWitchIsShown } = props;
     const [dialogs, setDialogs] = useState([])
     const [open, setOpen] = useState(false);
     // const   [loading, setLoading] = useState(false)
 
     useEffect(() => {
+
         const getDialogs = async () => {
             // setLoading(false)
-            console.log("Begin fetch")
-            const res = await fetch(`${API_HOST}/dialogs`)
-            console.log("End fetch")
+            // console.log("Begin fetch")
+            const res = await fetch(`/dialogs`)
+            // console.log("End fetch")
             // setLoading(true)
             const dialogs1 = await res.json()
             setDialogs(dialogs1)
@@ -37,18 +37,9 @@ function SideBarBody() {
 
     return (
         <div>
-            {
-                f(dialogs).map(dialog => {
-                    return <div className="chat-bar">
-                        <Button onClick={() => setOpen(true)} className='button'>
-                            {dialog.id}
-                        </Button>
-                    </div>
-                })
-            }
-            {/*{f(dialogs).map(dialog =>*/}
-            {/*   <ChatBar dialog = {dialog}/>*/}
-            {/*)}*/}
+            {dialogs.map((dialog:any) =>
+               <ChatBar dialog={dialog} idOfShownDialog={idOfShownDialog} setIdDialogWitchIsShown={setIdDialogWitchIsShown} />
+            )}
         </div>
 
     );
