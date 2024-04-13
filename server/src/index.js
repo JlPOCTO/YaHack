@@ -4,19 +4,16 @@
     const cookieParser = require("cookie-parser");
     const cors = require('cors');
     const bodyParser = require('body-parser');
-    require('dotenv').config()
+    require('dotenv').config();
 
-    const sqlite3 = require('sqlite3');
-    const sqlite = require('sqlite');
+    const { db } = require('./database/db');
+
     const sqliteStore = require('express-session-sqlite');
 
     const { routers } = require('./routes');
     const { myPassport } = require('./myPassport');
 
-    let db = await sqlite.open({
-        filename: "./DB/db.db",
-        driver: sqlite3.Database
-    });
+    
 
     const app = express()
     app.use(cookieParser(process.env.EXPRESS_SESSION_SECRET))

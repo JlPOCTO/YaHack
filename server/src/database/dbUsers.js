@@ -30,7 +30,7 @@ async function findByNickname(db, nickname) {
 }
 
 async function createTables() {
-	await dbCreate.checkDB("./DB/db.db", "UsersDB", "(\
+    await dbCreate.checkDB("./DB/sqlite.db", "UsersDB", "(\
 		userID INTEGER PRIMARY KEY,\
 		name TEXT,\
 		login TEXT,\
