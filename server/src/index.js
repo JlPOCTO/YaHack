@@ -1,15 +1,15 @@
-// const cookieParser = require('cookie-parser');
 const express = require('express');
 const expressSession = require('express-session');
+const cookieParser = require("cookie-parser");
+const cors = require('cors');
+const bodyParser = require('body-parser');
 require('dotenv').config()
 
-const { routers } = require('./routes');
-const { myPassport } = require('./myPassport');
+const sqlite3 = require('sqlite3');
+const sqliteStore = require('express-session-sqlite');
 
-const app = express();
-
-const bodyParser = require('body-parser');
-const cors = require('cors');
+const {routers} = require('./routes');
+const {myPassport} = require('./myPassport');
 
 const me = {
     id: 1,
@@ -32,18 +32,20 @@ const students = [
 const dialogs = [
     {
         id: 1,
-        messages: [{ idFrom: 1, time: Date(2024, 1, 10, 10, 5, 20), message: "Hi!" },
-            { idFrom: 2, time: Date(2024, 1, 11, 12), message: "Yo" },
-            { idFrom: 1, time: Date(2024, 2, 1), message: "Ohayo" }]
+        messages: [{idFrom: 1, time: Date(2024, 1, 10, 10, 5, 20), message: "Hi!"},
+            {idFrom: 2, time: Date(2024, 1, 11, 12), message: "Yo"},
+            {idFrom: 1, time: Date(2024, 2, 1), message: "Ohayo"}]
     },
     {
         id: 2,
-        messages: [{ idFrom: 2, time: Date(2024, 3, 1, 10, 7), message: "Here" },
-            { idFrom: 2, time: Date(2024, 3, 1, 11), message: "아니요" },
-            { idFrom: 3, time: Date(2024, 2, 1), message: "مداح" }]
+        messages: [{idFrom: 2, time: Date(2024, 3, 1, 10, 7), message: "Here"},
+            {idFrom: 2, time: Date(2024, 3, 1, 11), message: "아니요"},
+            {idFrom: 3, time: Date(2024, 2, 1), message: "مداح"}]
     }
 ]
 
+const app = express()
+app.use(cookieParser(process.env.EXPRESS_SESSION_SECRET))
 app.use(bodyParser.json());
 app.use(cors());
 
@@ -76,45 +78,20 @@ app.post('/addMessage', (req, res) => {
     }
 })
 
-app.use(express.static('../Client/build/static'));
 
-// app.set('view engine', 'hbs');
-// app.set('views', './src/views');
+app.use(express.static('../client/build/static'));
+app.use(express.static('../client/static'))
 
-// TODO Понять зачем и как
-// // Подключаем библиотеку для парсинга кук, чтобы получить доступ к сессионной куке
-// app.use(cookieParser());
-
-// Подключаем библиотеку, чтобы управлять сессиями аутентифицированных пользователей.
 app.use(expressSession({
-    // TODO Осознать
-    // Сессии содержат id сессии и данные пользователя
-    // (или id пользователя, если данные хранятся в базе).
-    //
-    // Как только пользователь аутентифицируется, мы создаём его сессию с уникальным id.
-    // кладём её в хранилище (по умолчанию, в память), связываем с данными пользователя.
-    //
-    // Затем подписываем сессию секретом и кладём в cookie `connect.sid`.
-    //
-    // При обновлении страницы, мы читаем cookie `connect.sid`,
-    // получаем из неё id и смотрим, нет ли в хранилище существующей сессии.
-    //
-    // Если есть, то считаем пользователя уже аутентифицированным.
-
     secret: process.env.EXPRESS_SESSION_SECRET,
-    // TODO Понять что делать с сессиями
     resave: false,
-    // TODO Понять что делать с сессиями
     saveUninitialized: false,
-    // TODO Понять что делать с сессиями. Что делать с хранилищем
-    // store: new require('connect-mongo')(expressSession)(options)
+    // store: new sqliteStore({
+    //
+    // })
 }));
 
 app.use(myPassport.initialize());
-
-// TODO Понять что делать с сессиями
-app.use(myPassport.session());
-
+app.use(myPassport.session({}));
 app.use(routers);
-
 app.listen(3000);

@@ -1,0 +1,73 @@
+.profile {
+  width: 330px;
+  height: 270px;
+  background-color: aliceblue;
+  background: #fff;
+  margin: 0 auto;
+}
+
+.profileName {
+  padding-top: 10px;
+  font-size: 20px;
+  word-wrap: break-word;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: bold;
+  line-height: 28px;
+  display: inline;
+}
+
+.userPhoto {
+  width: 120px;
+  height: 80px;
+}
+
+.userProfile {
+  padding: 20px 30px;
+  height: 80px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  align-content: flex-start;
+  gap: 50px
+}
+
+.ProfileMenu {
+  align-self: stretch;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 200px;
+  height: 30px;
+  padding: 20px 20px;
+  margin: 0;
+}
+
+.ProfileNav {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  gap: 8px;
+}
+
+.item {
+  height: 35px;
+  padding: 16px 30px;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  display: flex;
+  gap: 18px;
+  align-self: stretch;
+}
+
+.itemNaming {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 16px;
+  word-wrap: break-word;
+  font-weight: 400;
+  line-height: 24px;
+  display: inline;
+  text-align: center;
+  padding-top: 2px;
+}
