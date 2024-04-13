@@ -1,7 +1,9 @@
 const express = require('express');
 const passport = require('passport');
 const {getBasePage} = require("./statics/getBasePage");
-const {isAuthenticatedMiddleware} = require("./middlewares/isAuthenticatedMiddleware")
+const { isAuthenticatedMiddleware } = require("./middlewares/isAuthenticatedMiddleware")
+const dbChats = require('./database/dbChats');
+const dbUsers = require('./database/dbUsers');
 
 const routers = express.Router();
 
@@ -60,7 +62,7 @@ routers.post(
 routers.get(
     version + '/myInfo',
     (req, res) => {
-     res.send(dbUsers.findByID(users, req.body.id));
+        res.send(dbUsers.findByID(users, req.body.id));
     }
 );
 
