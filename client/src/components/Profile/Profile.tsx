@@ -1,12 +1,28 @@
 import '../../css/Profile.css';
+import { useEffect, useState } from 'react'
+
+const API_HOST = 'http://localhost:3000';
 
 function Profile() {
+
+  // const [me, setMyInfo] = useState([])
+
+  // useEffect(() => {
+  //   const getMyInfo = async () => {
+  //     const res = await fetch(`${API_HOST}/myInfo`)
+  //     const me = await res.json();
+
+  //     setMyInfo(me)
+  //   }
+  //   getMyInfo()
+  // }, [])
+
   return (
     <div className='profile'>
       <header>
         <div className='userProfile'>
           <div className='userPhoto'></div>
-          <div className='profileName'>Firstname Lastname</div>
+          <div className='profileName'>FirstName LastName</div>
         </div>
       </header>
       <main>
