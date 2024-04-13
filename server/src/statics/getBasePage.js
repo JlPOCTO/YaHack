@@ -3,10 +3,6 @@ const { fetchNames } = require("./fetchNames")
 function getBasePage() {
     const names = fetchNames()
 
-    console.log('names: ', names);
-
-    console.log('names.js: ', names.js);
-
     return `
 <!DOCTYPE html>
 <html lang="ru">
