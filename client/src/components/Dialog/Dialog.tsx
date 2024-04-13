@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import '../../css/ChatBar.css';
+import '../../css/Dialog.css';
 import {Button, Modal} from "@gravity-ui/uikit";
-import settings from "../../settings-svgrepo-com.svg";
+// import settings from "../../settings-svgrepo-com.svg";
 import Profile from "../Profile/Profile";
 import HeaderOfBodyMain from "../HeaderOfBodyMain/HeaderOfBodyMain";
 import AddMessage from "../AddMessage/AddMessage";
@@ -30,10 +30,9 @@ function Dialog(props: DialogProps) {
 
     return (
         <div className="dialog">
-
             <HeaderOfBodyMain/>
             <DialogWithMessages messages={messages}/>
-            {/*<AddMessage/>*/}
+            <AddMessage/>
         </div>
 
     );

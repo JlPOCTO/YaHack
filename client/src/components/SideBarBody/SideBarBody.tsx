@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import '../../css/SideBarBody.css';
-import '../../css/ChatBar.css';
+// import '../../css/ChatBar.css';
 import ChatBar from "../ChatBar/ChatBar";
 import {Button} from "@gravity-ui/uikit";
 // import {Checkbox} from "@gravity-ui/uikit";

@@ -1,11 +1,32 @@
-import React from 'react';
-import '../../css/BodyMain.css';
+import '../../css/AddMessage.css';
+import { FaceSmile, File, ArrowShapeRight } from '@gravity-ui/icons';
+import { Icon } from '@gravity-ui/uikit';
+import Popup from 'reactjs-popup';
 
 function AddMessage() {
-  return (
-    <div className="add-message">
-      <input/>
-    </div>
-  );
+
+    return (
+        <div className='messageContainer'>
+            <button type="submit" className='currentSettings' style={{ bottom: 0, position: 'absolute', margin: '3px' }}>
+                <Icon className='Settings' data={File} />
+            </button>
+            <input type="text" id="message" placeholder='Введите текст' name='textMessage' />
+            <div className='buttonContainer'>
+                <Popup
+                    trigger={
+                        <button className='currentSettings'>
+                            <Icon className='Settings' data={FaceSmile} />
+                        </button>}
+                    position="top center"
+                >
+                    <div>Choose an emoji</div>
+                    <button>emoji</button>
+                </Popup>
+                <button type="submit" className='currentSettings'>
+                    <Icon className='Settings' data={ArrowShapeRight} />
+                </button>
+            </div>
+        </div>
+    );
 }
 export default AddMessage;

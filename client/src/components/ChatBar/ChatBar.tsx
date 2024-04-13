@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import '../../css/ChatBar.css';
 import {Button, Modal} from "@gravity-ui/uikit";
-import settings from "../../settings-svgrepo-com.svg";
+// import settings from "../../settings-svgrepo-com.svg";
 import Profile from "../Profile/Profile";
 import Dialog from "../Dialog/Dialog";
 
@@ -15,29 +15,26 @@ function ChatBar(props: ChatBarProps) {
     const { dialog, idOfShownDialog, setIdDialogWitchIsShown } = props;
 
     // const [isShown, setIsShown] = useState(false);
-    // const [isActual, setIsActual] = useState(false);
+    const [isActual, setIsActual] = useState(false);
     const handleClick = (event:any) => {
         setIdDialogWitchIsShown(dialog.id)
-        // setIsShown(current => !current);
+        setIsActual(current => dialog.id === idOfShownDialog);
     };
+
 
     return (
      <div className="chat-bar">
-        <Button onClick={handleClick} className='button'>
+         {!isActual && <Button onClick={handleClick} className='button'>
             {dialog.id}
-        </Button>
+        </Button>}
+         {isActual && <Button onClick={handleClick} className='button-no-actual'>
+             {dialog.id}
+         </Button>}
 
          {/*{isShown && <Dialog dialog={dialog}/>}*/}
     </div>
 
-    // <div className="chat-bar">
-    //     {/*<Button onClick={() => setOpen(true)} className='button'>*/}
-    //     {/*    {dialog.id}*/}
-    //     {/*</Button>*/}
-    //     {/*<Modal open={open} onClose={() => setOpen(false)}>*/}
-    //     {/*    <Profile/>*/}
-    //     {/*</Modal>*/}
-    // </div>
+
   );
 }
 export default ChatBar;

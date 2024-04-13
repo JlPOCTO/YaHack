@@ -10,7 +10,7 @@ function BodyMain(props:SideBarProps) {
     const [isShown, setIsShown] = useState(false);
   return (
     <div className="body-main">
-        {(!idOfShownDialog) && <img className="Img" alt="picture" />}
+        {/*{(!idOfShownDialog) && <img className="Img" alt="picture" />}*/}
         {idOfShownDialog && <Dialog dialogId={idOfShownDialog}/>}
     </div>
   );

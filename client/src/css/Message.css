@@ -1,0 +1,10 @@
+.message{
+    height: 40px;
+    width: 100px;
+    background-color: #61dafb;
+    border-radius: 30px ;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+
+}

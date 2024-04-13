@@ -1,3 +1,7 @@
-.dialog-with-messages{
-height: 800px;
+.dialog-with-messages {
+    height: 630px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
 }

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-// import '../../css/HeaderOfBodyMain.css';
+import '../../css/Message.css';
 import {Button, Modal} from "@gravity-ui/uikit";
-import settings from "../../settings-svgrepo-com.svg";
+// import settings from "../../settings-svgrepo-com.svg";
 import Profile from "../Profile/Profile";
 
 type Message = {
@@ -11,9 +11,10 @@ type Message = {
 function Message(props:Message) {
     const { message } = props;
   return (
-    <div className="header-of-body-main">
-        Сообщение!
-        {/*{message}*/}
+    <div className="message">
+        <div className="text">
+            {message.message}
+        </div>
     </div>
 
   );
