@@ -5,6 +5,8 @@ const {isAuthenticatedMiddleware} = require("./middlewares/isAuthenticatedMiddle
 
 const routers = express.Router();
 
+const version = '/api/v1';
+    
 routers.get(
     '/auth/github',
     passport.authenticate('github')
@@ -42,44 +44,35 @@ routers.get(
 )
 
 routers.get(
-    '*',
-    isAuthenticatedMiddleware,
-    (req, res) => {
-        res.set('Content-Type', 'text/html');
-        res.send(Buffer.from(getBasePage()));
-    }
-);
-
-routers.get(
-    '/dialogs',
+    version + '/dialogs',
     (req, res) => {
         res.send(dbChats.getChats(chats, req.body.id));
     }
 );
 
 routers.post(
-    '/createDialog',
+    version + '/createDialog',
     (req, res) => {
         dbChats.addChat(chats, [req.body.idFirst, req.body.idSecond]);
     }
 );
 
 routers.post(
-    '/createChat',
+    version + '/createChat',
     (req, res) => {
         dbChats.addChat(chats, [req.body.idFirst], req.body.chatName);
     }
 );
 
 routers.get(
-    '/myInfo',
+    version + '/myInfo',
     (req, res) => {
      res.send(dbUsers.findByID(users, req.body.id));
     }
 );
 
 routers.get(
-    '/messages',
+    version + '/messages',
     (req, res) => {
     const dialogID = req.body.dialogID;
         res.send(dbChats.getMessages(chats, dialogID));
@@ -87,7 +80,7 @@ routers.get(
 );
 
 routers.post(
-    '/addMessage',
+    version + '/addMessage',
     (req, res) => {
         const dialogID = req.body.dialogID;
         const fromID = req.body.fromID;
@@ -96,5 +89,14 @@ routers.post(
         dbChats.addMessage(chats, dialogID, fromID, message, time);
     }
 )
+
+routers.get(
+    '*',
+    isAuthenticatedMiddleware,
+    (req, res) => {
+        res.set('Content-Type', 'text/html');
+        res.send(Buffer.from(getBasePage()));
+    }
+);
 
 module.exports = {routers}

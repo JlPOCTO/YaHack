@@ -9,7 +9,6 @@ async function checkDB(dbPath, dbName, params) {
     });
     await db.exec("PRAGMA foreign_keys = ON;");
     await db.exec("CREATE TABLE IF NOT EXISTS " + dbName + " " + params);
-    console.log("created");
     await db.close();
 }
 

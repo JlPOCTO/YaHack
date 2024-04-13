@@ -15,6 +15,7 @@ async function getMessages(db, chatID) {
 }
 
 async function addChat(db, users, name) {
+	//TODO check existing chat
 	if (name === undefined) {
 		name = "";
 		for (let user of users) {
@@ -24,11 +25,17 @@ async function addChat(db, users, name) {
 	name += "AUTO";
 	let newID = -1;
 
-	const ress = await db.get(`INSERT INTO ChatsDB(name) VALUES(\"${name}\")`);
+	const res = await db.get(`INSERT INTO ChatsDB(name)\
+	VALUES(\"${name}\")\
+	RETURNING *`);
 
-	console.log(ress);
+	if (res !== undefined) {
+		newID = res.chatID;
+	}
+
+	console.log(newID);
 	if (newID != -1) {
-		for (let user in users) {
+		for (let user of users) {
 			await db.exec(`INSERT INTO ChatsUsersDB(userID, chatID) VALUES(${user}, ${newID})`);
 		}
 	}

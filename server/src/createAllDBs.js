@@ -16,9 +16,9 @@
         filename: "./DB/Chats.db",
         driver: sqlite3.Database
     });
-    await usersDB.addUser(users, "Test testovich", "uyuigehbj");
-    await usersDB.addUser(users, "Other one", "ss");
-    await usersDB.addUser(users, "DROP DATABASE", "MessageDB");
+    await usersDB.addUser(users, 0, "Test testovich", "uyuigehbj");
+    await usersDB.addUser(users, 1, "Other one", "ss");
+    await usersDB.addUser(users, 2, "DROP DATABASE", "MessageDB");
 
     await chatsDB.addChat(chats, [0, 1]);
     await chatsDB.addChat(chats, [0, 2]);
