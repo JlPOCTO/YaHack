@@ -47,16 +47,16 @@ routers.get(
 )
 
 routers.get(
-    version + '/dialogs',
+    version + '/chats',
     (req, res) => {
-        res.send(dbChats.getChats(openDB(), req.query.chatID));
+        res.send(dbChats.getChats(openDB(), req.query.userID));
     }
 );
 
 routers.post(
     version + '/createChat',
     (req, res) => {
-        res.send(dbChats.addChat(openDB(), [req.query.userIDs], req.query.chatType, req.query.chatName));
+        res.send(dbChats.addChat(openDB(), req.query.userIDs, req.query.chatType, req.query.chatName));
     }
 );
 
@@ -70,8 +70,8 @@ routers.get(
 routers.get(
     version + '/messages',
     (req, res) => {
-        const dialogID = req.query.dialogID;
-        res.send(dbChats.getMessages(openDB(), dialogID));
+        const chatID = req.query.chatID;
+        res.send(dbChats.getMessages(openDB(), chatID));
     }
 );
 
