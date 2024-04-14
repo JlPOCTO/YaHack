@@ -6,8 +6,6 @@
     const bodyParser = require('body-parser');
     require('dotenv').config();
 
-    const { db } = require('./database/db');
-
     const sqliteStore = require('express-session-sqlite');
 
     const { routers } = require('./routes');

@@ -18,11 +18,7 @@ async function addChat(db, users, type, name) {
 	//TODO check existing chat
 	if (type === 'direct') {
 		name = "";
-		for (let user of users) {
-			name += user + "_";
-		}
 	}
-	name += "AUTO";
 	let newID = -1;
 
 	const res = await db.get(`INSERT INTO ChatsDB(name, pathToIMG, type)\

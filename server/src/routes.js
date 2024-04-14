@@ -4,7 +4,7 @@ const {getBasePage} = require("./statics/getBasePage");
 const { isAuthenticatedMiddleware } = require("./middlewares/isAuthenticatedMiddleware")
 const dbChats = require('./database/dbChats');
 const dbUsers = require('./database/dbUsers');
-const { db } = require('./database/db');
+const { openDB } = require('./database/db');
 
 const routers = express.Router();
 
@@ -49,21 +49,21 @@ routers.get(
 routers.get(
     version + '/dialogs',
     (req, res) => {
-        res.send(dbChats.getChats(db, req.query.chatID));
+        res.send(dbChats.getChats(openDB(), req.query.chatID));
     }
 );
 
 routers.post(
     version + '/createChat',
     (req, res) => {
-        res.send(dbChats.addChat(db, [req.query.userIDs], req.query.chatType, req.query.chatName));
+        res.send(dbChats.addChat(openDB(), [req.query.userIDs], req.query.chatType, req.query.chatName));
     }
 );
 
 routers.get(
     version + '/myInfo',
     (req, res) => {
-        res.send(dbUsers.findByID(db, req.query.userID));
+        res.send(dbUsers.findByID(openDB(), req.query.userID));
     }
 );
 
@@ -71,19 +71,19 @@ routers.get(
     version + '/messages',
     (req, res) => {
         const dialogID = req.query.dialogID;
-        res.send(dbChats.getMessages(db, dialogID));
+        res.send(dbChats.getMessages(openDB(), dialogID));
     }
 );
 
 routers.post(
     version + '/addMessage',
     (req, res) => {
-        const dialogID = req.query.dialogID;
+        const chatID = req.query.chatID;
         const fromID = req.query.fromID;
         const message = req.query.messageText;
         const time = req.query.messageTime;
         const IMGPath = ""; //TODO IMG
-        dbChats.addMessage(db, dialogID, fromID, message, time, IMGPath);
+        dbChats.addMessage(openDB(), chatID, fromID, message, time, IMGPath);
     }
 )
 
