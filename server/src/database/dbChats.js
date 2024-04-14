@@ -1,49 +1,82 @@
-const sqlite3 = require('sqlite3');
-const sqlite = require('sqlite');
+const { createTable } = require('./launchDB');
 
-async function getMessages(db, userID1, userID2) {
-	const ID1 = Math.min(userID1, userID2);
-	const ID2 = Math.max(userID1, userID2);
-
-	const res = await db.get(`SELECT messages FROM MessageDB WHERE id1 = ${ID1} AND id2 = ${ID2}`);
+//MessagesDB - хранилище всех сообщений
+//Столбцы: chatID, fromID, message, time, IMGPath
+//ChatsUsersDB - хранилище пар пользователь-чат
+//Столбцы: userID, chatID
+//ChatsDB - хранилище чатов
+//Столбцы: chatID (autoincrement), name, avatarIMGPath, type
+async function getMessages(db, chatID) {
+	const res = await db.get(`SELECT message, time, fromID, IMGPath FROM MessagesDB WHERE chatID = ${chatID} ORDER BY time`);
 	if (res === undefined) return [];
-	return res['messages'].split("$&%");
+	return res;
 }
 
-async function addChat(db, userID1, userID2) {
-	const ID1 = Math.min(userID1, userID2);
-	const ID2 = Math.max(userID1, userID2);
-
-	const res = await db.get(`SELECT * FROM MessageDB WHERE id1 = ${ID1} AND id2 = ${ID2}`);
-	if (res === undefined) {
-		await db.exec(`INSERT INTO MessageDB VALUES (${ID1}, ${ID2},"")`);
+async function addChat(db, users, type, name) {
+	//TODO check existing chat
+	if (type === 'direct') {
+		name = "";
 	}
-}
+	let newID;
 
-async function addMessage(db, userIDFrom, userIDTo, message) {
-	const ID1 = Math.min(userIDFrom, userIDTo);
-	const ID2 = Math.max(userIDFrom, userIDTo);
+	const res = await db.get(`INSERT INTO ChatsDB(name, avatarIMGPath, type)
+	VALUES("${name}", "", "${type}")
+	RETURNING *`);
 
-	await addChat(db, userIDFrom, userIDTo);
+	if (res) {
+		newID = res.chatID;
+	}
 
-	const row = await db.get(`SELECT messages FROM MessageDB WHERE id1 = ${ID1} AND id2 = ${ID2}`,
-		(err, row) => {
-			if (err) {
-				return "ERROR";
-			}
-			return row;
-		});
-	if (row != "ERROR") {
-		if (row['messages'] == "") {
-			await db.exec(`UPDATE MessageDB SET messages = "${userIDFrom}:${message}" WHERE id1 = ${ID1} AND id2 = ${ID2}`);
-		} else {
-			await db.exec(`UPDATE MessageDB SET messages = "${row['messages']}$&%${userIDFrom}:${message}"
-			WHERE id1 = ${ID1} AND id2 = ${ID2}`);
+	if (newID) {
+		for (let user of users) {
+			await db.exec(`INSERT INTO ChatsUsersDB(userID, chatID) VALUES(${user}, ${newID})`);
 		}
 	}
+	return res;
+}
+async function getChats(db, userID) {
+	const res = await db.get(`SELECT *
+                              FROM ChatsUsersDB chatsUsers
+                              JOIN ChatsDB chats ON chatsUsers.chatID = chats.chatID
+                              WHERE chatsUsers.userID = ${userID}`);
+	if (res === undefined) return [];
+	return res;
+}
+
+
+async function addMessage(db, chatID, fromID, message, time, IMGPath) {
+	await db.exec(`INSERT INTO MessagesDB(message, time, fromID, chatID, IMGPath)
+	VALUES ("${message}", "${time}", ${fromID}, ${chatID}, "${IMGPath}")`);
+}
+
+async function createTables() {
+	await createTable("./DB/sqlite.db", "MessagesDB", `(
+		chatID INTEGER,
+		fromID INTEGER,
+		message TEXT,
+		time VARCHAR(255),
+		IMGPath VARCHAR(255),
+		FOREIGN KEY(chatID) REFERENCES ChatsDB(chatID)
+		);`);
+	await createTable("./DB/sqlite.db", "ChatsUsersDB", `(
+		chatID INTEGER,
+		userID INTEGER,
+		PRIMARY KEY (chatID, userID),
+		FOREIGN KEY(chatID) REFERENCES ChatsDB(chatID),
+		FOREIGN KEY(userID) REFERENCES UsersDB(userID)
+		);`);
+	await createTable("./DB/sqlite.db", "ChatsDB", `(
+		chatID INTEGER PRIMARY KEY,
+		name VARCHAR(255),
+		avatarIMGPath VARCHAR(255),
+		type VARCHAR(255) CHECK (type IN ('direct', 'group'))
+		);`);
 }
 
 module.exports = {
+	getChats,
 	getMessages,
+	addChat,
 	addMessage,
+	createTables,
 }

@@ -1,4 +1,6 @@
 const passportGithub = require('passport-github');
+const { addUser } = require('../database/dbUsers');
+const { openDB } = require('../database/launchDB');
 
 const githubStrategy = new passportGithub.Strategy(
     {
@@ -8,6 +10,7 @@ const githubStrategy = new passportGithub.Strategy(
     },
     (accessToken, refreshToken, profile, done) => {
         // TODO Добавление в базу данных или обновление
+        await addUser(openDB(), profile.id, profile.displayName, profile.username)
         done(null, profile)
 
         // TODO Возможно отмена: done(null, false)
