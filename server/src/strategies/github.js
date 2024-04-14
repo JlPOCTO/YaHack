@@ -1,6 +1,6 @@
 const passportGithub = require('passport-github');
 const { addUser } = require('../database/dbUsers');
-const { openDB } = require('../database/db');
+const { openDB } = require('../database/launchDB');
 
 const githubStrategy = new passportGithub.Strategy(
     {

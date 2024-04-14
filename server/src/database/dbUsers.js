@@ -1,4 +1,4 @@
-const { createTable } = require('./dbCreate');
+const { createTable } = require('./launchDB');
 
 //UsersDB - хранилище всех пользователей
 //Столбцы: userID (autoincrement), name, login, avatarPath

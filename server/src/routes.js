@@ -4,7 +4,7 @@ const {getBasePage} = require("./statics/getBasePage");
 const { isAuthenticatedMiddleware } = require("./middlewares/isAuthenticatedMiddleware")
 const dbChats = require('./database/dbChats');
 const dbUsers = require('./database/dbUsers');
-const { openDB } = require('./database/db');
+const { openDB } = require('./database/launchDB');
 
 const routers = express.Router();
 
@@ -54,7 +54,7 @@ routers.get(
 );
 
 routers.post(
-    version + '/createChat',
+    version + '/chat',
     (req, res) => {
         res.send(dbChats.addChat(openDB(), req.query.userIDs, req.query.chatType, req.query.chatName));
     }
@@ -76,7 +76,7 @@ routers.get(
 );
 
 routers.post(
-    version + '/addMessage',
+    version + '/message',
     (req, res) => {
         const chatID = req.query.chatID;
         const fromID = req.query.fromID;

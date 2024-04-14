@@ -1,4 +1,4 @@
-const { createTable } = require('./dbCreate');
+const { createTable } = require('./launchDB');
 
 //MessagesDB - хранилище всех сообщений
 //Столбцы: chatID, fromID, message, time, IMGPath
