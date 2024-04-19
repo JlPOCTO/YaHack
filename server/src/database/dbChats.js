@@ -1,82 +1,61 @@
-const { createTable } = require('./launchDB');
-
 //MessagesDB - хранилище всех сообщений
 //Столбцы: chatID, fromID, message, time, IMGPath
+
 //ChatsUsersDB - хранилище пар пользователь-чат
 //Столбцы: userID, chatID
+
 //ChatsDB - хранилище чатов
 //Столбцы: chatID (autoincrement), name, avatarIMGPath, type
-async function getMessages(db, chatID) {
-	const res = await db.get(`SELECT message, time, fromID, IMGPath FROM MessagesDB WHERE chatID = ${chatID} ORDER BY time`);
-	if (res === undefined) return [];
-	return res;
+
+const {database} = require("./launchDB");
+
+async function getMessages(chatID) {
+    return await database().all(`
+        SELECT message, time, fromID, IMGPath 
+        FROM MessagesDB WHERE chatID = ${chatID} 
+        ORDER BY time;
+    `)
 }
 
-async function addChat(db, users, type, name) {
-	//TODO check existing chat
-	if (type === 'direct') {
-		name = "";
-	}
-	let newID;
+async function addChat(users, type, name, avatarImgPath) {
+    //TODO check existing chat
 
-	const res = await db.get(`INSERT INTO ChatsDB(name, avatarIMGPath, type)
-	VALUES("${name}", "", "${type}")
-	RETURNING *`);
+    if (type === 'direct') {
+        name = "";
+        avatarImgPath = "";
+    }
 
-	if (res) {
-		newID = res.chatID;
-	}
+    const res = await database().get(`
+        INSERT INTO ChatsDB(name, avatarIMGPath, type)
+	    VALUES('${name}', '${avatarImgPath}', '${type}')
+	    RETURNING *;
+    `);
 
-	if (newID) {
-		for (let user of users) {
-			await db.exec(`INSERT INTO ChatsUsersDB(userID, chatID) VALUES(${user}, ${newID})`);
-		}
-	}
-	return res;
-}
-async function getChats(db, userID) {
-	const res = await db.get(`SELECT *
-                              FROM ChatsUsersDB chatsUsers
-                              JOIN ChatsDB chats ON chatsUsers.chatID = chats.chatID
-                              WHERE chatsUsers.userID = ${userID}`);
-	if (res === undefined) return [];
-	return res;
+    if (res && res.chatID) {
+        for (let user of users) {
+            await database().run(`INSERT INTO ChatsUsersDB(userID, chatID) VALUES(${user}, ${res.chatID});`);
+        }
+    }
+    return res;
 }
 
-
-async function addMessage(db, chatID, fromID, message, time, IMGPath) {
-	await db.exec(`INSERT INTO MessagesDB(message, time, fromID, chatID, IMGPath)
-	VALUES ("${message}", "${time}", ${fromID}, ${chatID}, "${IMGPath}")`);
+async function getChats(userID) {
+    const res = await database().all(`
+        SELECT * FROM ChatsUsersDB chatsUsers
+        JOIN ChatsDB chats ON chatsUsers.chatID = chats.chatID
+        WHERE chatsUsers.userID = ${userID};
+    `);
+    return res ? res : [];
 }
 
-async function createTables() {
-	await createTable("./DB/sqlite.db", "MessagesDB", `(
-		chatID INTEGER,
-		fromID INTEGER,
-		message TEXT,
-		time VARCHAR(255),
-		IMGPath VARCHAR(255),
-		FOREIGN KEY(chatID) REFERENCES ChatsDB(chatID)
-		);`);
-	await createTable("./DB/sqlite.db", "ChatsUsersDB", `(
-		chatID INTEGER,
-		userID INTEGER,
-		PRIMARY KEY (chatID, userID),
-		FOREIGN KEY(chatID) REFERENCES ChatsDB(chatID),
-		FOREIGN KEY(userID) REFERENCES UsersDB(userID)
-		);`);
-	await createTable("./DB/sqlite.db", "ChatsDB", `(
-		chatID INTEGER PRIMARY KEY,
-		name VARCHAR(255),
-		avatarIMGPath VARCHAR(255),
-		type VARCHAR(255) CHECK (type IN ('direct', 'group'))
-		);`);
+
+async function addMessage(chatID, fromID, message, time, imgPath) {
+    await database().run(`
+        INSERT INTO MessagesDB(message, time, fromID, chatID, IMGPath)
+	    VALUES ('${message}', '${time}', ${fromID}, ${chatID}, '${imgPath}');
+    `);
 }
 
 module.exports = {
-	getChats,
-	getMessages,
-	addChat,
-	addMessage,
-	createTables,
+    getChats, getMessages, addChat, addMessage,
 }

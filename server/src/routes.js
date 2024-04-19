@@ -1,15 +1,14 @@
 const express = require('express');
 const passport = require('passport');
 const {getBasePage} = require("./statics/getBasePage");
-const { isAuthenticatedMiddleware } = require("./middlewares/isAuthenticatedMiddleware")
+const {isAuthenticatedMiddleware} = require("./middlewares/isAuthenticatedMiddleware")
 const dbChats = require('./database/dbChats');
 const dbUsers = require('./database/dbUsers');
-const { openDB } = require('./database/launchDB');
 
 const routers = express.Router();
 
 const version = '/api/v1';
-    
+
 routers.get(
     '/auth/github',
     passport.authenticate('github')
@@ -49,21 +48,24 @@ routers.get(
 routers.get(
     version + '/chats',
     (req, res) => {
-        res.send(dbChats.getChats(openDB(), req.query.userID));
+        res.send(dbChats.getChats(req.query.userID));
     }
 );
 
 routers.post(
     version + '/chat',
     (req, res) => {
-        res.send(dbChats.addChat(openDB(), req.query.userIDs, req.query.chatType, req.query.chatName));
+        dbChats.addChat(req.query.userIDs, req.query.chatType, req.query.chatName).then(
+            result => res.send(result)
+        )
     }
 );
 
 routers.get(
     version + '/myInfo',
     (req, res) => {
-        res.send(dbUsers.findByID(openDB(), req.query.userID));
+        console.log(req)
+        res.send(dbUsers.findByID(req.query.userID));
     }
 );
 
@@ -71,7 +73,7 @@ routers.get(
     version + '/messages',
     (req, res) => {
         const chatID = req.query.chatID;
-        res.send(dbChats.getMessages(openDB(), chatID));
+        res.send(dbChats.getMessages(chatID));
     }
 );
 
@@ -83,7 +85,9 @@ routers.post(
         const message = req.query.messageText;
         const time = req.query.messageTime;
         const IMGPath = ""; //TODO IMG
-        dbChats.addMessage(openDB(), chatID, fromID, message, time, IMGPath);
+        dbChats.addMessage(chatID, fromID, message, time, IMGPath).then(_ => {
+            res.status(200)
+        });
     }
 )
 
