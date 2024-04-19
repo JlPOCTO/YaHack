@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('./utilities/checkEnv')()
 const express = require('express');
 const expressSession = require('express-session');
 const cookieParser = require("cookie-parser");
