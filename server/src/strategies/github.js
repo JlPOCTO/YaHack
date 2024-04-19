@@ -8,8 +8,6 @@ const githubStrategy = new passportGithub.Strategy({
     },
     (accessToken, refreshToken, profile, done) => {
         addUser(profile.id, profile.displayName, profile.username).then(done(null, profile.id))
-
-        // TODO Возможно отмена: done(null, false)
     }
 );
 

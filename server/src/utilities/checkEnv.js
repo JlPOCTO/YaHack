@@ -1,9 +1,9 @@
-function checking(param) {
+function check(param) {
     if (!process.env[param]) {
-        console.error(`Missing ${param} in .env`);
-        return true;
+        console.error(`Missing ${param}`);
+        return false;
     }
-    return false;
+    return true;
 }
 
 const PARAMS = [
@@ -12,13 +12,14 @@ const PARAMS = [
     'LINK',
     'PORT',
     'EXPRESS_SESSION_SECRET',
-    'DATABASE'
+    'DATABASE',
+    'API_VERSION'
 ];
 
 module.exports = function checkEnv() {
-    let check = PARAMS.map(param => checking(param)).reduce((acc, val) => acc || val, false)
-    if (check) {
-        console.error("Вероятно в одном из последних обновлений в .env файл вошел новый параметр. Проверьте чат и добавьте в файл пропущенное")
+    let result = PARAMS.map(check).reduce((acc, val) => acc && val, true)
+    if (!result) {
+        console.error("В .env не хватает параметров. Проверьте чат и добавьте в файл пропущенное")
         process.exit(1);
     }
 }

@@ -9,7 +9,7 @@
 
 const {database} = require("./launchDB");
 
-async function getMessages(chatID) {
+async function getMessagesFromChat(chatID) {
     return await database().all(`
         SELECT message, time, fromID, IMGPath 
         FROM MessagesDB WHERE chatID = ${chatID} 
@@ -17,37 +17,35 @@ async function getMessages(chatID) {
     `)
 }
 
-async function addChat(users, type, name, avatarImgPath) {
+async function addChat(users, type, name, avatarPath) {
     //TODO check existing chat
 
     if (type === 'direct') {
         name = "";
-        avatarImgPath = "";
+        avatarPath = "";
     }
 
-    const res = await database().get(`
+    const newChat = await database().get(`
         INSERT INTO ChatsDB(name, avatarIMGPath, type)
-	    VALUES('${name}', '${avatarImgPath}', '${type}')
+	    VALUES('${name}', '${avatarPath}', '${type}')
 	    RETURNING *;
     `);
 
-    if (res && res.chatID) {
-        for (let user of users) {
-            await database().run(`INSERT INTO ChatsUsersDB(userID, chatID) VALUES(${user}, ${res.chatID});`);
+    if (newChat && 'chatID' in newChat) {
+        for (let userID of users) {
+            await database().run(`INSERT INTO ChatsUsersDB(userID, chatID) VALUES(${userID}, ${newChat.chatID});`);
         }
     }
-    return res;
+    return newChat;
 }
 
-async function getChats(userID) {
-    const res = await database().all(`
+async function getChatsByUser(userID) {
+    return await database().all(`
         SELECT * FROM ChatsUsersDB chatsUsers
         JOIN ChatsDB chats ON chatsUsers.chatID = chats.chatID
         WHERE chatsUsers.userID = ${userID};
     `);
-    return res ? res : [];
 }
-
 
 async function addMessage(chatID, fromID, message, time, imgPath) {
     await database().run(`
@@ -57,5 +55,5 @@ async function addMessage(chatID, fromID, message, time, imgPath) {
 }
 
 module.exports = {
-    getChats, getMessages, addChat, addMessage,
+    getChatsByUser, getMessagesFromChat, addChat, addMessage,
 }

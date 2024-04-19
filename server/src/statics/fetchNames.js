@@ -9,6 +9,7 @@ function fetchNames() {
         return {js: jsNames, css: cssNames}
     } catch (err) {
         console.error("Ошибка при чтении директории:", err);
+        process.exit(1);
     }
 }
 

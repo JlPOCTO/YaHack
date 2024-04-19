@@ -7,13 +7,10 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3')
 const sqliteStoreFactory = require('express-session-sqlite');
-
-
 const sqliteStore = sqliteStoreFactory.default(expressSession);
 const {routers} = require('./routes');
 const {myPassport} = require('./myPassport');
-const {launchDB, database} = require("./database/launchDB");
-const chats = require("./database/dbChats");
+const {launchDB} = require("./database/launchDB");
 
 (async () => {
     const app = express()
@@ -31,7 +28,6 @@ const chats = require("./database/dbChats");
             driver: sqlite3.Database,
             path: process.env.DATABASE,
             ttl: 604800000
-            
         })
     }));
     app.use(myPassport.initialize());

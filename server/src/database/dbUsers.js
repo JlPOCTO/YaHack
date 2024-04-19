@@ -15,13 +15,13 @@ async function deleteUser(id) {
 }
 
 async function findUserByID(id) {
-    const res = await database().get(`SELECT * FROM UsersDB WHERE userID = ${id};`);
-    return res ? res : [];
+    const user = await database().get(`SELECT * FROM UsersDB WHERE userID = ${id};`);
+    return user ? user : [];
 }
 
 async function findUserByLogin(login) {
-    const res = await database().get(`SELECT * FROM UsersDB WHERE login = '${login}';`);
-    return res ? res : [];
+    const user = await database().get(`SELECT * FROM UsersDB WHERE login = '${login}';`);
+    return user ? user : [];
 }
 
 module.exports = {

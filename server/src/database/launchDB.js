@@ -9,12 +9,13 @@ async function launchDB() {
             filename: process.env.DATABASE, driver: sqlite3.Database
         });
     } catch (err) {
-        console.error("Launch failed");
+        console.error("Ошибка при запуске базы данных:", err);
+        process.exit(1);
     }
 }
 
 function database() {
-    return db
+    return db;
 }
 
 module.exports = {launchDB, database};

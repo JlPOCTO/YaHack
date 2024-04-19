@@ -7,7 +7,7 @@ const dbUsers = require('./database/dbUsers');
 
 const routers = express.Router();
 
-const version = '/api/v1';
+const version = process.env.API_VERSION;
 
 routers.get(
     '/auth/github',
@@ -23,6 +23,19 @@ routers.get(
 );
 
 routers.get(
+    '/',
+    (req, res) => {
+        if (req.isAuthenticated()) {
+            return res.redirect('/home');
+        }
+        res.set('Content-Type', 'text/html');
+        res.send(Buffer.from(getBasePage()));
+    }
+)
+
+routers.use(isAuthenticatedMiddleware);
+
+routers.get(
     '/logout',
     (req, res, next) => {
         req.logout(function (err) {
@@ -33,17 +46,6 @@ routers.get(
         });
     }
 );
-
-routers.get(
-    '/',
-    (req, res) => {
-        if (req.isAuthenticated()) {
-            return res.redirect('/home');
-        }
-        res.set('Content-Type', 'text/html');
-        res.send(Buffer.from(getBasePage()));
-    }
-)
 
 routers.get(
     version + '/chats',
@@ -64,8 +66,7 @@ routers.post(
 routers.get(
     version + '/myInfo',
     (req, res) => {
-        console.log(req)
-        res.send(dbUsers.findByID(req.query.userID));
+        res.send(req.user);
     }
 );
 
@@ -93,7 +94,6 @@ routers.post(
 
 routers.get(
     '*',
-    isAuthenticatedMiddleware,
     (req, res) => {
         res.set('Content-Type', 'text/html');
         res.send(Buffer.from(getBasePage()));
