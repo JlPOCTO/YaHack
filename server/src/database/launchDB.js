@@ -1,23 +1,30 @@
 const sqlite3 = require('sqlite3');
 const sqlite = require('sqlite');
 
-async function createTable(path, name, params) {
-    const db = await sqlite.open({
-        filename: path,
-        driver: sqlite3.Database
-    });
-    await db.exec("PRAGMA foreign_keys = ON;");
-    await db.exec(`CREATE TABLE IF NOT EXISTS ${name} ${params}`);
-    await db.close();
-}
-async function openDB() {
-    return sqlite.open(
-        {
-            filename: "./DB/sqlite.db",
-            driver: sqlite3.Database
+let db;
+
+async function launchDB(databasePath) {
+    try {
+        db = await sqlite.open({
+            filename: databasePath, driver: sqlite3.Database
         });
+    } catch (err) {
+        console.error("Ошибка при запуске базы данных:", err);
+        process.exit(1);
+    }
 }
 
-module.exports = { openDB };
+async function closeDB() {
+    try {
+        await db.close()
+    } catch (err) {
+        console.error("Ошибка при закрытии базы данных:", err);
+        process.exit(1);
+    }
+}
 
-module.exports = { createTable, openDB };
+function database() {
+    return db;
+}
+
+module.exports = {launchDB, database, closeDB};

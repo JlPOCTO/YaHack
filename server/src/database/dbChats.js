@@ -1,82 +1,61 @@
-const { createTable } = require('./launchDB');
+const {database} = require("./launchDB");
 
-//MessagesDB - хранилище всех сообщений
-//Столбцы: chatID, fromID, message, time, IMGPath
-//ChatsUsersDB - хранилище пар пользователь-чат
-//Столбцы: userID, chatID
-//ChatsDB - хранилище чатов
-//Столбцы: chatID (autoincrement), name, avatarIMGPath, type
-async function getMessages(db, chatID) {
-	const res = await db.get(`SELECT message, time, fromID, IMGPath FROM MessagesDB WHERE chatID = ${chatID} ORDER BY time`);
-	if (res === undefined) return [];
-	return res;
+async function getMessagesFromChat(chatID) {
+    return await database().all(`
+        SELECT message, time, sender_id, image_path 
+        FROM messages WHERE chat_id = ${chatID} 
+        ORDER BY time;
+    `)
 }
 
-async function addChat(db, users, type, name) {
-	//TODO check existing chat
-	if (type === 'direct') {
-		name = "";
-	}
-	let newID;
+async function addChat(users, type, name, avatarPath) {
+    //TODO check existing chat
 
-	const res = await db.get(`INSERT INTO ChatsDB(name, avatarIMGPath, type)
-	VALUES("${name}", "", "${type}")
-	RETURNING *`);
+    if (type === 'direct') {
+        name = "";
+        avatarPath = "";
+    }
+    await database().run("BEGIN TRANSACTION;")
+    try {
+        const newChat = await database().get(`
+            INSERT INTO chats(name, avatar_path, type)
+            VALUES('${name}', '${avatarPath}', '${type}')
+            RETURNING *;
+        `)
 
-	if (res) {
-		newID = res.chatID;
-	}
-
-	if (newID) {
-		for (let user of users) {
-			await db.exec(`INSERT INTO ChatsUsersDB(userID, chatID) VALUES(${user}, ${newID})`);
-		}
-	}
-	return res;
-}
-async function getChats(db, userID) {
-	const res = await db.get(`SELECT *
-                              FROM ChatsUsersDB chatsUsers
-                              JOIN ChatsDB chats ON chatsUsers.chatID = chats.chatID
-                              WHERE chatsUsers.userID = ${userID}`);
-	if (res === undefined) return [];
-	return res;
+        if (newChat && 'id' in newChat) {
+            for (let userID of users) {
+                await database().run(`INSERT INTO users_in_chats(user_id, chat_id) VALUES(${userID}, ${newChat.id});`);
+            }
+            await database().run("COMMIT;")
+            return newChat
+        }
+    } catch (e) {
+        console.error(e);
+    }
+    console.error("Error while adding chat");
+    await database().run("ROLLBACK");
 }
 
-
-async function addMessage(db, chatID, fromID, message, time, IMGPath) {
-	await db.exec(`INSERT INTO MessagesDB(message, time, fromID, chatID, IMGPath)
-	VALUES ("${message}", "${time}", ${fromID}, ${chatID}, "${IMGPath}")`);
+async function getChatsByUser(userID) {
+    return await database().all(`
+        SELECT *
+        FROM chats 
+        WHERE id IN (
+              SELECT chat_id
+              FROM users_in_chats
+              WHERE user_id = ${userID}  
+        );
+    `);
 }
 
-async function createTables() {
-	await createTable("./DB/sqlite.db", "MessagesDB", `(
-		chatID INTEGER,
-		fromID INTEGER,
-		message TEXT,
-		time VARCHAR(255),
-		IMGPath VARCHAR(255),
-		FOREIGN KEY(chatID) REFERENCES ChatsDB(chatID)
-		);`);
-	await createTable("./DB/sqlite.db", "ChatsUsersDB", `(
-		chatID INTEGER,
-		userID INTEGER,
-		PRIMARY KEY (chatID, userID),
-		FOREIGN KEY(chatID) REFERENCES ChatsDB(chatID),
-		FOREIGN KEY(userID) REFERENCES UsersDB(userID)
-		);`);
-	await createTable("./DB/sqlite.db", "ChatsDB", `(
-		chatID INTEGER PRIMARY KEY,
-		name VARCHAR(255),
-		avatarIMGPath VARCHAR(255),
-		type VARCHAR(255) CHECK (type IN ('direct', 'group'))
-		);`);
+async function addMessage(chatID, senderID, message, time, imagePath) {
+    await database().run(`
+        INSERT INTO messages(message, time, sender_id, chat_id, image_path)
+	    VALUES ('${message}', ${time}, ${senderID}, ${chatID}, '${imagePath}');
+    `);
 }
 
 module.exports = {
-	getChats,
-	getMessages,
-	addChat,
-	addMessage,
-	createTables,
+    getChatsByUser, getMessagesFromChat, addChat, addMessage,
 }

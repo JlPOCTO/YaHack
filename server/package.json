@@ -5,7 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "create-db": "node src/utilities/createDB.js \"./src/sqlite.db\"",
+    "fill-test-db": "node src/utilities/fillTestDB.js \"./src/sqlite.db\""
   },
   "dependencies": {
     "body-parser": "^1.20.2",
