@@ -4,7 +4,6 @@ import Body from '../BodyMain/BodyMain';
 import {useState, useEffect} from 'react';
 import {ThemeProvider} from 'styled-components';
 import {lightTheme, darkTheme, GlobalStyles} from '../App/themes';
-import {AppStoreProvider} from '../../stores/AppStore/AppStoreProvider';
 import {UserStoreProvider} from "../../stores/UserStore";
 
 const getInitialTheme = () => {
