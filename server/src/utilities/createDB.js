@@ -1,44 +1,44 @@
 ﻿const sqlite3 = require("sqlite3");
-const sqlite = require("sqlite")
-require('dotenv').config();
+const {open} = require("sqlite");
 
 function makeTable(name, param) {
     return {name: name, params: param}
 }
 
 const TABLES = [
-    makeTable("MessagesDB", `(
-        chatID INTEGER,
-        fromID INTEGER,
+    makeTable("messages", `(
+        id INTEGER PRIMARY KEY,
+        chat_id INTEGER,
+        sender_id INTEGER,
         message TEXT,
-        time VARCHAR(255),
-        IMGPath VARCHAR(255),
-        FOREIGN KEY(chatID) REFERENCES ChatsDB(chatID))`),
-    makeTable("ChatsUsersDB", `(
-        chatID INTEGER,
-        userID INTEGER,
-        PRIMARY KEY (chatID, userID),
-        FOREIGN KEY(chatID) REFERENCES ChatsDB(chatID),
-        FOREIGN KEY(userID) REFERENCES UsersDB(userID))`),
-    makeTable("ChatsDB", `(
-        chatID INTEGER PRIMARY KEY,
-        name VARCHAR(255),
-        avatarIMGPath VARCHAR(255),
-        type VARCHAR(255) CHECK (type IN ('direct', 'group')))`),
-    makeTable("UsersDB", `(
-        userID INTEGER PRIMARY KEY,
+        time INTEGER,
+        image_path TEXT,
+        FOREIGN KEY(chat_id) REFERENCES chats(id))`),
+    makeTable("users_in_chats", `(
+        chat_id INTEGER,
+        user_id INTEGER,
+        PRIMARY KEY (chat_id, user_id),
+        FOREIGN KEY(chat_id) REFERENCES chats(id),
+        FOREIGN KEY(user_id) REFERENCES users(id))`),
+    makeTable("chats", `(
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        avatar_path TEXT,
+        type TEXT CHECK (type IN ('direct', 'group')))`),
+    makeTable("users", `(
+        id INTEGER PRIMARY KEY,
         name TEXT,
         login TEXT,
-        avatarPath VARCHAR(255))`),
+        avatar_path TEXT)`),
 ];
 
 (async () => {
-    const database = await sqlite.open({
-        filename: process.env.DATABASE, driver: sqlite3.Database
+    const database = await open({
+        filename: process.argv[2], driver: sqlite3.Database
     });
     await database.run(`PRAGMA foreign_keys = ON;`);
     await Promise.all(TABLES.map(table => {
-        database.run(`CREATE TABLE IF NOT EXISTS ${table.name} ${table.params};`)
+        database.run(`CREATE TABLE IF NOT EXISTS ${table.name} ${table.params} STRICT;`)
     }));
     await database.close();
 })();

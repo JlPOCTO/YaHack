@@ -1,18 +1,9 @@
-//MessagesDB - хранилище всех сообщений
-//Столбцы: chatID, fromID, message, time, IMGPath
-
-//ChatsUsersDB - хранилище пар пользователь-чат
-//Столбцы: userID, chatID
-
-//ChatsDB - хранилище чатов
-//Столбцы: chatID (autoincrement), name, avatarIMGPath, type
-
 const {database} = require("./launchDB");
 
 async function getMessagesFromChat(chatID) {
     return await database().all(`
-        SELECT message, time, fromID, IMGPath 
-        FROM MessagesDB WHERE chatID = ${chatID} 
+        SELECT message, time, sender_id, image_path 
+        FROM messages WHERE chat_id = ${chatID} 
         ORDER BY time;
     `)
 }
@@ -24,33 +15,44 @@ async function addChat(users, type, name, avatarPath) {
         name = "";
         avatarPath = "";
     }
+    await database().run("BEGIN TRANSACTION;")
+    try {
+        const newChat = await database().get(`
+            INSERT INTO chats(name, avatar_path, type)
+            VALUES('${name}', '${avatarPath}', '${type}')
+            RETURNING *;
+        `)
 
-    const newChat = await database().get(`
-        INSERT INTO ChatsDB(name, avatarIMGPath, type)
-	    VALUES('${name}', '${avatarPath}', '${type}')
-	    RETURNING *;
-    `);
-
-    if (newChat && 'chatID' in newChat) {
-        for (let userID of users) {
-            await database().run(`INSERT INTO ChatsUsersDB(userID, chatID) VALUES(${userID}, ${newChat.chatID});`);
+        if (newChat && 'id' in newChat) {
+            for (let userID of users) {
+                await database().run(`INSERT INTO users_in_chats(user_id, chat_id) VALUES(${userID}, ${newChat.id});`);
+            }
+            await database().run("COMMIT;")
+            return newChat
         }
+    } catch (e) {
+        console.error(e);
     }
-    return newChat;
+    console.error("Error while adding chat");
+    await database().run("ROLLBACK");
 }
 
 async function getChatsByUser(userID) {
     return await database().all(`
-        SELECT * FROM ChatsUsersDB chatsUsers
-        JOIN ChatsDB chats ON chatsUsers.chatID = chats.chatID
-        WHERE chatsUsers.userID = ${userID};
+        SELECT *
+        FROM chats 
+        WHERE id IN (
+              SELECT chat_id
+              FROM users_in_chats
+              WHERE user_id = ${userID}  
+        );
     `);
 }
 
-async function addMessage(chatID, fromID, message, time, imgPath) {
+async function addMessage(chatID, senderID, message, time, imagePath) {
     await database().run(`
-        INSERT INTO MessagesDB(message, time, fromID, chatID, IMGPath)
-	    VALUES ('${message}', '${time}', ${fromID}, ${chatID}, '${imgPath}');
+        INSERT INTO messages(message, time, sender_id, chat_id, image_path)
+	    VALUES ('${message}', ${time}, ${senderID}, ${chatID}, '${imagePath}');
     `);
 }
 

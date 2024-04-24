@@ -10,11 +10,11 @@ const sqliteStoreFactory = require('express-session-sqlite');
 const sqliteStore = sqliteStoreFactory.default(expressSession);
 const {routers} = require('./routes');
 const {myPassport} = require('./myPassport');
-const {launchDB} = require("./database/launchDB");
+const {launchDB, closeDB} = require("./database/launchDB");
 
 (async () => {
     const app = express()
-    await launchDB()
+    await launchDB(process.env.DATABASE)
     app.use(cookieParser(process.env.EXPRESS_SESSION_SECRET))
     app.use(bodyParser.json());
     app.use(cors());
@@ -36,3 +36,10 @@ const {launchDB} = require("./database/launchDB");
 
     app.listen(process.env.PORT);
 })();
+
+process.on('exit', async () => {
+    await closeDB();
+});
+process.on('SIGINT', async () => {
+    await closeDB();
+});
