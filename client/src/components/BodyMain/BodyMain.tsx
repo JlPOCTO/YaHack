@@ -1,17 +1,17 @@
 import React, {useState} from 'react';
 import '../../css/BodyMain.css';
 import Dialog from "../Dialog/Dialog";
+import {useUserStore} from "../../stores/UserStore";
 
-type SideBarProps = {
-    idOfShownDialog : any;
-}
-function BodyMain(props:SideBarProps) {
-    const { idOfShownDialog} = props;
+
+function BodyMain() {
+
+    // const { idOfShownDialog} = props;
     const [isShown, setIsShown] = useState(false);
   return (
     <div className="body-main">
         {/*{(!idOfShownDialog) && <img className="Img" alt="picture" />}*/}
-        {idOfShownDialog && <Dialog dialogId={idOfShownDialog}/>}
+        {<Dialog/>}
     </div>
   );
 }

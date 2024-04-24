@@ -1,5 +1,5 @@
 #message {
-    width: 100%;
+    width: 1030px;
     height: 40px;
 
     flex: 0 0 auto;
@@ -14,7 +14,7 @@
 .messageContainer {
     position: absolute;
     bottom: 0;
-    width: 100%;
+    width: 1030px;
     display: inline-block;
 }
 

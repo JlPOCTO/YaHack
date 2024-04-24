@@ -9,13 +9,8 @@ import {Button} from "@gravity-ui/uikit";
 
 const API_HOST = 'http://localhost:3000';
 
-type SideBarProps = {
-    idOfShownDialog : any;
-    setIdDialogWitchIsShown:any
-}
 
-function SideBarBody(props:SideBarProps) {
-    const { idOfShownDialog, setIdDialogWitchIsShown } = props;
+function SideBarBody() {
     const [dialogs, setDialogs] = useState([])
     const [open, setOpen] = useState(false);
     // const   [loading, setLoading] = useState(false)
@@ -38,7 +33,7 @@ function SideBarBody(props:SideBarProps) {
     return (
         <div>
             {dialogs.map((dialog:any) =>
-               <ChatBar dialog={dialog} idOfShownDialog={idOfShownDialog} setIdDialogWitchIsShown={setIdDialogWitchIsShown} />
+               <ChatBar dialog={dialog}/>
             )}
         </div>
 

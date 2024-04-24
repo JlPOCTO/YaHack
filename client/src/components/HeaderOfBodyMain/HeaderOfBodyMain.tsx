@@ -3,18 +3,25 @@ import '../../css/HeaderOfBodyMain.css';
 import {Button, Modal} from "@gravity-ui/uikit";
 // import settings from "../../settings-svgrepo-com.svg";
 import Profile from "../Profile/Profile";
+import {useUserStore} from "../../stores/UserStore";
+import {observer} from "mobx-react-lite";
 
 type DialogProps = {
-    dialog: any;
+    dialogId: any;
 }
 
 function HeaderOfBodyMain(props:any) {
-
+    const {dialogID} = useUserStore();
   return (
     <div className="header-of-body-main">
-        DIALOG
+        <div className="dialog-name">
+            {dialogID}
+        </div>
+        <div className="status">
+            online
+        </div>
     </div>
 
   );
 }
-export default HeaderOfBodyMain;
+export default observer(HeaderOfBodyMain);

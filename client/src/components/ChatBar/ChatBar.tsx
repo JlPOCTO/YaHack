@@ -4,32 +4,37 @@ import {Button, Modal} from "@gravity-ui/uikit";
 // import settings from "../../settings-svgrepo-com.svg";
 import Profile from "../Profile/Profile";
 import Dialog from "../Dialog/Dialog";
+import {useUserStore} from "../../stores/UserStore";
+import {action} from "mobx";
+import {observer} from "mobx-react-lite";
 
 type ChatBarProps = {
     dialog: any;
-    idOfShownDialog : any;
-    setIdDialogWitchIsShown:any
 }
 
 function ChatBar(props: ChatBarProps) {
-    const { dialog, idOfShownDialog, setIdDialogWitchIsShown } = props;
+    const { dialog } = props;
+    const {dialogID, setDialogID} = useUserStore()
 
     // const [isShown, setIsShown] = useState(false);
     const [isActual, setIsActual] = useState(false);
     const handleClick = (event:any) => {
-        setIdDialogWitchIsShown(dialog.id)
-        setIsActual(current => dialog.id === idOfShownDialog);
+        setDialogID(dialog.id)
+        // setIsActual(current => dialog.id === idOfShownDialog);
+        // setIdDialogWitchIsShown(dialog.id)
     };
 
 
     return (
      <div className="chat-bar">
-         {!isActual && <Button onClick={handleClick} className='button'>
+         <Button onClick={action((e) =>{
+             setDialogID(dialog.id)
+         })} className='button'>
             {dialog.id}
-        </Button>}
-         {isActual && <Button onClick={handleClick} className='button-no-actual'>
-             {dialog.id}
-         </Button>}
+        </Button>
+         {/*{isActual && <Button onClick={handleClick} className='button-no-actual'>*/}
+         {/*    {dialog.id}*/}
+         {/*</Button>}*/}
 
          {/*{isShown && <Dialog dialog={dialog}/>}*/}
     </div>
@@ -37,4 +42,4 @@ function ChatBar(props: ChatBarProps) {
 
   );
 }
-export default ChatBar;
+export default observer(ChatBar);

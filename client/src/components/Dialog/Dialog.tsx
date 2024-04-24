@@ -8,29 +8,27 @@ import AddMessage from "../AddMessage/AddMessage";
 import DialogWithMessages from "../DialogWithMessages/DialogWithMessages";
 import ChatBar from "../ChatBar/ChatBar";
 import message from "../Message/Message";
+import {useUserStore} from "../../stores/UserStore";
+import {observer} from "mobx-react-lite";
 
-type DialogProps = {
-    dialogId: any;
-}
 
-function Dialog(props: DialogProps) {
-    const {dialogId} = props;
+function Dialog() {
+    const {dialogID} = useUserStore()
     const [messages, setMessages] = useState([])
     useEffect(() => {
 
         const getMessages = async () => {
-            const res = await fetch(`/dialogs/:id/messages`)
+            const res = await fetch(`/messages?id=${dialogID}`)
             const messages = await res.json()
             setMessages(messages)
 
         }
-
         getMessages()
-    }, [])
+    }, [{dialogID}])
 
     return (
         <div className="dialog">
-            <HeaderOfBodyMain/>
+            <HeaderOfBodyMain dialogId={dialogID}/>
             <DialogWithMessages messages={messages}/>
             <AddMessage/>
         </div>
@@ -38,4 +36,4 @@ function Dialog(props: DialogProps) {
     );
 }
 
-export default Dialog;
+export default observer(Dialog);

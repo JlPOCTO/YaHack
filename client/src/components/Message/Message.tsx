@@ -1,8 +1,5 @@
 import React, {useState} from 'react';
 import '../../css/Message.css';
-import {Button, Modal} from "@gravity-ui/uikit";
-// import settings from "../../settings-svgrepo-com.svg";
-import Profile from "../Profile/Profile";
 
 type Message = {
     message: any;
@@ -11,11 +8,24 @@ type Message = {
 function Message(props:Message) {
     const { message } = props;
   return (
-    <div className="message">
-        <div className="text">
-            {message.message}
-        </div>
-    </div>
+
+      <div className="container">
+          <div className="arrow">
+              <div className="outer"></div>
+              <div className="inner"></div>
+          </div>
+          <div className="message-body">
+              <div className="author">
+                  <p>{message.idFrom}</p>
+              </div>
+              <div className="text">
+                  <p>{message.message}</p>
+              </div>
+              <div className="data">
+                  <p>{message.time.substring(19, 24)}</p>
+              </div>
+          </div>
+      </div>
 
   );
 }
