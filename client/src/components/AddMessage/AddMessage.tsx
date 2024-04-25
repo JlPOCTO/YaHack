@@ -2,8 +2,16 @@ import '../../css/AddMessage.css';
 import { FaceSmile, File, ArrowShapeRight } from '@gravity-ui/icons';
 import { Icon } from '@gravity-ui/uikit';
 import Popup from 'reactjs-popup';
+import Picker from 'emoji-picker-react';
+import { useState } from 'react';
 
 function AddMessage() {
+
+    const [emoji, setEmoji] = useState<any>(null)
+    
+    const onEmojiClick = (event: any, curEmoji : any) => {
+        setEmoji(curEmoji)
+    }
 
     return (
         <div className='messageContainer'>
@@ -19,8 +27,9 @@ function AddMessage() {
                         </button>}
                     position="top center"
                 >
-                    <div>Choose an emoji</div>
-                    <button>emoji</button>
+                    <div className='emojiPopup'>
+                        <Picker onEmojiClick={onEmojiClick}/>
+                    </div>
                 </Popup>
                 <button type="submit" className='currentSettings'>
                     <Icon className='Settings' data={ArrowShapeRight} />
