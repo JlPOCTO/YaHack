@@ -2,7 +2,7 @@ import {makeAutoObservable} from "mobx";
 import React, {useContext, useRef} from "react";
 
 export default class UserStore{
-    constructor(dialogID : number ) {
+    constructor(dialogID : number) {
         this.dialogID = dialogID
         makeAutoObservable(this)
     }
@@ -13,8 +13,11 @@ export default class UserStore{
 
     dialogID : number|any = 0
     setDialogID = (dialogID: number|any) => {
-        console.log("click on button" + dialogID)
         this.dialogID = dialogID
+    }
+    userID : number|any = 1
+    setUserID = (userID: number|any) => {
+        this.userID = userID
     }
 
 }

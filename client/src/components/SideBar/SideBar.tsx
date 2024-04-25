@@ -3,7 +3,7 @@ import '../../css/SideBar.css';
 import SideBarBody from "../SideBarBody/SideBarBody";
 import SideBarHeader from "../SideBarHeader/SideBarHeader";
 import {observer} from 'mobx-react-lite';
-import {useAppStore} from '../../stores/AppStore/AppStoreProvider';
+
 
 function SideBar() {
     return (

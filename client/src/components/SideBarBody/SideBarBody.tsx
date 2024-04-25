@@ -13,16 +13,11 @@ const API_HOST = 'http://localhost:3000';
 function SideBarBody() {
     const [dialogs, setDialogs] = useState([])
     const [open, setOpen] = useState(false);
-    // const   [loading, setLoading] = useState(false)
 
     useEffect(() => {
 
         const getDialogs = async () => {
-            // setLoading(false)
-            // console.log("Begin fetch")
             const res = await fetch(`/dialogs`)
-            // console.log("End fetch")
-            // setLoading(true)
             const dialogs1 = await res.json()
             setDialogs(dialogs1)
         }
