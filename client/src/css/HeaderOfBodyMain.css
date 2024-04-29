@@ -1,0 +1,14 @@
+.header-of-body-main {
+    height: 60px;
+    width: 100%;
+    background-color: #4aa1f2;
+}
+.dialog-name{
+    font-size: large;
+    font-weight: bold;
+    color: blue;
+}
+.status{
+    font-size:small;
+    color: white;
+}

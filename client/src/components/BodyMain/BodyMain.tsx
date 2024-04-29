@@ -1,15 +1,19 @@
+import React, {useState} from 'react';
 import '../../css/BodyMain.css';
+import Dialog from "../Dialog/Dialog";
+import {useUserStore} from "../../stores/UserStore";
 import AddMessage from '../AddMessage/AddMessage';
-import picture from '../../../public/picture.jpg';
+import picture from '../../../static/picture.jpg';
 
 
 function BodyMain() {
+
+    // const { idOfShownDialog} = props;
+    const [isShown, setIsShown] = useState(false);
   return (
     <div className="body-main">
-      <div className="Img">
-       {/* <img src={picture} className="Settings" alt="settings" /> */}
-        <AddMessage />
-      </div>
+        {/* <img src={picture} className="Settings" alt="settings" /> */}
+        {<Dialog/>}
     </div>
   );
 }

@@ -1,0 +1,20 @@
+.contacts {
+    width: 330px;
+    height: 270px;
+    background-color: aliceblue;
+    background: #fff;
+    margin: 0 auto;
+  } 
+
+.header {
+    padding: 10px;
+    font-size: 20px;
+    word-wrap: break-word;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+    line-height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space-collapse: break-spaces;
+  }

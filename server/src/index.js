@@ -32,9 +32,11 @@ const students = [
 const dialogs = [
     {
         id: 1,
-        messages: [{idFrom: 1, time: Date(2024, 1, 10, 10, 5, 20), message: "Hi!"},
+        messages: [{idFrom: 1, time: Date(2024, 1, 10, 10, 5, 20), message: "Hihhhhhhhjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh hhhhhhhhhhhh uuuuuuuuuu uuuuuuuu uuuuuuuuuu iiiiiiiiii uuuuuuuuu iiiiiiii uuuuuuuuu!"},
             {idFrom: 2, time: Date(2024, 1, 11, 12), message: "Yo"},
-            {idFrom: 1, time: Date(2024, 2, 1), message: "Ohayo"}]
+            {idFrom: 1, time: Date(2024, 2, 1), message: "Ohayo"},{idFrom: 2, time: Date(2024, 3, 1, 10, 7), message: "Here"},
+            {idFrom: 2, time: Date(2024, 3, 1, 11), message: "아니요"},
+            {idFrom: 3, time: Date(2024, 2, 1), message: "مداح"}]
     },
     {
         id: 2,
@@ -50,21 +52,23 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.get('/dialogs', (req, res) => {
-    res.send(students);
+    res.send(dialogs);
 });
 
 app.get('/myInfo', (req, res) => {
     res.send(me);
 });
 
+app.get('/dialogs/:id/messages', (req, res) => {
+    let a = req.params.id - 1
+    res.send(dialogs[a].messages)
+    // res.send(dialogs[0].messages)
+});
+
 app.get('/messages', (req, res) => {
-    const dialogID = req.body.dialogID;
-    for (let dialog in dialogs) {
-        if (dialog.id == dialogID) {
-            res.send(dialog)
-            break;
-        }
-    }
+    let a = req.query.id - 1
+    res.send(dialogs[a].messages)
+    // res.send(dialogs[0].messages)
 });
 
 app.post('/addMessage', (req, res) => {

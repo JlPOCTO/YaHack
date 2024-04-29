@@ -30,7 +30,7 @@ body {
     border: ${(props) => props.theme.border};
 }
 
-.profile {
+.profile, .contacts {
     background: ${(props) => props.theme.body};
     color: ${(props) => props.theme.text};
  }

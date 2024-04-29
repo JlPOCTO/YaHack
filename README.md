@@ -4,6 +4,8 @@
 1. Сбилдить client: в директории /client написать команды: <br>
     npm install <br>
     npm run build
+2. Вместо первого пункта можно теперь просто запускать 
+<br> npm run watch
 2. Создаем в папке /server файл .env и секретные коды из чата
 3. Запустить server: в директории /server написать команды: <br>
     npm install <br>

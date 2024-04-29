@@ -1,0 +1,11 @@
+.dialog-with-messages {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position:relative;
+    overflow-y: scroll;
+    /* height: 630px; */
+    overflow-x: hidden;
+    height: 89%;
+}
