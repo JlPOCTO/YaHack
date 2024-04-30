@@ -2,7 +2,7 @@ import '../../css/ProfileModalWindow.css';
 import { Modal } from '@gravity-ui/uikit';
 import Profile from "../Profile/Profile";
 import { useEffect, useState } from 'react'
-import {observer} from "mobx-react-lite";
+import { observer } from "mobx-react-lite";
 
 
 type ProfileModalWindow = {
@@ -15,9 +15,8 @@ function ProfileModalWindow() {
   useEffect(() => {
 
     const getMyInfo = async () => {
-      const res = await fetch(`/myInfo`)
+      const res = await fetch('\me')
       const me = await res.json();
-
       setMyInfo(me)
     }
     getMyInfo()
@@ -33,7 +32,7 @@ function ProfileModalWindow() {
         </svg>
       </button>
       <Modal open={open} onClose={() => setOpen(false)}>
-        <Profile me={me}/>
+        <Profile me={me} />
       </Modal>
     </div>
   );

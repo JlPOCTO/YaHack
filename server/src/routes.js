@@ -2,8 +2,12 @@ const express = require('express');
 const passport = require('passport');
 const {getBasePage} = require("./statics/getBasePage");
 const {isAuthenticatedMiddleware} = require("./middlewares/isAuthenticatedMiddleware")
+const dbChats = require('./database/dbChats');
+const dbUsers = require('./database/dbUsers');
 
 const routers = express.Router();
+
+const version = process.env.API_VERSION;
 
 routers.get(
     '/auth/github',
@@ -19,6 +23,19 @@ routers.get(
 );
 
 routers.get(
+    '/',
+    (req, res) => {
+        if (req.isAuthenticated()) {
+            return res.redirect('/home');
+        }
+        res.set('Content-Type', 'text/html');
+        res.send(Buffer.from(getBasePage()));
+    }
+)
+
+routers.use(isAuthenticatedMiddleware);
+
+routers.get(
     '/logout',
     (req, res, next) => {
         req.logout(function (err) {
@@ -31,19 +48,52 @@ routers.get(
 );
 
 routers.get(
-    '/',
+    version + '/chats',
     (req, res) => {
-        if (req.isAuthenticated()) {
-            return res.redirect('/home');
-        }
-        res.set('Content-Type', 'text/html');
-        res.send(Buffer.from(getBasePage()));
+        res.send(dbChats.getChats(req.query.userID));
+    }
+);
+
+routers.post(
+    version + '/chat',
+    (req, res) => {
+        dbChats.addChat(req.query.userIDs, req.query.chatType, req.query.chatName).then(
+            result => res.send(result)
+        )
+    }
+);
+
+routers.get(
+    version + '/myInfo',
+    (req, res) => {
+        res.send(req.user);
+    }
+);
+
+routers.get(
+    version + '/messages',
+    (req, res) => {
+        const chatID = req.query.chatID;
+        res.send(dbChats.getMessages(chatID));
+    }
+);
+
+routers.post(
+    version + '/message',
+    (req, res) => {
+        const chatID = req.query.chatID;
+        const fromID = req.query.fromID;
+        const message = req.query.messageText;
+        const time = req.query.messageTime;
+        const IMGPath = ""; //TODO IMG
+        dbChats.addMessage(chatID, fromID, message, time, IMGPath).then(_ => {
+            res.status(200)
+        });
     }
 )
 
 routers.get(
     '*',
-    isAuthenticatedMiddleware,
     (req, res) => {
         res.set('Content-Type', 'text/html');
         res.send(Buffer.from(getBasePage()));

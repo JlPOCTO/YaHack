@@ -1,33 +1,26 @@
-const db = {};
+const {database} = require("./launchDB");
 
-function getChats(userID) {
-
+async function addUser(id, name, login, avatarPath) {
+    await database().run(`
+        INSERT OR IGNORE INTO users(id, name, login, avatar_path)
+        VALUES(${id}, '${name}', '${login}', '${avatarPath}');
+    `);
 }
 
-function addUser(userID, userNickname) {
-
+async function deleteUser(id) {
+    await database().run(`DELETE FROM users WHERE id = ${id};`);
 }
 
-function deleteUser(userID) {
-
+async function findUserByID(id) {
+    const user = await database().get(`SELECT * FROM users WHERE id = ${id};`);
+    return user ? user : [];
 }
 
-function findID(userID) {
-
-}
-
-function findNickname(nickname) {
-
-}
-
-function createDB() {
-
+async function findUserByLogin(login) {
+    const user = await database().get(`SELECT * FROM users WHERE login = '${login}';`);
+    return user ? user : [];
 }
 
 module.exports = {
-    getChats,
-    addUser,
-    deleteUser,
-    findID,
-    findNickname,
+    addUser, deleteUser, findUserByID, findUserByLogin,
 }

@@ -57,6 +57,7 @@
 }
 .container .message-body p {
     margin: 0;
+    color: #2b6fae;
 }
 .author{
     color: #2b6fae;
@@ -121,6 +122,7 @@
 }
 .myContainer .message-body p {
     margin: 0;
+    color: #2b6fae;
 }
 .myContainer.author{
     color: #2b6fae;
