@@ -1,8 +1,6 @@
 .contacts {
     width: 330px;
     height: 270px;
-    background-color: aliceblue;
-    background: #fff;
     margin: 0 auto;
   } 
 
@@ -18,3 +16,13 @@
     justify-content: center;
     white-space-collapse: break-spaces;
   }
+
+.myContactsNames {
+  padding: 0 10px;
+  font-size: 16px;
+  word-wrap: break-word;
+  font-weight: 400;
+  line-height: 24px;
+  display: flex;
+  text-align: center;
+}

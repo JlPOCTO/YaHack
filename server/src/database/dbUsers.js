@@ -16,11 +16,15 @@ async function findUserByID(id) {
     return user ? user : [];
 }
 
+async function findAllUsers() {
+    return await database().all(`SELECT name FROM users;`);
+}
+
 async function findUserByLogin(login) {
     const user = await database().get(`SELECT * FROM users WHERE login = '${login}';`);
     return user ? user : [];
 }
 
 module.exports = {
-    addUser, deleteUser, findUserByID, findUserByLogin,
+    addUser, deleteUser, findUserByID, findUserByLogin, findAllUsers
 }

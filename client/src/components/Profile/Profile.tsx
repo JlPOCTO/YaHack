@@ -1,6 +1,6 @@
 import '../../css/Profile.css';
 import { Modal } from '@gravity-ui/uikit';
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Contacts from "../Contacts/Contacts";
 
 type Profile = {
@@ -11,6 +11,17 @@ function Profile(props: Profile) {
 
   const { me } = props;
   const [open, setOpen] = useState(false);
+  const [contacts, setMyContacts] = useState([])
+  useEffect(() => {
+
+    const getMyInfo = async () => {
+      const res = await fetch('\contacts')
+      const contacts = await res.json();
+      setMyContacts(contacts)
+    }
+    getMyInfo()
+  }, [])
+
   return (
     <div className='profile'>
       <header>
@@ -26,7 +37,7 @@ function Profile(props: Profile) {
               <svg className='Settings' fill="#000000" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4,21a1,1,0,0,0,1,1H19a1,1,0,0,0,1-1V3a1,1,0,0,0-1-1H5A1,1,0,0,0,4,3ZM12,7.5a2,2,0,1,1-2,2A2,2,0,0,1,12,7.5ZM8.211,16.215a4,4,0,0,1,7.578,0A.993.993,0,0,1,14.83,17.5H9.18A1,1,0,0,1,8.211,16.215Z" /></svg>
             </button>
             <Modal open={open} onClose={() => setOpen(false)}>
-              <Contacts me={me} />
+              <Contacts contacts={contacts} />
             </Modal>
           </div>
           <div className='itemNaming'>Contacts</div>

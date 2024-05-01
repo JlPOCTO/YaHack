@@ -30,6 +30,10 @@ const chats = require('./database/dbChats');
         //currentUser to be added
         res.send(await users.findUserByID(1));
     });
+    app.get('/contacts', async (req, res) => {
+        //currentUser to be added
+        res.send(await users.findAllUsers());
+    });
     app.get('/dialogs/:id/messages', async (req, res) => {
         let a = req.query.id
         res.send(await chats.getMessagesFromChat(a))
