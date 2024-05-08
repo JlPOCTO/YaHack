@@ -5,5 +5,7 @@
     justify-content: flex-end;
     position:relative;
     overflow-y: scroll;
-    height: 630px;
+    /* height: 630px; */
+    overflow-x: hidden;
+    height: 89%;
 }

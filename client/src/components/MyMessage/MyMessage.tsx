@@ -16,13 +16,13 @@ function MyMessage(props:MyMessage) {
           </div>
           <div className="message-body">
               <div className="author">
-                  <p>{message.idFrom}</p>
+                  <p>{message.sender_id}</p>
               </div>
               <div className="text">
                   <p>{message.message}</p>
               </div>
               <div className="data">
-                  <p>{message.time.substring(19, 24)}</p>
+                  <p>{message.time}</p>
               </div>
           </div>
       </div>

@@ -1,6 +1,11 @@
 .App {
     display: flex;
+    height: 100%;
+}
 
+html, body, #root, .home-page {
+    height: 100%;
+    /* width: 100%; */
 }
 
 .App-logo {
@@ -24,7 +29,7 @@
     background: #fff;
     border-radius: 8px; 
     height: 35px;
-    margin: 18px 20px 20px 0px;
+    margin: 18px;
   }
 
 .App-link {

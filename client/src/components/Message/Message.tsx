@@ -10,7 +10,7 @@ function Message(props: Message) {
     const {message} = props;
     const {userID} = useUserStore()
     function isMine() {
-        return message.idFrom === userID
+        return message.sender_id === userID
     }
     return (
         <>
@@ -21,13 +21,13 @@ function Message(props: Message) {
                 </div>
                 <div className="message-body">
                     <div className="author">
-                        <p>{message.idFrom}</p>
+                        <p>{message.sender_id}</p>
                     </div>
                     <div className="text">
                         <p>{message.message}</p>
                     </div>
                     <div className="data">
-                        <p>{message.time.substring(19, 24)}</p>
+                        <p>{message.time}</p>
                     </div>
                 </div>
             </div>}
@@ -38,13 +38,13 @@ function Message(props: Message) {
                 </div>
                 <div className="message-body">
                     <div className="author">
-                        <p>{message.idFrom}</p>
+                        <p>{message.sender_id}</p>
                     </div>
                     <div className="text">
                         <p>{message.message}</p>
                     </div>
                     <div className="data">
-                        <p>{message.time.substring(19, 24)}</p>
+                        <p>{message.time}</p>
                     </div>
                 </div>
             </div>}

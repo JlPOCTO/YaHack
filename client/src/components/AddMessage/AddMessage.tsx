@@ -1,32 +1,18 @@
 import '../../css/AddMessage.css';
 import { FaceSmile, File, ArrowShapeRight } from '@gravity-ui/icons';
-import {Icon, PaletteOption} from '@gravity-ui/uikit';
+import { Icon } from '@gravity-ui/uikit';
 import Popup from 'reactjs-popup';
-import {Palette} from '@gravity-ui/uikit';
-import React from "react";
+import Picker from 'emoji-picker-react';
+import { useState } from 'react';
+
 function AddMessage() {
-    const options: PaletteOption[] = [
-        {content: '😊', value: 'ID-cool'},
-        {content: '❤️', value: 'ID-woozy'},
-        {content: '👍', value: 'ID-sick'},
-        {content: '😂', value: 'ID-cool'},
-        {content: '😍', value: 'ID-woozy'},
-        {content: '😛', value: 'ID-sick'},
-        {content: '😡', value: 'ID-cool'},
-        {content: '😢', value: 'ID-woozy'},
-        {content: '😯', value: 'ID-sick'},
-        {content: '😱', value: 'ID-cool'},
-        {content: '🤗', value: 'ID-woozy'},
-        {content: '🤢', value: 'ID-sick'},
-        {content: '🤥', value: 'ID-cool'},
-        {content: '🤩', value: 'ID-woozy'},
-        {content: '🤭', value: 'ID-sick'},
-        {content: '🥴', value: 'ID-woozy'},
-        {content: '🥳', value: 'ID-cool'},
-        {content: '🤮', value: 'ID-woozy'},
-        {content: '😎', value: 'ID-woozy'},
-        {content: '🥶', value: 'ID-sick'}
-    ];
+
+    const [emoji, setEmoji] = useState<any>(null)
+    
+    const onEmojiClick = (event: any, curEmoji : any) => {
+        setEmoji(curEmoji)
+    }
+
     return (
         <div className='messageContainer'>
             <button type="submit" className='currentSettings' style={{ bottom: 0, position: 'absolute', margin: '3px' }}>
@@ -41,10 +27,8 @@ function AddMessage() {
                         </button>}
                     position="top left"
                 >
-                    <div className="palette">
-                    <Palette options={options} disabled={false} multiple={false} />
-                    {/*<div>Choose an emoji</div>*/}
-                    {/*<button>emoji</button>*/}
+                    <div className='emojiPopup'>
+                        <Picker onEmojiClick={onEmojiClick}/>
                     </div>
                 </Popup>
                 <button type="submit" className='currentSettings'>

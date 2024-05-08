@@ -1,16 +1,17 @@
 const myPassport = require('passport');
 const {githubStrategy} = require('./strategies/github');
+const {findUserByID} = require('./database/dbUsers')
 
 myPassport.use(githubStrategy);
 
-myPassport.serializeUser((profile, done) => {
-    // TODO Сохранение данных юзера в сессии
-    done(null, profile);
+myPassport.serializeUser((id, done) => {
+    done(null, id);
 });
 
-myPassport.deserializeUser((profile, done) => {
-    // TODO Загрузка данных юзера из сессии
-    done(null, profile);
+myPassport.deserializeUser((id, done) => {
+    findUserByID(id).then(user => {
+        done(null, user);
+    })
 });
 
 module.exports = {myPassport};

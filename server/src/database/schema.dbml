@@ -1,0 +1,38 @@
+// Ссылка на сайт, где можно потрогать структуру
+// https://dbdiagram.io/d/Kilogram-Database-6628e5be03593b6b61d8597b
+
+Table users {
+  id INTEGER [primary key]
+  name TEXT
+  login TEXT
+  avatar_path TEXT
+}
+
+Table chats {
+  id INTEGER [primary key]
+  name TEXT
+  avatar_path TEXT
+  type chat_type
+}
+
+Table users_in_chats {
+  user_id INTEGER [ref: > users.id]
+  chat_id INTEGER [ref: > chats.id]
+  indexes {
+    (user_id, chat_id) [pk]
+  }
+}
+
+Table messages {
+  id INTEGER [pk]
+  chat_id INTEGER [ref: > chats.id]
+  sender_id INTEGER [ref: > users.id]
+  message TEXT
+  time INTEGER
+  image_path TEXT
+}
+
+enum chat_type {
+  direct
+  group
+}
