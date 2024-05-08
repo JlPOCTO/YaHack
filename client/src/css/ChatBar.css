@@ -1,0 +1,23 @@
+
+.chat-bar{
+    /*height: 80px;*/
+    /*background-color: #2b6fae;*/
+    /*border: solid;*/
+}
+.button{
+    height: 85px;
+    width: 100%;
+    background-color: #2b6fae;
+    border-color: rgb(216, 216, 216) rgb(209, 209, 209) rgb(186, 186, 186);
+    border-style: solid;
+    border-width: 1px;
+
+}
+.buttonnotactual{
+    height: 85px;
+    width: 100%;
+    background-color: #4aa1f2;
+    border-color: rgb(216, 216, 216) rgb(209, 209, 209) rgb(186, 186, 186);
+    border-style: solid;
+    border-width: 1px;
+}
