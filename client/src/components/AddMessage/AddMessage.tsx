@@ -39,7 +39,7 @@ function AddMessage() {
                         <button className='currentSettings'>
                             <Icon className='Settings' data={FaceSmile} />
                         </button>}
-                    position="top center"
+                    position="top left"
                 >
                     <div className="palette">
                     <Palette options={options} disabled={false} multiple={false} />
