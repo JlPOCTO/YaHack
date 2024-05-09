@@ -76,9 +76,10 @@
     position: relative;
     float: right;
     top: 6px;
-    right: -1px;
+    right: 1px;
+    transform: rotate(0.5turn);
 }
-.myContainer.arrow .outer {
+.myContainer .arrow .outer {
     width: 0;
     height: 0;
     border-right: 20px solid #000000;
@@ -91,7 +92,7 @@
 .myContainer .arrow .inner {
     width: 0;
     height: 0;
-    border-right: 20px solid #ffffff;
+    border-right: 20px solid #a0b3c4;
     border-top: 10px solid transparent;
     border-bottom: 10px solid transparent;
     position: absolute;
@@ -128,3 +129,4 @@
     color: #2b6fae;
     font-weight: bold;
 }
+/*transform: rotate(0.5turn);*/

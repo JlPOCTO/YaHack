@@ -19,6 +19,10 @@ export default class UserStore{
     setUserID = (userID: number|any) => {
         this.userID = userID
     }
+    theme : string|any = 'light'
+    setTheme = ()=>{
+        this.theme = this.theme === 'light' ? 'dark' : 'light'
+    }
 
 }
 const UserStoreContext = React.createContext<UserStore>(
