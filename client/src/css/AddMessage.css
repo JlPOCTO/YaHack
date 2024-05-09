@@ -43,3 +43,12 @@
     background: none;
     border: none;
 }
+
+.firstCurrentSettings {
+    background: none;
+    border: none;
+    bottom: 0;
+    position: absolute;
+    margin: 3px;
+    z-index: 1;
+}
