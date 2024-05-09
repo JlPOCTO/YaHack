@@ -13,6 +13,8 @@ const { myPassport } = require('./myPassport');
 const { launchDB, closeDB } = require("./database/launchDB");
 const users = require('./database/dbUsers');
 const chats = require('./database/dbChats');
+const messages = require('./database/dbMessages');
+
 
 (async () => {
     await launchDB(process.env.DATABASE)
@@ -44,10 +46,19 @@ const chats = require('./database/dbChats');
         res.send(await chats.getMessagesFromChat(a))
     });
 
-    // app.post('/addMessage', async(req, res) => {
-    //     const dialogID = req.body.dialogID;
-    //     chats.addMessage(req.body.message)
-    // })
+
+    app.post('/addMessage', async (req, res) => {
+        const message = req.body.message;
+        const chatID = req.body.chatID;
+        const senderID = req.body.senderID;
+        const time = req.body.time;
+        const imagePath = req.body.imagePath;
+        await messages.addMessage(chatID,senderID,message,time,imagePath)
+        res.send(await chats.getMessagesFromChat(chatID))
+        // console.log(await chats.getMessagesFromChat(chatID))
+    })
+
+
     app.use(express.static('../client/build/assets'));
     app.use(express.static('../client/static'))
     app.use(expressSession({
