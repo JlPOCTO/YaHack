@@ -24,14 +24,6 @@ html, body, #root, .home-page {
     color: white;
 }
 
-.switchButton {
-    text-align: center;
-    background: #fff;
-    border-radius: 8px; 
-    height: 35px;
-    margin: 18px;
-  }
-
 .App-link {
     color: #61dafb;
 }

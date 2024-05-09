@@ -1,4 +1,3 @@
-import { reverse } from "dns"
 import { createGlobalStyle } from "styled-components"
 
 export const lightTheme = {

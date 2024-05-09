@@ -39,3 +39,11 @@ input {
   width: 100%;
   box-sizing:border-box;
 }
+
+.switchButton {
+  text-align: center;
+  background: #fff;
+  border-radius: 8px; 
+  height: 35px;
+  margin: 18px;
+}
