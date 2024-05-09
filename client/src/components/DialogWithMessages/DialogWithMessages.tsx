@@ -14,10 +14,18 @@ type DialogWithMessages = {
 function DialogWithMessages(props:DialogWithMessages) {
     const { messages } = props;
     return (
+        <div style={{
+            overflowY: "auto",
+            maxHeight: "650px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems:"center"
+        }}>
         <div className="dialog-with-messages">
             {messages.map((message:any) =>
                 <Message message={message}/>
             )}
+        </div>
         </div>
     );
 }
