@@ -1,6 +1,7 @@
 .side-bar {
     width: 25%;
     text-align: center;
+    overflow: hidden;
     /* background-color : red */
 }
 
