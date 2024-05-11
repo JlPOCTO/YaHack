@@ -38,6 +38,8 @@ function Dialog() {
                 <AddMessage/>
             </div>}
 
+            {isDefault() && <div className="just-picture">
+            </div>}
         </>
     );
 }

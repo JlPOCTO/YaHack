@@ -1,7 +1,7 @@
 .message {
     width: 100%;
-    height: 40px;
-    background: #fff;
+    height: 53px;
+    /*background: #fff;*/
     /*margin: 0 auto;*/
     flex: 0 0 auto;
     box-sizing: border-box;
@@ -14,6 +14,9 @@
     font-size: medium;
     color: rgb(54, 62, 69);
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    border-radius: 10px;
+    border-color: beige;
+    margin-left: 3px;
 }
 
 .message::placeholder {
@@ -21,10 +24,14 @@
 }
 
 .box {
+    /*margin-top: 3px;*/
+    padding-top: 3px;
     display: flex;
     flex-direction: column;
     align-items: center;
     border: none;
+    background-color: dimgrey;
+    height: 10%
 }
 
 .messageContainer {
@@ -39,8 +46,8 @@
 .emojiPopup {
     /* right: 40%; */
     position: fixed;
-    bottom: 50px;
-    right: 30px;
+    bottom: 12%;
+    right: 5%;
 }
 
 
@@ -50,7 +57,7 @@
     justify-content: space-between;
     position: absolute;
     right: 15px;
-    bottom: 0;
+    bottom: 7px;
     gap: 15px;
     margin-bottom: 3px;
 }
@@ -63,8 +70,8 @@
 .firstCurrentSettings {
     background: none;
     border: none;
-    bottom: 0;
+    bottom: 7px;
     position: absolute;
-    margin: 3px;
+    margin: 4px;
     z-index: 1;
 }
