@@ -16,8 +16,8 @@ function DialogWithMessages(props:DialogWithMessages) {
     return (
         <div style={{
             overflowY: "auto",
-            maxHeight: "85%",
-            height: "85%",
+            maxHeight: "82%",
+            height: "82%",
             display: "flex",
             flexDirection: "column",
             alignItems:"center"

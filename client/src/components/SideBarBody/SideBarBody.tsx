@@ -10,8 +10,6 @@ import {Button} from "@gravity-ui/uikit";
 const API_HOST = 'http://localhost:3000';
 
 
-
-
 function SideBarBody() {
     const [dialogs, setDialogs] = useState([])
     const [open, setOpen] = useState(false);
@@ -30,10 +28,11 @@ function SideBarBody() {
     return (
         <div style={{
             overflowY: "auto",
-            maxHeight: "660px"
+            maxHeight: "92%",
+            height: "92%"
         }}>
-            {dialogs.map((dialog:any) =>
-               <ChatBar dialog={dialog}/>
+            {dialogs.map((dialog: any) =>
+                <ChatBar dialog={dialog}/>
             )}
         </div>
 

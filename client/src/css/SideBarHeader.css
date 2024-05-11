@@ -1,7 +1,12 @@
 .SideBarHeader {
   text-align: center;
-  height: 60px;
-  /* background-color : yellow; */
+  height: 8%;
+  /*border-color: red;*/
+  /*border-bottom: solid;*/
+  border-bottom-color: dimgrey;
+  border-bottom-style : solid;
+  border-bottom-width: 1px;
+   /*background-color : yellow;*/
 }
 
 .HeaderMenu {
@@ -11,7 +16,7 @@
   align-items: center;
   /*width: 200px;*/
   height: 30px;
-  padding: 20px 2px;
+  padding: 15px 2px;
   margin: 0;
   width: 100%;
 }
@@ -46,7 +51,7 @@ input {
   overflow: hidden;
   display: inline-flex;
   outline: none;
-  width: 130%;
+  width: 100%;
   box-sizing:border-box;
 }
 form{

@@ -52,14 +52,12 @@ function AddMessage() {
                 <button type="submit" className='firstCurrentSettings'>
                     <Icon className='Settings' data={File}/>
                 </button>
-                <TextInput
-                    size='m'
-                    pin="brick-round"
+                <input
                     value={currrentMessage}
                     onChange={handleSetCurrentMessage}
-                    placeholder='Введите текст' name='textMessage'
-                    id="message"
-                    style={{color: '#363E45'}}
+                    placeholder='Введите текст'
+                    className="message"
+                    // style={{border: 'none'}}
                 />
                 <div className='buttonContainer'>
                     <Popup
