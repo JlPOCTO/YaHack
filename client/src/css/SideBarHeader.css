@@ -1,7 +1,6 @@
 .SideBarHeader {
   text-align: center;
   height: 60px;
-  /* background-color : yellow; */
 }
 
 .HeaderMenu {
@@ -9,7 +8,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 200px;
   height: 30px;
   padding: 20px 2px;
   margin: 0;
@@ -45,5 +43,4 @@ input {
   background: #fff;
   border-radius: 8px; 
   height: 35px;
-  margin: 18px;
 }
