@@ -48,34 +48,34 @@ function AddMessage() {
 
     return (
         <div className="box">
-            <div className='messageContainer'>
-                <button type="submit" className='firstCurrentSettings'>
-                    <Icon className='Settings' data={File}/>
-                </button>
-                <input
-                    value={currrentMessage}
-                    onChange={handleSetCurrentMessage}
-                    placeholder='Введите текст'
-                    className="message"
-                    // style={{border: 'none'}}
-                />
-                <div className='buttonContainer'>
-                    <Popup
-                        trigger={
-                            <button className='currentSettings'>
-                                <Icon className='Settings' data={FaceSmile}/>
-                            </button>}
-                        position="top left"
-                    >
-                        <div className='emojiPopup'>
-                            <Picker onEmojiClick={onEmojiClick}/>
-                        </div>
-                    </Popup>
-                    <button onClick={handleAddMessage} className='currentSettings'>
-                        <Icon className='Settings' data={ArrowShapeRight}/>
+                <div className='messageContainer'>
+                    <button type="submit" className='firstCurrentSettings'>
+                        <Icon className='Settings' data={File}/>
                     </button>
+                    <input
+                        value={currrentMessage}
+                        onChange={handleSetCurrentMessage}
+                        placeholder='Введите текст'
+                        className="message"
+                        // style={{border: 'none'}}
+                    />
+                    <div className='buttonContainer'>
+                        <Popup
+                            trigger={
+                                <button className='currentSettings'>
+                                    <Icon className='Settings' data={FaceSmile}/>
+                                </button>}
+                            position="top left"
+                        >
+                            <div className='emojiPopup'>
+                                <Picker onEmojiClick={onEmojiClick}/>
+                            </div>
+                        </Popup>
+                        <button onClick={handleAddMessage} className='currentSettings'>
+                            <Icon className='Settings' data={ArrowShapeRight}/>
+                        </button>
+                    </div>
                 </div>
-            </div>
         </div>
     );
 }

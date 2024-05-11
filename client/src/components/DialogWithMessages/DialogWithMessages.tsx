@@ -20,7 +20,8 @@ function DialogWithMessages(props:DialogWithMessages) {
             height: "82%",
             display: "flex",
             flexDirection: "column",
-            alignItems:"center"
+            alignItems:"center",
+            backgroundColor: "dimgrey"
         }}>
         <div className="dialog-with-messages">
             {messages.map((message:any) =>
