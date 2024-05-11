@@ -46,6 +46,7 @@ function AddMessage() {
 
 
     return (
+        <div className="box">
         <div className='messageContainer'>
             <button type="submit" className='firstCurrentSettings'>
                 <Icon className='Settings' data={File} />
@@ -75,6 +76,7 @@ function AddMessage() {
                     <Icon className='Settings' data={ArrowShapeRight} />
                 </button>
             </div>
+        </div>
         </div>
     );
 }
