@@ -47,7 +47,7 @@ input {
   overflow: hidden;
   display: inline-flex;
   outline: none;
-  width: 100%;
+  width: 200%;
   box-sizing:border-box;
 }
 form{
