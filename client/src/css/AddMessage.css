@@ -21,7 +21,7 @@
 .messageContainer {
     position: absolute;
     border: none;
-    bottom: 0;
+    /*bottom: 0;*/
     width: 65%;
     display: inline-block;
     /*border-radius: 2px;*/

@@ -26,13 +26,19 @@ function Dialog() {
         getMessages()
     }, [{dialogID}])
 
-    return (
-        <div className="dialog">
-            <HeaderOfBodyMain dialogId={dialogID}/>
-            <DialogWithMessages messages={messages}/>
-            <AddMessage/>
-        </div>
+    function isDefault() {
+        return dialogID === 0
+    }
 
+    return (
+        <>
+            {!isDefault() && <div className="dialog">
+                <HeaderOfBodyMain dialogId={dialogID}/>
+                <DialogWithMessages messages={messages}/>
+                <AddMessage/>
+            </div>}
+
+        </>
     );
 }
 
