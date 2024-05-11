@@ -1,38 +1,25 @@
 .SideBarHeader {
   text-align: center;
   height: 60px;
-  /* background-color : yellow; */
 }
 
 .HeaderMenu {
   align-self: stretch;
   display: flex;
-  /*justify-content: space-between;*/
+  justify-content: space-between;
   align-items: center;
-  /*width: 200px;*/
   height: 30px;
   padding: 20px 2px;
   margin: 0;
   width: 100%;
 }
-.profile-input{
-  float: left;
+
+.HeaderNav {
+  justify-content: center;
   display: flex;
-  flex-direction: row;
   align-items: center;
   align-self: stretch;
-}
-.profile{
-  /*margin-bottom: 2px;*/
-}
-.HeaderNav {
-  width: 100%;
-  /*justify-content: center;*/
-  /*display: flex;*/
-  /*flex-direction: row;*/
-  /*align-items: center;*/
-  /*align-self: stretch;*/
-  /*gap: 8px;*/
+  gap: 8px;
 }
 
 input {
@@ -50,15 +37,10 @@ input {
   width: 100%;
   box-sizing:border-box;
 }
-form{
-  width: 150%;
-}
+
 .switchButton {
   text-align: center;
   background: #fff;
   border-radius: 8px; 
   height: 35px;
-  float: right;
-  margin-right: 8px;
-  /*margin: 18px;*/
 }
