@@ -1,7 +1,6 @@
-#message {
+.message {
     width: 100%;
     height: 40px;
-    background-color: aliceblue;
     background: #fff;
     /*margin: 0 auto;*/
     flex: 0 0 auto;
@@ -11,13 +10,23 @@
     /* position: absolute; */
     /*margin: 0;*/
     padding: 8px 40px;
+    border: none;
+    font-size: medium;
+    color: rgb(54, 62, 69);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
-.box{
+
+.message::placeholder {
+    color: rgb(54, 62, 69);
+}
+
+.box {
     display: flex;
     flex-direction: column;
     align-items: center;
     border: none;
 }
+
 .messageContainer {
     position: absolute;
     border: none;

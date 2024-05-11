@@ -1,18 +1,16 @@
-import React, {useState} from 'react';
+import { useRef, useEffect } from 'react';
 import '../../css/DialogWithMessages.css';
-import {Button, Modal} from "@gravity-ui/uikit";
-// import settings from "../../settings-svgrepo-com.svg";
-import Profile from "../Profile/Profile";
-import HeaderOfBodyMain from "../HeaderOfBodyMain/HeaderOfBodyMain";
-import AddMessage from "../AddMessage/AddMessage";
-import ChatBar from "../ChatBar/ChatBar";
 import Message from "../Message/Message";
 type DialogWithMessages = {
     messages: any;
 }
 
-function DialogWithMessages(props:DialogWithMessages) {
+function DialogWithMessages(props: DialogWithMessages) {
     const { messages } = props;
+    const lastMessage = useRef<null | HTMLDivElement>(null)
+    useEffect(() => {
+        lastMessage.current?.scrollIntoView()
+    }, [messages])
     return (
         <div style={{
             overflowY: "auto",
@@ -20,13 +18,15 @@ function DialogWithMessages(props:DialogWithMessages) {
             height: "85%",
             display: "flex",
             flexDirection: "column",
-            alignItems:"center"
+            alignItems: "center",
+            justifyContent: "flex-end"
         }}>
-        <div className="dialog-with-messages">
-            {messages.map((message:any) =>
-                <Message message={message}/>
-            )}
-        </div>
+            <div className="dialog-with-messages">
+                {messages.map((message: any) =>
+                    <Message message={message} />
+                )}
+                <div ref={lastMessage} />
+            </div>
         </div>
     );
 }

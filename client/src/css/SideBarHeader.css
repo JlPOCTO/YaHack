@@ -15,7 +15,8 @@
   margin: 0;
   width: 100%;
 }
-.profile-input{
+
+.profile-input {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -46,12 +47,14 @@ input {
   overflow: hidden;
   display: inline-flex;
   outline: none;
-  width: 130%;
-  box-sizing:border-box;
+  width: 100%;
+  box-sizing: border-box;
 }
-form{
+
+form {
   width: 100%;
 }
+
 .switchButton {
   text-align: center;
   background: #fff;
