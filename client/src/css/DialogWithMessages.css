@@ -2,15 +2,22 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    position:relative;
+    position: relative;
     width: 65%;
-    /*background-color: dimgrey;*/
-    /*overflow-y: scroll;*/
-    /* height: 630px; */
-    /*overflow-x: hidden;*/
-    /*height: 89%;*/
 }
-div{
+
+.dialog-container {
+    overflow-y: auto;
+    max-height: 82%;
+    height: 82%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    /* backgroundColor: "dimgrey", */
+}
+
+div {
     -ms-overflow-style: none;
     scrollbar-width: none;
 }

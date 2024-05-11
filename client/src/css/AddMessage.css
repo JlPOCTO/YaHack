@@ -30,7 +30,7 @@
     flex-direction: column;
     align-items: center;
     border: none;
-    background-color: dimgrey;
+    /* background-color: dimgrey; */
     height: 10%
 }
 

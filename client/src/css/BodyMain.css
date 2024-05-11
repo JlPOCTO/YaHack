@@ -16,7 +16,7 @@
     background-image: url('../picture.jpg');
 }
 .just-picture{
-    background-color: dimgrey;
+    /* background-color: dimgrey; */
     height: 100%;
     display: flex;
     flex-direction: column;

@@ -12,16 +12,7 @@ function DialogWithMessages(props: DialogWithMessages) {
         lastMessage.current?.scrollIntoView()
     }, [messages])
     return (
-        <div style={{
-            overflowY: "auto",
-            maxHeight: "82%",
-            height: "82%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            backgroundColor: "dimgrey",
-            justifyContent: "flex-end"
-        }}>
+        <div className='dialog-container'>
             <div className="dialog-with-messages">
                 {messages.map((message: any) =>
                     <Message message={message} />
