@@ -14,37 +14,43 @@ type ChatBarProps = {
 }
 
 function ChatBar(props: ChatBarProps) {
-    const { dialog } = props;
+    const {dialog} = props;
     const {dialogID, setDialogID} = useUserStore()
 
     // const [isShown, setIsShown] = useState(false);
     const [isActual, setIsActual] = useState(false);
-    const handleClick = (event:any) => {
+    const handleClick = (event: any) => {
         setIsActual(current => dialog.id === dialogID);
     };
     const className = ["button", dialog.id === dialogID ? "notactual" : ""].join("");
 
     return (
-     <div className="chat-bar">
-          <Button onClick={action((e) =>{
-             setDialogID(dialog.id)
-         })} className={className}>
-            {dialog.id}
-        </Button>
-         {/*{ <Button onClick={action((e) =>{*/}
-         {/*    setDialogID(dialog.id)*/}
-         {/*    handleClick(e)*/}
-         {/*})} className='button-no-actual'>*/}
-         {/*    {dialog.id}*/}
-         {/*</Button>&& isActual }*/}
-         {/*{isActual && <Button onClick={handleClick} className='button-no-actual'>*/}
-         {/*    {dialog.id}*/}
-         {/*</Button>}*/}
+        <div className="chat-bar">
+            <Button onClick={action((e) => {
+                setDialogID(dialog.id)
+            })} className={className}>
+                <div id="chat-information">
+                    <div id="chatName-time">
+                        <div id="chatName">
+                            ChatName: {dialog.id}
+                        </div>
+                        <div id="time">
+                            Time: {dialog.id}
+                        </div>
 
-         {/*{isShown && <Dialog dialog={dialog}/>}*/}
-    </div>
+                    </div>
+                    <div id="last-message">
+                        <div id = "to-left">
+                        LastMessage: {dialog.id}
+                        </div>
+                    </div>
+                </div>
+            </Button>
+
+        </div>
 
 
-  );
+    );
 }
+
 export default observer(ChatBar);

@@ -3,21 +3,28 @@
     height: 40px;
     background-color: aliceblue;
     background: #fff;
-    margin: 0 auto;
+    /*margin: 0 auto;*/
     flex: 0 0 auto;
     box-sizing: border-box;
     /* padding: 10px; */
     bottom: 0;
     /* position: absolute; */
-    margin: 0;
+    /*margin: 0;*/
     padding: 8px 40px;
 }
-
+.box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: none;
+}
 .messageContainer {
     position: absolute;
+    border: none;
     bottom: 0;
-    width: 100%;
+    width: 65%;
     display: inline-block;
+    /*border-radius: 2px;*/
 }
 
 .emojiPopup {
