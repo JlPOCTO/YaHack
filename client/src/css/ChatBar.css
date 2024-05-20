@@ -16,8 +16,9 @@
 
 }
 .button:hover {
-    background-color: #4aa1f2;
-    opacity: 0.3;
+    background-color:rgba(0, 0, 0, 0.1)
+    /*background-color: #4aa1f2;*/
+    /*opacity: 0.3;*/
 }
 
 .buttonnotactual {

@@ -4,6 +4,7 @@
     clear: both;
     position: relative;
 }
+
 .container .arrow {
     width: 12px;
     height: 20px;
@@ -13,6 +14,7 @@
     top: 6px;
     right: -1px;
 }
+
 .container .arrow .outer {
     width: 0;
     height: 0;
@@ -23,6 +25,7 @@
     top: 0;
     left: 0;
 }
+
 .container .arrow .inner {
     width: 0;
     height: 0;
@@ -33,10 +36,11 @@
     top: 0;
     left: 2px;
 }
+
 .container .message-body {
-    max-width:400px;
+    max-width: 400px;
     float: left;
-    word-wrap:break-word;
+    word-wrap: break-word;
 
     /*height: auto;*/
     border: 1px solid #CCC;
@@ -50,16 +54,19 @@
     /*display: flex;*/
     /*flex-direction: column;*/
 }
-.data{
+
+.data {
     float: right;
     color: dimgray;
     font-size: small;
 }
+
 .container .message-body p {
     margin: 0;
     color: #2b6fae;
 }
-.author{
+
+.author {
     color: #2b6fae;
     font-weight: bold;
 }
@@ -69,6 +76,7 @@
     clear: both;
     position: relative;
 }
+
 .myContainer .arrow {
     width: 12px;
     height: 20px;
@@ -79,6 +87,7 @@
     right: 1px;
     transform: rotate(0.5turn);
 }
+
 .myContainer .arrow .outer {
     width: 0;
     height: 0;
@@ -89,6 +98,7 @@
     top: 0;
     left: 0;
 }
+
 .myContainer .arrow .inner {
     width: 0;
     height: 0;
@@ -99,10 +109,11 @@
     top: 0;
     left: 2px;
 }
+
 .myContainer .message-body {
-    max-width:400px;
+    max-width: 400px;
     float: right;
-    word-wrap:break-word;
+    word-wrap: break-word;
 
     /*height: auto;*/
     border: 1px solid #CCC;
@@ -116,17 +127,61 @@
     /*display: flex;*/
     /*flex-direction: column;*/
 }
-.myContainer.data{
+
+.myContainer.data {
     float: right;
     color: dimgray;
     font-size: small;
 }
+
 .myContainer .message-body p {
     margin: 0;
     color: #2b6fae;
 }
-.myContainer.author{
+
+.myContainer.author {
     color: #2b6fae;
     font-weight: bold;
 }
+
 /*transform: rotate(0.5turn);*/
+.heart-button {
+    display: none;
+    opacity:0; /*Элемент полностью прозрачный (невидимый)*/
+    transition: 5s;
+    /*transition-delay:5s;*/
+    /*margin-left: -10px;*/
+}
+
+.myContainer:hover  .heart-button {
+    display: block;
+    opacity:1;
+    transition: 5s;
+    /*transition-delay:5s;*/
+}
+
+.myReaction {
+    display: flex;
+    flex-direction: row-reverse;
+
+}
+
+/*myCon+reaction{*/
+/*    */
+/*}*/
+.currentSettingsMessage {
+    position: relative;
+    top: 60%;
+    left: 25%;
+    background: none;
+    border: none;
+
+}
+.myContainer {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items:flex-end;
+    /*transition: 0s display;*/
+
+
+}
