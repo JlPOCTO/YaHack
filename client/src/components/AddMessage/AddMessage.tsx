@@ -3,7 +3,7 @@ import { FaceSmile, File, ArrowShapeRight } from '@gravity-ui/icons';
 import { Icon } from '@gravity-ui/uikit';
 import Popup from 'reactjs-popup';
 import Picker, { EmojiClickData } from 'emoji-picker-react';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useUserStore } from "../../stores/UserStore";
 
 const getInitialCurrentMessage = () => {
@@ -12,6 +12,7 @@ const getInitialCurrentMessage = () => {
 
 function AddMessage() {
     const { dialogID, userID } = useUserStore()
+    const ref = useRef<HTMLTextAreaElement>(null)
     const [messages, setMessage] = useState([])
     const [currrentMessage, setCurrentMessage] = useState(getInitialCurrentMessage())
     const onEmojiClick = (curEmoji: EmojiClickData) => {
@@ -45,6 +46,17 @@ function AddMessage() {
         sessionStorage.setItem('currentMessage', e.target.value)
     }
 
+    useEffect(() => {
+        const changeHeight = () => {
+          if (ref.current) {
+            ref.current.style.height = 'auto';
+            ref.current.style.height = ref.current.scrollHeight + 'px';
+          }
+        };
+        changeHeight();
+      }, [currrentMessage]);
+    
+
 
     return (
         <div className="box">
@@ -54,6 +66,8 @@ function AddMessage() {
                 </button>
                 <textarea
                     value={currrentMessage}
+                    ref={ref}
+                    maxLength={1000}
                     onChange={handleSetCurrentMessage}
                     placeholder='Введите текст'
                     className="message"

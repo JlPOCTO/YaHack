@@ -4,7 +4,7 @@
     flex: 0 0 auto;
     box-sizing: border-box;
     bottom: 0;
-    padding: 8px 110px 8px 40px;
+    padding: 10px 110px 10px 40px;
     overflow-y: auto;
     scrollbar-width: none;
     border: none;
@@ -17,6 +17,7 @@
     height: auto;
     resize: none;
     align-content: center;
+    max-height: 300px;
 }
 
 .message::placeholder {
@@ -31,20 +32,19 @@
     align-items: center;
     border: none;
     /* background-color: dimgrey; */
-    height: 10%
+    height: 10%;
+    position: relative;
 }
 
 .messageContainer {
     position: absolute;
     border: none;
-    /*bottom: 0;*/
+    bottom: 14px;
     width: 65%;
     display: inline-block;
-    /*border-radius: 2px;*/
 }
 
 .emojiPopup {
-    /* right: 40%; */
     position: fixed;
     bottom: 12%;
     right: 5%;
