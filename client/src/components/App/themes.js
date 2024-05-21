@@ -5,7 +5,12 @@ export const lightTheme = {
     reverseBody: "#212F3C",
     reverseText: "#fff",
     text: "#363E45",
-    border: "1px solid rgb(52, 73, 94)"
+    border: "1px solid rgb(52, 73, 94)",
+    bodyColor: "cadetblue",
+    hover: "#dcdcdc",
+    border: "1px solid rgb(52, 73, 94)",
+    bodyColor: "cadetblue",
+    hover: "#dcdcdc"
 }
 
 export const darkTheme = {
@@ -13,7 +18,9 @@ export const darkTheme = {
     text: "#fff",
     reverseBody: "#fff",
     reverseText: "#363E45",
-    border: "1px solid #fff"
+    border: "1px solid #fff",
+    bodyColor: "dimgray",
+    hover: "dimgray"
 }
 
 export const GlobalStyles = createGlobalStyle`
@@ -29,9 +36,39 @@ body {
     border: ${(props) => props.theme.border};
 }
 
+.myContainer.data, .data {
+    color: ${(props) => props.theme.bodyColor};
+} 
+.box, .just-picture, .dialog-container {
+    background-color: ${(props) => props.theme.bodyColor};
+}
+
+.myContainer.data, .data {
+    color: ${(props) => props.theme.bodyColor};
+} 
+.box, .just-picture, .dialog-container {
+    background-color: ${(props) => props.theme.bodyColor};
+}
+
 .profile, .contacts {
     background: ${(props) => props.theme.body};
     color: ${(props) => props.theme.text};
+ }
+
+ .itemNaming {
+    color: ${(props) => props.theme.text};
+ }
+
+ .item:hover {
+    background-color: ${(props) => props.theme.hover};
+ }
+
+ .itemNaming {
+    color: ${(props) => props.theme.text};
+ }
+
+ .item:hover {
+    background-color: ${(props) => props.theme.hover};
  }
 
 .userPhoto {

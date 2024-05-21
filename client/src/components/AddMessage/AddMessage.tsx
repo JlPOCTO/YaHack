@@ -1,17 +1,17 @@
 import '../../css/AddMessage.css';
-import {FaceSmile, File, ArrowShapeRight} from '@gravity-ui/icons';
-import {Icon, TextInput} from '@gravity-ui/uikit';
+import { FaceSmile, File, ArrowShapeRight } from '@gravity-ui/icons';
+import { Icon } from '@gravity-ui/uikit';
 import Popup from 'reactjs-popup';
-import Picker, {EmojiClickData} from 'emoji-picker-react';
-import {useState} from 'react';
-import {useUserStore} from "../../stores/UserStore";
+import Picker, { EmojiClickData } from 'emoji-picker-react';
+import { useState } from 'react';
+import { useUserStore } from "../../stores/UserStore";
 
 const getInitialCurrentMessage = () => {
     return sessionStorage.getItem('currentMessage') || '';
 }
 
 function AddMessage() {
-    const {dialogID, userID} = useUserStore()
+    const { dialogID, userID } = useUserStore()
     const [messages, setMessage] = useState([])
     const [currrentMessage, setCurrentMessage] = useState(getInitialCurrentMessage())
     const onEmojiClick = (curEmoji: EmojiClickData) => {
@@ -48,34 +48,34 @@ function AddMessage() {
 
     return (
         <div className="box">
-                <div className='messageContainer'>
-                    <button type="submit" className='firstCurrentSettings'>
-                        <Icon className='Settings' data={File}/>
+            <div className='messageContainer'>
+                <button type="submit" className='firstCurrentSettings'>
+                    <Icon className='Settings' data={File} />
+                </button>
+                <input
+                    value={currrentMessage}
+                    onChange={handleSetCurrentMessage}
+                    placeholder='Введите текст'
+                    className="message"
+                // style={{border: 'none'}}
+                />
+                <div className='buttonContainer'>
+                    <Popup
+                        trigger={
+                            <button className='currentSettings'>
+                                <Icon className='Settings' data={FaceSmile} />
+                            </button>}
+                        position="top left"
+                    >
+                        <div className='emojiPopup'>
+                            <Picker onEmojiClick={onEmojiClick} />
+                        </div>
+                    </Popup>
+                    <button onClick={handleAddMessage} className='currentSettings'>
+                        <Icon className='Settings' data={ArrowShapeRight} />
                     </button>
-                    <input
-                        value={currrentMessage}
-                        onChange={handleSetCurrentMessage}
-                        placeholder='Введите текст'
-                        className="message"
-                        // style={{border: 'none'}}
-                    />
-                    <div className='buttonContainer'>
-                        <Popup
-                            trigger={
-                                <button className='currentSettings'>
-                                    <Icon className='Settings' data={FaceSmile}/>
-                                </button>}
-                            position="top left"
-                        >
-                            <div className='emojiPopup'>
-                                <Picker onEmojiClick={onEmojiClick}/>
-                            </div>
-                        </Popup>
-                        <button onClick={handleAddMessage} className='currentSettings'>
-                            <Icon className='Settings' data={ArrowShapeRight}/>
-                        </button>
-                    </div>
                 </div>
+            </div>
         </div>
     );
 }

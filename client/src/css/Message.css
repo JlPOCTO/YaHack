@@ -57,7 +57,7 @@
 
 .data {
     float: right;
-    color: dimgray;
+    /* color: dimgray; */
     font-size: small;
 }
 
@@ -131,7 +131,7 @@
 
 .myContainer.data {
     float: right;
-    color: dimgray;
+    /* color: dimgray; */
     font-size: small;
 }
 

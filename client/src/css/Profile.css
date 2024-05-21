@@ -52,7 +52,7 @@
 }
 
 .item {
-  height: 35px;
+  height: 30px;
   padding: 16px 30px;
   flex-direction: row;
   align-items: flex-start;
@@ -71,4 +71,11 @@
   display: inline;
   text-align: center;
   padding-top: 2px;
+}
+
+.contactsButton {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 1px;
 }
