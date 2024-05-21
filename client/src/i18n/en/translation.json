@@ -1,0 +1,16 @@
+{
+  "title": "Welcome {{name}}",
+  "description": {
+    "part1": "This is a simple example.",
+    "part2": "With different use cases for i18next"
+  },
+  "userMessagesUnread_one": "You have {{count}} unread message.",
+  "userMessagesUnread_other": "You have {{count}} unread messages.",
+  "error": {
+    "500": "500 Internal server error",
+    "404": "404 Page not found",
+    "other": "Unknown error, code {{code}}"
+  },
+  "nesting": "Title of this page is \"$t(title, {\"count\": \"{{name}}\"})\"",
+  "read_message": "{{name}} read message"
+}
