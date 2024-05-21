@@ -1,9 +1,9 @@
 import { createGlobalStyle } from "styled-components"
 
 export const lightTheme = {
-    body: "ivory",
+    body: "#fff",
     reverseBody: "#212F3C",
-    reverseText: "ivory",
+    reverseText: "#fff",
     text: "#363E45",
     border: "1px solid rgb(52, 73, 94)",
     bodyColor: "cadetblue",
@@ -15,8 +15,8 @@ export const lightTheme = {
 
 export const darkTheme = {
     body: "#212F3C",
-    text: "ivory",
-    reverseBody: "ivory",
+    text: "#fff",
+    reverseBody: "#fff",
     reverseText: "#363E45",
     border: "1px solid #fff",
     bodyColor: "dimgray",
