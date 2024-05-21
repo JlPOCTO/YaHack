@@ -5,7 +5,7 @@ import {Icon} from "@gravity-ui/uikit";
 import {FaceSmile} from "@gravity-ui/icons";
 import Picker, {EmojiClickData} from "emoji-picker-react";
 import Popup from "reactjs-popup";
-import { Heart } from 'lucide-react';
+import {Heart} from 'lucide-react';
 
 type Message = {
     message: any;

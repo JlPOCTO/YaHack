@@ -18,7 +18,7 @@
 .container .arrow .outer {
     width: 0;
     height: 0;
-    border-right: 20px solid #000000;
+    border-right: 20px solid #ffffff;
     border-top: 10px solid transparent;
     border-bottom: 10px solid transparent;
     position: absolute;
@@ -43,14 +43,14 @@
     word-wrap: break-word;
 
     /*height: auto;*/
-    border: 1px solid #CCC;
+    /*border: 1px solid #CCC;*/
     background-color: #ffffff;
-    border: 1px solid #000000;
+    border: 1px solid #a0b3c4;
     padding: 6px 8px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
-    -o-border-radius: 5px;
-    border-radius: 5px;
+    -o-border-radius: 10px;
+    border-radius: 10px;
     /*display: flex;*/
     /*flex-direction: column;*/
 }
@@ -91,7 +91,7 @@
 .myContainer .arrow .outer {
     width: 0;
     height: 0;
-    border-right: 20px solid #000000;
+    border-right: 20px solid #a0b3c4;
     border-top: 10px solid transparent;
     border-bottom: 10px solid transparent;
     position: absolute;
@@ -112,18 +112,19 @@
 
 .myContainer .message-body {
     max-width: 400px;
+    /*width: 70%;*/
     float: right;
     word-wrap: break-word;
 
     /*height: auto;*/
-    border: 1px solid #CCC;
+    border: 1px solid #a0b3c4;
     background-color: #a0b3c4;
-    border: 1px solid #000000;
+    /*border: 1px solid #000000;*/
     padding: 6px 8px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
-    -o-border-radius: 5px;
-    border-radius: 5px;
+    -o-border-radius: 10px;
+    border-radius: 10px;
     /*display: flex;*/
     /*flex-direction: column;*/
 }
@@ -148,7 +149,7 @@
 .heart-button {
     display: none;
     opacity:0; /*Элемент полностью прозрачный (невидимый)*/
-    transition: 5s;
+    transition: 1s;
     /*transition-delay:5s;*/
     /*margin-left: -10px;*/
 }
@@ -156,7 +157,7 @@
 .myContainer:hover  .heart-button {
     display: block;
     opacity:1;
-    transition: 5s;
+    transition: 1s;
     /*transition-delay:5s;*/
 }
 
@@ -182,6 +183,7 @@
     flex-direction: row-reverse;
     align-items:flex-end;
     /*transition: 0s display;*/
-
+    opacity:1;
+    transition: 1s;
 
 }
