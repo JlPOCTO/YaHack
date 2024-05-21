@@ -1,10 +1,13 @@
 import { createGlobalStyle } from "styled-components"
 
 export const lightTheme = {
-    body: "#fff",
+    body: "ivory",
     reverseBody: "#212F3C",
-    reverseText: "#fff",
+    reverseText: "ivory",
     text: "#363E45",
+    border: "1px solid rgb(52, 73, 94)",
+    bodyColor: "cadetblue",
+    hover: "#dcdcdc"
     border: "1px solid rgb(52, 73, 94)",
     bodyColor: "cadetblue",
     hover: "#dcdcdc"
@@ -12,8 +15,8 @@ export const lightTheme = {
 
 export const darkTheme = {
     body: "#212F3C",
-    text: "#fff",
-    reverseBody: "#fff",
+    text: "ivory",
+    reverseBody: "ivory",
     reverseText: "#363E45",
     border: "1px solid #fff",
     bodyColor: "dimgray",
@@ -40,9 +43,24 @@ body {
     background-color: ${(props) => props.theme.bodyColor};
 }
 
+.myContainer.data, .data {
+    color: ${(props) => props.theme.bodyColor};
+} 
+.box, .just-picture, .dialog-container {
+    background-color: ${(props) => props.theme.bodyColor};
+}
+
 .profile, .contacts {
     background: ${(props) => props.theme.body};
     color: ${(props) => props.theme.text};
+ }
+
+ .itemNaming {
+    color: ${(props) => props.theme.text};
+ }
+
+ .item:hover {
+    background-color: ${(props) => props.theme.hover};
  }
 
  .itemNaming {
