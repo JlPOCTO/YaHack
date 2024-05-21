@@ -52,12 +52,11 @@ function AddMessage() {
                 <button type="submit" className='firstCurrentSettings'>
                     <Icon className='Settings' data={File} />
                 </button>
-                <input
+                <textarea
                     value={currrentMessage}
                     onChange={handleSetCurrentMessage}
                     placeholder='Введите текст'
                     className="message"
-                // style={{border: 'none'}}
                 />
                 <div className='buttonContainer'>
                     <Popup

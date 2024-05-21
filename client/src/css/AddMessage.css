@@ -1,15 +1,12 @@
 .message {
     width: 100%;
-    height: 53px;
-    /*background: #fff;*/
-    /*margin: 0 auto;*/
+    min-height: 53px;
     flex: 0 0 auto;
     box-sizing: border-box;
-    /* padding: 10px; */
     bottom: 0;
-    /* position: absolute; */
-    /*margin: 0;*/
-    padding: 8px 40px;
+    padding: 8px 110px 8px 40px;
+    overflow-y: auto;
+    scrollbar-width: none;
     border: none;
     font-size: medium;
     color: rgb(54, 62, 69);
@@ -17,6 +14,9 @@
     border-radius: 10px;
     border-color: beige;
     margin-left: 3px;
+    height: auto;
+    resize: none;
+    align-content: center;
 }
 
 .message::placeholder {
@@ -57,7 +57,7 @@
     justify-content: space-between;
     position: absolute;
     right: 15px;
-    bottom: 7px;
+    bottom: 10px;
     gap: 15px;
     margin-bottom: 3px;
 }
@@ -70,7 +70,7 @@
 .firstCurrentSettings {
     background: none;
     border: none;
-    bottom: 7px;
+    bottom: 10px;
     position: absolute;
     margin: 4px;
     z-index: 1;
