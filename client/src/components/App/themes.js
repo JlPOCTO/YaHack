@@ -7,7 +7,7 @@ export const lightTheme = {
     text: "#363E45",
     border: "1px solid rgb(52, 73, 94)",
     bodyColor: "cadetblue",
-    hover: "#dcdcdc"
+    hover: "#dcdcdc",
     border: "1px solid rgb(52, 73, 94)",
     bodyColor: "cadetblue",
     hover: "#dcdcdc"
