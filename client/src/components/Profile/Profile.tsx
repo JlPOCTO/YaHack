@@ -31,17 +31,15 @@ function Profile(props: Profile) {
         </div>
       </header>
       <main>
-        <div className="item">
-          <div className='itemImage'>
-            <button type='button' onClick={() => setOpen(true)} style={{ background: "none", border: "none" , padding: "0"}}>
+          <button type='button' className='contactsButton' onClick={() => setOpen(true)}>
+            <div className='item'>
               <svg className='Settings' fill="#000000" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4,21a1,1,0,0,0,1,1H19a1,1,0,0,0,1-1V3a1,1,0,0,0-1-1H5A1,1,0,0,0,4,3ZM12,7.5a2,2,0,1,1-2,2A2,2,0,0,1,12,7.5ZM8.211,16.215a4,4,0,0,1,7.578,0A.993.993,0,0,1,14.83,17.5H9.18A1,1,0,0,1,8.211,16.215Z" /></svg>
-            </button>
-            <Modal open={open} onClose={() => setOpen(false)}>
-              <Contacts contacts={contacts} />
-            </Modal>
-          </div>
-          <div className='itemNaming'>Contacts</div>
-        </div>
+              <div className='itemNaming'>Contacts</div>
+            </div>
+          </button>
+          <Modal open={open} onClose={() => setOpen(false)}>
+            <Contacts contacts={contacts} />
+          </Modal>
         <div className="item">
           <div className='itemImage'>
             <svg className='Settings' width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

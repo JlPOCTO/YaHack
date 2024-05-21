@@ -57,7 +57,7 @@ function AddMessage() {
                     onChange={handleSetCurrentMessage}
                     placeholder='Введите текст'
                     className="message"
-                    style={{ border: 'none' }}
+                // style={{border: 'none'}}
                 />
                 <div className='buttonContainer'>
                     <Popup

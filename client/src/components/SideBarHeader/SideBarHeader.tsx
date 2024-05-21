@@ -6,7 +6,6 @@ import { ThemeProvider } from 'styled-components';
 import { lightTheme, darkTheme, GlobalStyles } from '../App/themes';
 
 const getInitialTheme = () => {
-    console.log(localStorage.getItem('theme'))
     return localStorage.getItem('theme') || 'light';
 }
 

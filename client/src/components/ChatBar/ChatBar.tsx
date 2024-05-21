@@ -28,7 +28,10 @@ function ChatBar(props: ChatBarProps) {
         <div className="chat-bar">
             <Button onClick={action((e) => {
                 setDialogID(dialog.id)
-            })} className={className}>
+            })} className={className}
+                    style={{
+                        borderRadius:"10px"
+                    }}>
                 <div id="chat-information">
                     <div id="chatName-time">
                         <div id="chatName">
