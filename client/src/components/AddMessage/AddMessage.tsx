@@ -5,13 +5,15 @@ import Popup from 'reactjs-popup';
 import Picker, { EmojiClickData } from 'emoji-picker-react';
 import { useState } from 'react';
 import { useUserStore } from "../../stores/UserStore";
-
+import '../../i18n/config';
+import {useTranslation} from 'react-i18next';
 const getInitialCurrentMessage = () => {
     return sessionStorage.getItem('currentMessage') || '';
 }
 
 function AddMessage() {
     const { dialogID, userID } = useUserStore()
+    const {t, i18n} = useTranslation();
     const [messages, setMessage] = useState([])
     const [currrentMessage, setCurrentMessage] = useState(getInitialCurrentMessage())
     const onEmojiClick = (curEmoji: EmojiClickData) => {
@@ -55,7 +57,7 @@ function AddMessage() {
                 <input
                     value={currrentMessage}
                     onChange={handleSetCurrentMessage}
-                    placeholder='Введите текст'
+                    placeholder={t('description.part2')}
                     className="message"
                 // style={{border: 'none'}}
                 />

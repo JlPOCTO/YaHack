@@ -1,8 +1,12 @@
 {
   "title": "Welcome {{name}}",
   "description": {
-    "part1": "This is a simple example.",
-    "part2": "With different use cases for i18next"
+    "part1": "Search",
+    "part2": "Message"
+  },
+  "profile": {
+    "contacts": "Contacts",
+    "savedMessages": "Saved messages"
   },
   "userMessagesUnread_one": "You have {{count}} unread message.",
   "userMessagesUnread_other": "You have {{count}} unread messages.",

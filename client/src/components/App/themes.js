@@ -8,9 +8,7 @@ export const lightTheme = {
     border: "1px solid rgb(52, 73, 94)",
     bodyColor: "cadetblue",
     hover: "#dcdcdc",
-    border: "1px solid rgb(52, 73, 94)",
-    bodyColor: "cadetblue",
-    hover: "#dcdcdc"
+
 }
 
 export const darkTheme = {

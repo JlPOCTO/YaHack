@@ -1,8 +1,12 @@
 {
   "title": "Привет, {{name}}",
   "description": {
-    "part1": "Это простой пример.",
-    "part2": "С разными вариантами использования i18next"
+    "part1": "Поиск",
+    "part2": "Введите текст"
+  },
+  "profile": {
+    "contacts": "Контакты",
+    "savedMessages": "Сохраненные сообщения"
   },
   "userMessagesUnread_zero": "У тебя нет непрочитанных сообщений",
   "userMessagesUnread_one": "У тебя {{count}} непрочитанное сообщение",
