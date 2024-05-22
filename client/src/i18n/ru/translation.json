@@ -1,0 +1,27 @@
+{
+  "title": "Привет, {{name}}",
+  "description": {
+    "part1": "Поиск",
+    "part2": "Введите текст"
+  },
+  "profile": {
+    "contacts": "Контакты",
+    "savedMessages": "Сохраненные сообщения"
+  },
+  "userMessagesUnread_zero": "У тебя нет непрочитанных сообщений",
+  "userMessagesUnread_one": "У тебя {{count}} непрочитанное сообщение",
+  "userMessagesUnread_few": "У тебя {{count}} непрочитанных сообщения",
+  "userMessagesUnread_many": "У тебя {{count}} непрочитанных сообщений",
+  "error": {
+    "500": "Внутренняя ошибка сервера",
+    "404": "Страница не найдена",
+    "other": "Неизвестная ошибка, код {{code}}"
+  },
+  "nesting": "Заголовок этой страницы \"$t(title, {\"name\": \"{{name}}\"})\"",
+  "read_message_male": "{{name}} прочитал сообщение",
+  "read_message_female": "{{name}} прочитала сообщение",
+  "addChat": {
+    "chat" : "Чаты",
+    "back" : "Вернуться к диалогам"
+  }
+}

@@ -1,9 +1,15 @@
-import { useRef, useEffect, useState } from 'react';
+
+import React, {useEffect, useRef, useState} from 'react';
+
+
 import '../../css/DialogWithMessages.css';
 import Message from "../Message/Message";
+
 type DialogWithMessages = {
     messages: any;
 }
+
+
 
 function DialogWithMessages(props: DialogWithMessages) {
     const { messages } = props;

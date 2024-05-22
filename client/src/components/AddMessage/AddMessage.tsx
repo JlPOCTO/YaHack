@@ -5,7 +5,8 @@ import Popup from 'reactjs-popup';
 import Picker, { EmojiClickData } from 'emoji-picker-react';
 import { useState, useRef, useEffect } from 'react';
 import { useUserStore } from "../../stores/UserStore";
-
+import '../../i18n/config';
+import {useTranslation} from 'react-i18next';
 const getInitialCurrentMessage = () => {
     return sessionStorage.getItem('currentMessage') || '';
 }
@@ -13,6 +14,7 @@ const getInitialCurrentMessage = () => {
 function AddMessage() {
     const { dialogID, userID } = useUserStore()
     const ref = useRef<HTMLTextAreaElement>(null)
+    const {t, i18n} = useTranslation();
     const [messages, setMessage] = useState([])
     const [currrentMessage, setCurrentMessage] = useState(getInitialCurrentMessage())
     const onEmojiClick = (curEmoji: EmojiClickData) => {
@@ -22,7 +24,7 @@ function AddMessage() {
         sessionStorage.setItem('currentMessage', newMessage)
     }
     const handleAddMessage = async () => {
-        console.log('current: ', currrentMessage)
+        // console.log('current: ', currrentMessage)
         const res = await fetch(`/addMessage`, {
             method: 'POST',
             headers: {
@@ -69,7 +71,7 @@ function AddMessage() {
                     ref={ref}
                     maxLength={1000}
                     onChange={handleSetCurrentMessage}
-                    placeholder='Введите текст'
+                    placeholder={t('description.part2')}
                     className="message"
                 />
                 <div className='buttonContainer'>

@@ -27,10 +27,16 @@ const messages = require('./database/dbMessages');
         //currentUser to be added 
         res.send(await chats.getChatsByUser(1));
     });
-
+    // routers.get(
+    //     version + '/myInfo',
+    //     (req, res) => {
+    //         res.send(req.user);
+    //     }
+    // );
     app.get('/me', async (req, res) => {
         //currentUser to be added
-        res.send(await users.findUserByID(1));
+        res.send(req.user);
+        // res.send(await users.findUserByID(1));
     });
     app.get('/contacts', async (req, res) => {
         //currentUser to be added
@@ -53,7 +59,7 @@ const messages = require('./database/dbMessages');
         const senderID = req.body.senderID;
         const time = req.body.time;
         const imagePath = req.body.imagePath;
-        await messages.addMessage(chatID,senderID,message,time,imagePath)
+        await chats.addMessage(chatID,senderID,message,time,imagePath)
         res.send(await chats.getMessagesFromChat(chatID))
         // console.log(await chats.getMessagesFromChat(chatID))
     })

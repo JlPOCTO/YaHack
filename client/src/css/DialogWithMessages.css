@@ -1,5 +1,6 @@
 .dialog-with-messages {
     display: flex;
+    /*flex-direction: column-reverse;*/
     flex-direction: column;
     width: 65%;
     height: 100%;
