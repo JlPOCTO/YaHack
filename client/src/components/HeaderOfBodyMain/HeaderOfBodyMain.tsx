@@ -11,7 +11,8 @@ type DialogProps = {
 }
 
 function HeaderOfBodyMain(props: any) {
-    const {dialogID} = useUserStore();
+
+    const {dialogID, chatName} = useUserStore();
     return (
         <div className="header-of-body-main-pro">
           <div className="someSpace">
@@ -19,7 +20,7 @@ function HeaderOfBodyMain(props: any) {
           </div>
             <div className="header-of-body-main">
                 <div className="dialog-name">
-                    {dialogID}
+                    {chatName}
                 </div>
                 <div className="status">
                     online

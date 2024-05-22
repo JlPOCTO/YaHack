@@ -10,6 +10,7 @@ import {useTranslation} from 'react-i18next';
 import {useUserStore} from "../../stores/UserStore";
 import {Icon} from "@gravity-ui/uikit";
 import {ArrowShapeRight} from "@gravity-ui/icons";
+import {ArrowRotateRight} from '@gravity-ui/icons';
 import {action} from "mobx";
 import {observer} from "mobx-react-lite";
 
@@ -21,7 +22,7 @@ const getInitialTheme = () => {
 }
 
 function SideBarHeader() {
-    let {setLanguage, setSearchInput, searchInput } = useUserStore();
+    let {setLanguage, setSearchInput, searchInput} = useUserStore();
     const [currrentInput, setCurrentInput] = useState(getInitialInput())
     const {t, i18n} = useTranslation();
     const changeLanguage = (lng: string) => () => {
@@ -35,7 +36,7 @@ function SideBarHeader() {
         setTheme(nextTheme)
         localStorage.setItem('theme', nextTheme)
     }
-    const getCurrentInput = () =>{
+    const getCurrentInput = () => {
         const currentInput = sessionStorage.getItem('currentInput')
         console.log("cuur: " + currentInput)
         setSearchInput(currentInput)
@@ -64,27 +65,29 @@ function SideBarHeader() {
                     <nav className='HeaderNav'>
                         <div className="profile-input">
                             <ProfileModalWindow/>
-                            <form method='get'>
-                                <input type="text" id="search-messenger" placeholder={t('description.part1')}
-                                       name='searchMessage'
-                                       value={currrentInput}
-                                       onChange={handleSetCurrentInput}
-                                       // onChange={handleSetCurrentMessage}
-                                       // className="message"
-                                >
-                                </input>
-                            </form>
-                            <button onClick={action((e) => {
-                                const currentInput = sessionStorage.getItem('currentInput')
-                                console.log("cuur: " + currentInput)
-                                setSearchInput(currentInput)
-                                // searchInput = currentInput
-                                console.log("search: " + searchInput)
-                                setCurrentInput('')
+                            <div className="searchPlace">
+                                <form method='get'>
+                                    <input type="text" id="search-messenger" placeholder={t('description.part1')}
+                                           name='searchMessage'
+                                           value={currrentInput}
+                                           onChange={handleSetCurrentInput}
+                                        // onChange={handleSetCurrentMessage}
+                                        // className="message"
+                                    >
+                                    </input>
+                                </form>
+                                <button onClick={action((e) => {
+                                    const currentInput = sessionStorage.getItem('currentInput')
+                                    console.log("cuur: " + currentInput)
+                                    setSearchInput(currentInput)
+                                    // searchInput = currentInput
+                                    console.log("search: " + searchInput)
+                                    setCurrentInput('')
 
-                            })} className='currentSettings'>
-                                <Icon className='Settings' data={ArrowShapeRight} />
-                            </button>
+                                })} className='currentSettings'>
+                                    <Icon id = "321" className='Settings' data={ArrowRotateRight}/>
+                                </button>
+                            </div>
                             <button className="switchButton" onClick={handleSetTheme}>
                                 <svg className='Settings' fill="#000000" width="800px" height="800px"
                                      viewBox="0 0 64 64"

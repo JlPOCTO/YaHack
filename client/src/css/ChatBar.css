@@ -52,12 +52,16 @@
 }
 #chatName{
     float: left;
+    font-weight: bold;
 }
 #time{
     float: right;
+    font-size: small;
+    opacity: 90%;
 }
 #last-message{
     float: left;
+    opacity: 90%;
 }
 span {
     width: 95%;

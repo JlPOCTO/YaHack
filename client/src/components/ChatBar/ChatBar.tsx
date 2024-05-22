@@ -15,7 +15,7 @@ type ChatBarProps = {
 
 function ChatBar(props: ChatBarProps) {
     const {dialog} = props;
-    const {dialogID, setDialogID, userID} = useUserStore()
+    const {dialogID, setDialogID, userID, setChatName} = useUserStore()
 
     // const [isShown, setIsShown] = useState(false);
     const [isActual, setIsActual] = useState(false);
@@ -28,8 +28,10 @@ function ChatBar(props: ChatBarProps) {
         if (dialog.type === "direct") {
             let partner = 0
             // dialog.users.forEach((u) => {if (u !== userID) partner = u})
+            setChatName("Dialog" + dialog.id)
             return "Dialog" + dialog.id
         } else {
+            setChatName(dialog.name)
             return dialog.name
         }
     }
