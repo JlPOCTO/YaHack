@@ -13,6 +13,8 @@ const {myPassport} = require('./myPassport');
 const {launchDB, closeDB} = require("./database/launchDB");
 const users = require('./database/dbUsers');
 const chats = require('./database/dbChats');
+const {initClient} = require('./database/images');
+initClient();
 
 (async () => {
     await launchDB(process.env.DATABASE)
