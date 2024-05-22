@@ -148,16 +148,15 @@
 /*transform: rotate(0.5turn);*/
 .heart-button {
     display: none;
-    opacity:0; /*Элемент полностью прозрачный (невидимый)*/
-    transition: 1s;
+    transform: scale(0.7);
+
     /*transition-delay:5s;*/
     /*margin-left: -10px;*/
 }
 
 .myContainer:hover  .heart-button {
     display: block;
-    opacity:1;
-    transition: 1s;
+
     /*transition-delay:5s;*/
 }
 
@@ -172,8 +171,8 @@
 /*}*/
 .currentSettingsMessage {
     position: relative;
-    top: 60%;
-    left: 25%;
+    top: 90%;
+    left: 50%;
     background: none;
     border: none;
 
@@ -183,7 +182,22 @@
     flex-direction: row-reverse;
     align-items:flex-end;
     /*transition: 0s display;*/
-    opacity:1;
-    transition: 1s;
+
+
+}
+.message-body{
+    display: flex;
+    flex-direction: column;
+}
+.block-of-reaction{
+    background-color: deepskyblue;
+    width: max-content;
+    /*padding: 1px;*/
+    padding-bottom: 3px;
+    padding-left: 4px;
+    padding-right: 4px;
+    border-radius: 10px;
+}
+.emojiPopupMyReaction{
 
 }

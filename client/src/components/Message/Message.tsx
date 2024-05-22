@@ -5,7 +5,9 @@ import {Icon} from "@gravity-ui/uikit";
 import {FaceSmile} from "@gravity-ui/icons";
 import Picker, {EmojiClickData} from "emoji-picker-react";
 import Popup from "reactjs-popup";
-import {Heart} from 'lucide-react';
+import {Heart} from "@gravity-ui/icons";
+import {isReaction} from "mobx/dist/core/reaction";
+
 
 type Message = {
     message: any;
@@ -22,11 +24,19 @@ function Message(props: Message) {
         return message.sender_id === userID
     }
 
+    function deleteReaction() {
+        setIsReaction(false)
+    }
+
+    const [isReaction, setIsReaction] = useState(false);
+    const [currentReaction, setCurrentReaction] = useState('😄');
     const onEmojiClick = (curEmoji: EmojiClickData) => {
-        const currentMessage = sessionStorage.getItem('currentMessage')
-        const newMessage = currentMessage ? currentMessage + curEmoji.emoji : curEmoji.emoji
-        setCurrentMessage(newMessage)
-        sessionStorage.setItem('currentMessage', newMessage)
+        setIsReaction(true)
+        setCurrentReaction(curEmoji.emoji)
+        // const currentMessage = sessionStorage.getItem('currentMessage')
+        // const newMessage = currentMessage ? currentMessage + curEmoji.emoji : curEmoji.emoji
+        // setCurrentMessage(newMessage)
+        // sessionStorage.setItem('currentMessage', newMessage)
     }
     const [currrentMessage, setCurrentMessage] = useState(getInitialCurrentMessage())
 
@@ -57,26 +67,32 @@ function Message(props: Message) {
                             <div className="inner"></div>
                         </div>
                         <div className="message-body">
-                            <div className="author">
-                                <p>{message.sender_id}</p>
+                            <div className="block-of-message">
+                                <div className="author">
+                                    <p>{message.sender_id}</p>
+                                </div>
+                                <div className="text">
+                                    <p>{message.message}</p>
+                                </div>
+                                <div className="data">
+                                    <p>{message.time}</p>
+                                </div>
                             </div>
-                            <div className="text">
-                                <p>{message.message}</p>
+                            {isReaction && <div className="block-of-reaction" onClick={deleteReaction}>
+                                <div>{currentReaction}</div>
                             </div>
-                            <div className="data">
-                                <p>{message.time}</p>
-                            </div>
+                            }
                         </div>
                     </div>
                     <div className="heart-button">
                         <Popup
                             trigger={
                                 <button className='currentSettingsMessage'>
-                                    <Icon className='Settings' data={FaceSmile}/>
+                                    <Icon className='Settings' data={Heart}/>
                                 </button>}
                             position="top left"
                         >
-                            <div className='emojiPopup'>
+                            <div className='emojiPopupMyReaction'>
                                 <Picker onEmojiClick={onEmojiClick}/>
                             </div>
                         </Popup>
@@ -87,7 +103,7 @@ function Message(props: Message) {
 
         </>
     )
-        ;
+
 }
 
 export default Message;
