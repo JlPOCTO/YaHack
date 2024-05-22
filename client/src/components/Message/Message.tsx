@@ -42,23 +42,47 @@ function Message(props: Message) {
 
     return (
         <>
-            {!isMine() && <div className="container">
-                <div className="arrow">
-                    <div className="outer"></div>
-                    <div className="inner"></div>
+            {!isMine() && <div className="Reaction">
+                <div className="container">
+                    <div className="notReaction">
+                        <div className="arrow">
+                            <div className="outer"></div>
+                            <div className="inner"></div>
+                        </div>
+                        <div className="message-body">
+                            <div className="block-of-message">
+                                <div className="author">
+                                    <p>{message.sender_id}</p>
+                                </div>
+                                <div className="text">
+                                    <p>{message.message}</p>
+                                </div>
+                                <div className="data">
+                                    <p>{message.time}</p>
+                                </div>
+                            </div>
+                            {isReaction && <div className="block-of-reaction" onClick={deleteReaction}>
+                                <div>{currentReaction}</div>
+                            </div>
+                            }
+                        </div>
+                    </div>
+                    <div className="heart-button">
+                        <Popup
+                            trigger={
+                                <button className='currentSettingsMessage'>
+                                    <Icon className='Settings' data={Heart}/>
+                                </button>}
+                            position="top left"
+                        >
+                            <div className='emojiPopupMyReaction'>
+                                <Picker onEmojiClick={onEmojiClick}/>
+                            </div>
+                        </Popup>
+                    </div>
                 </div>
-                <div className="message-body">
-                    <div className="author">
-                        <p>{message.sender_id}</p>
-                    </div>
-                    <div className="text">
-                        <p>{message.message}</p>
-                    </div>
-                    <div className="data">
-                        <p>{message.time}</p>
-                    </div>
-                </div>
-            </div>}
+            </div>
+            }
             {isMine() && <div className="myReaction">
                 <div className="myContainer">
                     <div className="notReaction">

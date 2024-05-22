@@ -159,10 +159,19 @@
 
     /*transition-delay:5s;*/
 }
+.container:hover  .heart-button {
+    display: block;
 
+    /*transition-delay:5s;*/
+}
 .myReaction {
     display: flex;
     flex-direction: row-reverse;
+
+}
+.Reaction {
+    display: flex;
+    flex-direction: row;
 
 }
 
@@ -182,8 +191,12 @@
     flex-direction: row-reverse;
     align-items:flex-end;
     /*transition: 0s display;*/
-
-
+}
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items:flex-end;
+    /*transition: 0s display;*/
 }
 .message-body{
     display: flex;
@@ -197,7 +210,4 @@
     padding-left: 4px;
     padding-right: 4px;
     border-radius: 10px;
-}
-.emojiPopupMyReaction{
-
 }
