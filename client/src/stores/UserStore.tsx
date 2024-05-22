@@ -28,6 +28,10 @@ export default class UserStore {
     setLanguage = (lan: string | any) => {
         this.language = lan
     }
+    searchInput: string | any = ""
+    setSearchInput = (input: string | any) => {
+        this.searchInput = input
+    }
 
 }
 const UserStoreContext = React.createContext<UserStore>(

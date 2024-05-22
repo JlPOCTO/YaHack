@@ -16,5 +16,9 @@
     "other": "Unknown error, code {{code}}"
   },
   "nesting": "Title of this page is \"$t(title, {\"count\": \"{{name}}\"})\"",
-  "read_message": "{{name}} read message"
+  "read_message": "{{name}} read message",
+   "addChat": {
+     "chat" : "Chats",
+     "back" : "Back to your dialogs"
+   }
 }

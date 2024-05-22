@@ -23,7 +23,7 @@ function AddMessage() {
         sessionStorage.setItem('currentMessage', newMessage)
     }
     const handleAddMessage = async () => {
-        console.log('current: ', currrentMessage)
+        // console.log('current: ', currrentMessage)
         const res = await fetch(`/addMessage`, {
             method: 'POST',
             headers: {

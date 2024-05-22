@@ -19,5 +19,9 @@
   },
   "nesting": "Заголовок этой страницы \"$t(title, {\"name\": \"{{name}}\"})\"",
   "read_message_male": "{{name}} прочитал сообщение",
-  "read_message_female": "{{name}} прочитала сообщение"
+  "read_message_female": "{{name}} прочитала сообщение",
+  "addChat": {
+    "chat" : "Чаты",
+    "back" : "Вернуться к диалогам"
+  }
 }

@@ -8,13 +8,21 @@ import {lightTheme, darkTheme, GlobalStyles} from '../App/themes';
 import '../../i18n/config';
 import {useTranslation} from 'react-i18next';
 import {useUserStore} from "../../stores/UserStore";
+import {Icon} from "@gravity-ui/uikit";
+import {ArrowShapeRight} from "@gravity-ui/icons";
+import {action} from "mobx";
+import {observer} from "mobx-react-lite";
 
+const getInitialInput = () => {
+    return localStorage.getItem('currentInput') || "";
+}
 const getInitialTheme = () => {
     return localStorage.getItem('theme') || 'light';
 }
 
 function SideBarHeader() {
-    const {setLanguage} = useUserStore();
+    let {setLanguage, setSearchInput, searchInput } = useUserStore();
+    const [currrentInput, setCurrentInput] = useState(getInitialInput())
     const {t, i18n} = useTranslation();
     const changeLanguage = (lng: string) => () => {
         console.log(lng)
@@ -27,6 +35,20 @@ function SideBarHeader() {
         setTheme(nextTheme)
         localStorage.setItem('theme', nextTheme)
     }
+    const getCurrentInput = () =>{
+        const currentInput = sessionStorage.getItem('currentInput')
+        console.log("cuur: " + currentInput)
+        setSearchInput(currentInput)
+        console.log("search: " + searchInput)
+        setCurrentInput('')
+        sessionStorage.setItem('currentInput', '')
+    }
+    const handleSetCurrentInput = (e: any) => {
+        // console.log("handleSetCurrentInput"+ e.target.value)
+        setCurrentInput(e.target.value)
+        sessionStorage.setItem('currentInput', e.target.value)
+    }
+
 
     useEffect(() => {
         const savedTheme = localStorage.getItem('theme');
@@ -44,9 +66,25 @@ function SideBarHeader() {
                             <ProfileModalWindow/>
                             <form method='get'>
                                 <input type="text" id="search-messenger" placeholder={t('description.part1')}
-                                       name='searchMessage'>
+                                       name='searchMessage'
+                                       value={currrentInput}
+                                       onChange={handleSetCurrentInput}
+                                       // onChange={handleSetCurrentMessage}
+                                       // className="message"
+                                >
                                 </input>
                             </form>
+                            <button onClick={action((e) => {
+                                const currentInput = sessionStorage.getItem('currentInput')
+                                console.log("cuur: " + currentInput)
+                                setSearchInput(currentInput)
+                                // searchInput = currentInput
+                                console.log("search: " + searchInput)
+                                setCurrentInput('')
+
+                            })} className='currentSettings'>
+                                <Icon className='Settings' data={ArrowShapeRight} />
+                            </button>
                             <button className="switchButton" onClick={handleSetTheme}>
                                 <svg className='Settings' fill="#000000" width="800px" height="800px"
                                      viewBox="0 0 64 64"
@@ -81,4 +119,4 @@ function SideBarHeader() {
     );
 }
 
-export default SideBarHeader;
+export default observer(SideBarHeader);
