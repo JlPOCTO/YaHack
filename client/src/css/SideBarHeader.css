@@ -4,8 +4,11 @@
     /*border-color: red;*/
     /*border-bottom: solid;*/
     border-bottom-color: dimgrey;
+    border-right-color: dimgrey;
     border-bottom-style: solid;
+    border-right-style: solid;
     border-bottom-width: 1px;
+    border-right-width: 1px;
     margin-bottom: 6px;
     /*background-color : yellow;*/
 }
@@ -73,7 +76,8 @@ form {
 .changeLanguages button{
     cursor: pointer;
     border-radius: 5px;
-    border: none
+    border: none;
+    margin-right: 1px;
 }
 .changeLanguages button.active{
     background: deepskyblue;

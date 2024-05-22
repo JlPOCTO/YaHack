@@ -10,18 +10,24 @@ type DialogProps = {
     dialogId: any;
 }
 
-function HeaderOfBodyMain(props:any) {
+function HeaderOfBodyMain(props: any) {
     const {dialogID} = useUserStore();
-  return (
-    <div className="header-of-body-main">
-        <div className="dialog-name">
-            {dialogID}
-        </div>
-        <div className="status">
-            online
-        </div>
-    </div>
+    return (
+        <div className="header-of-body-main-pro">
+          <div className="someSpace">
 
-  );
+          </div>
+            <div className="header-of-body-main">
+                <div className="dialog-name">
+                    {dialogID}
+                </div>
+                <div className="status">
+                    online
+                </div>
+            </div>
+        </div>
+
+    );
 }
+
 export default observer(HeaderOfBodyMain);
