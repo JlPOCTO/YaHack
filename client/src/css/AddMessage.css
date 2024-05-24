@@ -25,13 +25,11 @@
 }
 
 .box {
-    /*margin-top: 3px;*/
     padding-top: 3px;
     display: flex;
     flex-direction: column;
     align-items: center;
     border: none;
-    /* background-color: dimgrey; */
     height: 10%;
     position: relative;
 }
@@ -57,7 +55,7 @@
     justify-content: space-between;
     position: absolute;
     right: 15px;
-    bottom: 10px;
+    bottom: 14px;
     gap: 15px;
     margin-bottom: 3px;
 }
@@ -65,13 +63,12 @@
 .currentSettings {
     background: none;
     border: none;
-    /*margin-right: 10px;*/
 }
 
 .firstCurrentSettings {
     background: none;
     border: none;
-    bottom: 10px;
+    bottom: 14px;
     position: absolute;
     margin: 4px;
     z-index: 1;

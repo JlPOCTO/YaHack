@@ -8,6 +8,8 @@
     "contacts": "Контакты",
     "savedMessages": "Сохраненные сообщения"
   },
+  "contactsTitle": "Мои контакты",
+  "status": "онлайн",
   "userMessagesUnread_zero": "У тебя нет непрочитанных сообщений",
   "userMessagesUnread_one": "У тебя {{count}} непрочитанное сообщение",
   "userMessagesUnread_few": "У тебя {{count}} непрочитанных сообщения",

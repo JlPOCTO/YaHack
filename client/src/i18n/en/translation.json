@@ -2,12 +2,14 @@
   "title": "Welcome {{name}}",
   "description": {
     "part1": "Search",
-    "part2": "Message"
+    "part2": "Type your message"
   },
   "profile": {
     "contacts": "Contacts",
     "savedMessages": "Saved messages"
   },
+  "contactsTitle":  "My Contacts",
+  "status": "online",
   "userMessagesUnread_one": "You have {{count}} unread message.",
   "userMessagesUnread_other": "You have {{count}} unread messages.",
   "error": {

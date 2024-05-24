@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState, useRef} from 'react';
 import '../../css/Message.css';
 import {useUserStore} from "../../stores/UserStore";
 import {Icon} from "@gravity-ui/uikit";
@@ -19,6 +19,7 @@ const getInitialCurrentMessage = () => {
 function Message(props: Message) {
     const {message} = props;
     const {userID} = useUserStore()
+    const [scrollPos, setScrollPos] = useState(0)
 
     function isMine() {
         return message.sender_id === userID
@@ -29,10 +30,18 @@ function Message(props: Message) {
     }
 
     const [isReaction, setIsReaction] = useState(false);
+    const ref = useRef<null | HTMLDivElement>(null)
     const [currentReaction, setCurrentReaction] = useState('😄');
     const onEmojiClick = (curEmoji: EmojiClickData) => {
         setIsReaction(true)
         setCurrentReaction(curEmoji.emoji)
+        if (ref.current) {
+            ref.current.style.height = `${ref.current.scrollHeight}px`
+        }
+        setScrollPos(ref.current?.scrollTop || 0)
+        if (ref.current) {
+            ref.current.scrollTop = scrollPos
+        }
         // const currentMessage = sessionStorage.getItem('currentMessage')
         // const newMessage = currentMessage ? currentMessage + curEmoji.emoji : curEmoji.emoji
         // setCurrentMessage(newMessage)
