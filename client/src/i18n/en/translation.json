@@ -17,10 +17,15 @@
     "404": "404 Page not found",
     "other": "Unknown error, code {{code}}"
   },
+  "addDialid": {
+    "message": "Start the dialog",
+    "group-chat": "Add to group-chat"
+  },
   "nesting": "Title of this page is \"$t(title, {\"count\": \"{{name}}\"})\"",
   "read_message": "{{name}} read message",
    "addChat": {
      "chat" : "Chats",
      "back" : "Back to your dialogs"
    }
+
 }

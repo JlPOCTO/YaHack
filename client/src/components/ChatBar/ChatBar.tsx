@@ -15,7 +15,7 @@ type ChatBarProps = {
 
 function ChatBar(props: ChatBarProps) {
     const {dialog} = props;
-    const {dialogID, setDialogID} = useUserStore()
+    const {dialogID, setDialogID, userID, setChatName} = useUserStore()
 
     // const [isShown, setIsShown] = useState(false);
     const [isActual, setIsActual] = useState(false);
@@ -24,27 +24,43 @@ function ChatBar(props: ChatBarProps) {
     };
     const className = ["button", dialog.id === dialogID ? "notactual" : ""].join("");
 
+    function getchatName() {
+        if (dialog.type === "direct") {
+            let partner = 0
+            // dialog.users.forEach((u) => {if (u !== userID) partner = u})
+            setChatName("Dialog" + dialog.id)
+            return "Dialog" + dialog.id
+        } else {
+            setChatName(dialog.name)
+            return dialog.name
+        }
+    }
+
     return (
         <div className="chat-bar">
             <Button onClick={action((e) => {
                 setDialogID(dialog.id)
             })} className={className}
                     style={{
-                        borderRadius:"10px"
+                        borderRadius: "10px"
                     }}>
-                <div id="chat-information">
-                    <div id="chatName-time">
-                        <div id="chatName">
-                            ChatName: {dialog.id}
-                        </div>
-                        <div id="time">
-                            Time: {dialog.id}
-                        </div>
+                <div className="chat-bar-pro">
+                    <div className="space-for-avatar">
 
                     </div>
-                    <div id="last-message">
-                        <div id = "to-left">
-                        LastMessage: {dialog.id}
+                    <div id="chat-information">
+                        <div id="chatName-time">
+                            <div id="chatName">
+                                {getchatName()}
+                            </div>
+                            <div id="time">
+                                Time: {dialog.id}
+                            </div>
+                        </div>
+                        <div id="last-message">
+                            <div id="to-left">
+                                LastMessage: {dialog.id}
+                            </div>
                         </div>
                     </div>
                 </div>

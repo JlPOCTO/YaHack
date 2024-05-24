@@ -3,6 +3,9 @@
     margin-bottom: 10px;
     clear: both;
     position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items:flex-end;
 }
 
 .container .arrow {
@@ -41,9 +44,6 @@
     max-width: 400px;
     float: left;
     word-wrap: break-word;
-
-    /*height: auto;*/
-    /*border: 1px solid #CCC;*/
     background-color: #ffffff;
     border: 1px solid #a0b3c4;
     padding: 6px 8px;
@@ -51,13 +51,12 @@
     -moz-border-radius: 5px;
     -o-border-radius: 10px;
     border-radius: 10px;
-    /*display: flex;*/
-    /*flex-direction: column;*/
+    display: flex;
+    flex-direction: column;
 }
 
 .data {
     float: right;
-    /* color: dimgray; */
     font-size: small;
 }
 
@@ -75,6 +74,9 @@
     margin-bottom: 10px;
     clear: both;
     position: relative;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items:flex-end;
 }
 
 .myContainer .arrow {
@@ -112,26 +114,21 @@
 
 .myContainer .message-body {
     max-width: 400px;
-    /*width: 70%;*/
     float: right;
     word-wrap: break-word;
-
-    /*height: auto;*/
     border: 1px solid #a0b3c4;
     background-color: #a0b3c4;
-    /*border: 1px solid #000000;*/
     padding: 6px 8px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -o-border-radius: 10px;
     border-radius: 10px;
-    /*display: flex;*/
-    /*flex-direction: column;*/
+    display: flex;
+    flex-direction: column;
 }
 
 .myContainer.data {
     float: right;
-    /* color: dimgray; */
     font-size: small;
 }
 
@@ -145,39 +142,28 @@
     font-weight: bold;
 }
 
-/*transform: rotate(0.5turn);*/
+
+
 .heart-button {
     display: none;
     transform: scale(0.7);
-
-    /*transition-delay:5s;*/
-    /*margin-left: -10px;*/
 }
 
 .myContainer:hover  .heart-button {
     display: block;
-
-    /*transition-delay:5s;*/
 }
 .container:hover  .heart-button {
     display: block;
-
-    /*transition-delay:5s;*/
 }
 .myReaction {
     display: flex;
     flex-direction: row-reverse;
-
 }
 .Reaction {
     display: flex;
     flex-direction: row;
-
 }
 
-/*myCon+reaction{*/
-/*    */
-/*}*/
 .currentSettingsMessage {
     position: relative;
     top: 90%;
@@ -186,26 +172,10 @@
     border: none;
 
 }
-.myContainer {
-    display: flex;
-    flex-direction: row-reverse;
-    align-items:flex-end;
-    /*transition: 0s display;*/
-}
-.container {
-    display: flex;
-    flex-direction: row;
-    align-items:flex-end;
-    /*transition: 0s display;*/
-}
-.message-body{
-    display: flex;
-    flex-direction: column;
-}
-.block-of-reaction{
+
+.block-of-reaction {
     background-color: deepskyblue;
     width: max-content;
-    /*padding: 1px;*/
     padding-bottom: 3px;
     padding-left: 4px;
     padding-right: 4px;

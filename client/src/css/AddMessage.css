@@ -30,16 +30,15 @@
     flex-direction: column;
     align-items: center;
     border: none;
-    height: 10%;
-    position: relative;
 }
 
 .messageContainer {
-    position: absolute;
+    position: relative;
     border: none;
-    bottom: 14px;
-    width: 65%;
-    display: inline-block;
+    width: 60%;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
 }
 
 .emojiPopup {
@@ -54,15 +53,15 @@
     align-items: center;
     justify-content: space-between;
     position: absolute;
-    right: 15px;
     bottom: 14px;
     gap: 15px;
-    margin-bottom: 3px;
+    right: 0;
 }
 
 .currentSettings {
     background: none;
     border: none;
+    bottom: 4%;
 }
 
 .firstCurrentSettings {
@@ -70,6 +69,11 @@
     border: none;
     bottom: 14px;
     position: absolute;
-    margin: 4px;
-    z-index: 1;
+}
+.photo-box{
+    height: 100px;
+    width: 65%;
+    background-color: #CCCCCC;
+    border-radius: 10px;
+    margin-bottom: 5px;
 }

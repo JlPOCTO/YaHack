@@ -8,19 +8,26 @@ type DialogProps = {
     dialogId: any;
 }
 
-function HeaderOfBodyMain(props: any) {
+function HeaderOfBodyMain(props:  any) {
+
     const { t } = useTranslation();
-    const { dialogID } = useUserStore();
-    return (
-        <div className="header-of-body-main">
-            <div className="dialog-name">
-                {dialogID}
+    const { dialogID, chatName } = useUserStore();
+      return (
+        <div className="header-of-body-main-pro">
+          <div className="someSpace">
+
+          </div>
+                <div className="header-of-body-main">
+                    <div className="dialog-name">
+                        {dialogID}
+                    </div>
+                    <div className="status">
+                        {t('status')}
+                    </div>
             </div>
-            <div className="status">
-                {t('status')}
             </div>
-        </div>
 
     );
 }
+
 export default observer(HeaderOfBodyMain);
