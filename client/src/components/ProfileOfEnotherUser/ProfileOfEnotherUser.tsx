@@ -16,15 +16,7 @@ function Profile(props: Profile) {
     const {t, i18n} = useTranslation();
     const [open, setOpen] = useState(false);
     const [contacts, setMyContacts] = useState([])
-    useEffect(() => {
 
-        const getMyInfo = async () => {
-            const res = await fetch('\contacts')
-            const contacts = await res.json();
-            setMyContacts(contacts)
-        }
-        getMyInfo()
-    }, [])
     function HandleChatAdd(){
         setSearchInput("")
         setDialogID(2)
@@ -44,9 +36,6 @@ function Profile(props: Profile) {
                         <div className='itemNaming'>{t('addDialid.message')}</div>
                     </div>
                 </button>
-                {/*<Modal open={open} onClose={() => setOpen(false)}>*/}
-                {/*    <Contacts contacts={contacts} />*/}
-                {/*</Modal>*/}
                 <div className="item">
                     {/*<div className='itemImage'>*/}
                     {/*    /!*<svg className='Settings' width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">*!/*/}

@@ -31,8 +31,12 @@ function SideBarHeader() {
         i18n.changeLanguage(lng);
         setLanguage(lng)
     }
+    function getInitialIsLight(){
+        return theme === "light";
+
+    }
     const [theme, setTheme] = useState(getInitialTheme)
-    const [themeLight, setChangeTheme] = useState(true)
+    const [themeLight, setChangeTheme] = useState(getInitialIsLight())
     const handleSetTheme = () => {
         const nextTheme = theme === 'light' ? 'dark' : 'light'
         setTheme(nextTheme)
