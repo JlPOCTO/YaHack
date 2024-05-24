@@ -20,7 +20,7 @@ function HeaderOfBodyMain(props: any) {
           </div>
             <div className="header-of-body-main">
                 <div className="dialog-name">
-                    {chatName}
+                    {dialogID}
                 </div>
                 <div className="status">
                     online
