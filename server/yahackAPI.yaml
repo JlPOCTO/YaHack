@@ -112,6 +112,28 @@ paths:
         '500':
           description: Ошибка на сервере
 
+  /users:
+    get:
+      tags:
+        - user
+      summary: Получить информацию о всех пользователях
+      operationId: getUsers
+      responses:
+        '200':
+          description: Успешно
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Неверный запрос
+        '401':
+          description: Клиент не авторизован
+        '500':
+          description: Ошибка на сервере
+
   /chats:
     get:
       tags:
@@ -272,7 +294,7 @@ paths:
         '500':
           description: Ошибка на сервере
 
-  /chat/avatar:
+  /chat/{chatId}/avatar:
     get:
       tags:
         - chat
@@ -283,6 +305,11 @@ paths:
           in: query
           required: true
           schema: 
+            type: string
+        - name: chatId
+          in: path
+          required: true
+          schema:
             type: integer
       responses: 
         '200':
@@ -308,6 +335,12 @@ paths:
         - chat
       summary: Обновить аватар чата
       operationId: updateChatAvatar
+      parameters:
+        - name: chatId
+          in: path
+          required: true
+          schema:
+            type: integer
       requestBody:
         description: Новый аватар чата
         required: true
@@ -333,7 +366,7 @@ paths:
     get:
       tags:
         - chat
-      summary: Создать пригласительную ссылку для чата
+      summary: Получить пригласительную ссылку для чата
       operationId: createInviteLink
       parameters: 
         - name: id
@@ -745,7 +778,7 @@ components:
           description: Название чата
           type: string
           nullable: true
-        chatType:
+        type:
           description: Тип чата
           type: string
           example: direct
@@ -764,6 +797,7 @@ components:
         lastMessage:
           description: Последнее сообщение в чате
           type: object
+          nullable: true
           allOf:
             - $ref: '#/components/schemas/Message'
 
@@ -775,7 +809,7 @@ components:
           description: Идентификатор сообщения
           type: integer
           example: 10
-        userId:
+        senderId:
           description: Идентификатор пользователя, который отправил сообщение
           type: integer
           example: 10

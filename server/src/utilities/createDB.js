@@ -30,15 +30,28 @@ const TABLES = [
         name TEXT,
         login TEXT,
         avatar_path TEXT)`),
+    makeTable("reactions", `(
+        id INTEGER PRIMARY KEY,
+        message_id INTEGER,
+        user_id INTEGER,
+        reaction TEXT,
+        FOREIGN KEY(message_id) REFERENCES messages(id),
+        FOREIGN KEY(user_id) REFERENCES users(id))`),
+    makeTable("invite_links", `(
+        id INTEGER PRIMARY KEY,
+        chat_id INTEGER,
+        creator_id INTEGER,
+        FOREIGN KEY(chat_id) REFERENCES chats(id),
+        FOREIGN KEY(creator_id) REFERENCES users(id))`)
 ];
 
 (async () => {
     const database = await open({
         filename: process.argv[2], driver: sqlite3.Database
     });
-    await database.run(`PRAGMA foreign_keys = ON;`);
-    await Promise.all(TABLES.map(table => {
-        database.run(`CREATE TABLE IF NOT EXISTS ${table.name} ${table.params} STRICT;`)
-    }));
+    await database.run(`PRAGMA foreign_keys = ON`);
+    await Promise.all(TABLES.map(table =>
+        database.run(`CREATE TABLE IF NOT EXISTS ${table.name} ${table.params} STRICT`)
+    ));
     await database.close();
 })();
