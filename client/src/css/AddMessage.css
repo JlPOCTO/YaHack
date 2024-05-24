@@ -30,7 +30,9 @@
     flex-direction: column;
     align-items: center;
     border: none;
+    height: 12%;
 }
+
 
 .messageContainer {
     position: relative;
@@ -70,7 +72,8 @@
     bottom: 14px;
     position: absolute;
 }
-.photo-box{
+
+.photo-box {
     height: 100px;
     width: 65%;
     background-color: #CCCCCC;

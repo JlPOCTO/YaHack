@@ -1,11 +1,10 @@
-
 .container {
     margin-bottom: 10px;
     clear: both;
     position: relative;
     display: flex;
     flex-direction: row;
-    align-items:flex-end;
+    align-items: flex-end;
 }
 
 .container .arrow {
@@ -76,7 +75,7 @@
     position: relative;
     display: flex;
     flex-direction: row-reverse;
-    align-items:flex-end;
+    align-items: flex-end;
 }
 
 .myContainer .arrow {
@@ -149,16 +148,24 @@
     transform: scale(0.7);
 }
 
-.myContainer:hover  .heart-button {
+.heart-button-left {
+    display: none;
+    transform: scale(0.7) translate(-37px, 10%);
+}
+
+.myContainer:hover .heart-button {
     display: block;
 }
-.container:hover  .heart-button {
+
+.container:hover .heart-button {
     display: block;
 }
+
 .myReaction {
     display: flex;
     flex-direction: row-reverse;
 }
+
 .Reaction {
     display: flex;
     flex-direction: row;

@@ -35,8 +35,8 @@ const messages = require('./database/dbMessages');
     // );
     app.get('/me', async (req, res) => {
         //currentUser to be added
-        res.send(req.user);
-        // res.send(await users.findUserByID(1));
+        // res.send(req.user);
+        res.send(await users.findUserByID(1));
     });
     app.get('/contacts', async (req, res) => {
         //currentUser to be added
