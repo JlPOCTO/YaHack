@@ -3,15 +3,15 @@ info:
   title: YaHack Kilogram API
   description: Набор методов для обращения к серверу мессенджера Kilogram. <br> 
     ВАЖНО!! Обратите внимание, что ко всем методам сначала нужен префикс /api/{version}
-  version: 1.0.0
+  version: 2.0.0
   contact:
     name: Поддержка API
     url: https://t.me/gavrilovdash
 
 servers:
-  - url: http://127.0.0.1:3000/api/v1
+  - url: http://127.0.0.1:3000/api/v2
     description: Dev по умолчанию
-  - url: http://team5.ya-itmo.ru/api/v1
+  - url: http://team5.ya-itmo.ru/api/v2
     description: Production
 
 tags:
