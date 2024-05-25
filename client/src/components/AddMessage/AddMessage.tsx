@@ -27,6 +27,8 @@ function AddMessage() {
         sessionStorage.setItem('currentMessage', newMessage)
     }
     const handleAddMessage = async () => {
+        const date = Date.now() + 10800000;
+        const showTime = date
         if (currrentMessage !== "") {
             const res = await fetch('/addMessage', {
                 method: 'POST',
@@ -37,7 +39,7 @@ function AddMessage() {
                     message: currrentMessage,
                     chatID: dialogID,
                     senderID: userID,
-                    time: 3,
+                    time: showTime,
                     imagePath: " "
                 })
             });
