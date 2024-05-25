@@ -19,6 +19,7 @@ function Profile(props: Profile) {
 
     function HandleChatAdd(){
         setSearchInput("")
+        sessionStorage.setItem('currentInput', '')
         setDialogID(2)
     }
     return (
