@@ -14,25 +14,12 @@ const routers = express.Router();
 
 const version = process.env.API_VERSION;
 
-// Руты, связанные со страницами
-
-
-// Руты, связанные с API
-
-
-// v2
-
 
 routers.get('/dialogs', async (req, res) => {
     //currentUser to be added
     res.send(await chats.getChatsByUser(1));
 });
-// routers.get(
-//     version + '/myInfo',
-//     (req, res) => {
-//         res.send(req.user);
-//     }
-// );
+
 routers.get('/me', async (req, res) => {
     //currentUser to be added
     // res.send(req.user);
@@ -43,11 +30,6 @@ routers.get('/contacts', async (req, res) => {
     res.send(await users.findAllUsers());
 });
 routers.get('/dialogs/:id/messages', async (req, res) => {
-    let a = req.query.id
-    res.send(await chats.getMessagesFromChat(a))
-});
-
-routers.get('/messages', async (req, res) => {
     let a = req.query.id
     res.send(await chats.getMessagesFromChat(a))
 });
