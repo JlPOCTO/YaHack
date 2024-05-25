@@ -2,18 +2,19 @@ import '../../css/AddMessage.css';
 import {FaceSmile, File, ArrowShapeRight} from '@gravity-ui/icons';
 import {Icon} from '@gravity-ui/uikit';
 import Popup from 'reactjs-popup';
-import Picker, { EmojiClickData } from 'emoji-picker-react';
-import { useState, useRef, useEffect } from 'react';
-import { useUserStore } from "../../stores/UserStore";
+import Picker, {EmojiClickData} from 'emoji-picker-react';
+import {useState, useRef, useEffect} from 'react';
+import {useUserStore} from "../../stores/UserStore";
 import '../../i18n/config';
 import {useTranslation} from 'react-i18next';
 import {ChevronDown} from '@gravity-ui/icons';
+
 const getInitialCurrentMessage = () => {
     return sessionStorage.getItem('currentMessage') || '';
 }
 
 function AddMessage() {
-    const { dialogID, userID } = useUserStore()
+    const {dialogID, userID} = useUserStore()
     const ref = useRef<HTMLTextAreaElement>(null)
     const {t, i18n} = useTranslation();
     const [messages, setMessage] = useState([])
@@ -26,24 +27,26 @@ function AddMessage() {
         sessionStorage.setItem('currentMessage', newMessage)
     }
     const handleAddMessage = async () => {
-        // console.log('current: ', currrentMessage)
-        const res = await fetch(`/addMessage`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                message: currrentMessage,
-                chatID: dialogID,
-                senderID: userID,
-                time: 3,
-                imagePath: " "
-            })
-        });
-        const messages = await res.json();
-        setMessage(messages)
-        setCurrentMessage('')
-        sessionStorage.setItem('currentMessage', '')
+        if (currrentMessage !== "") {
+            const res = await fetch(`/addMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: currrentMessage,
+                    chatID: dialogID,
+                    senderID: userID,
+                    time: 3,
+                    imagePath: " "
+                })
+            });
+            const messages = await res.json();
+            setMessage(messages)
+            setCurrentMessage('')
+
+            sessionStorage.setItem('currentMessage', '')
+        }
     }
     const handleSetCurrentMessage = (e: any) => {
         setCurrentMessage(e.target.value)
@@ -52,19 +55,30 @@ function AddMessage() {
 
     useEffect(() => {
         const changeHeight = () => {
-          if (ref.current) {
-            ref.current.style.height = 'auto';
-            ref.current.style.height = ref.current.scrollHeight + 'px';
-          }
+            if (ref.current) {
+                ref.current.style.height = 'auto';
+                ref.current.style.height = ref.current.scrollHeight + 'px';
+            }
         };
         changeHeight();
-      }, [currrentMessage]);
-    
+    }, [currrentMessage]);
+
 
     function isPhotoBoxOpen() {
         setOpen(!isOpen)
     }
 
+    const handleKeyDown =  (e: any) => {
+        const link = document.getElementById('super-button');
+        if (e.keyCode == 13) {
+            if (e.shiftKey == false) {
+                e.preventDefault();
+                // @ts-ignore
+                link.click()
+            }
+        }
+
+    };
 
     return (
         <div className="box">
@@ -77,14 +91,17 @@ function AddMessage() {
                     {!isOpen && <Icon className='Settings' data={File}/>}
                     {isOpen && <Icon className='Settings' data={ChevronDown}/>}
                 </button>
+                <form>
                 <textarea
                     value={currrentMessage}
                     ref={ref}
                     maxLength={1000}
                     onChange={handleSetCurrentMessage}
+                    onKeyDown={handleKeyDown}
                     placeholder={t('description.part2')}
                     className="message"
                 />
+                </form>
                 <div className='buttonContainer'>
                     <Popup
                         trigger={
@@ -97,7 +114,7 @@ function AddMessage() {
                             <Picker onEmojiClick={onEmojiClick}/>
                         </div>
                     </Popup>
-                    <button onClick={handleAddMessage} className='currentSettings'>
+                    <button onClick={handleAddMessage} className='currentSettings' id="super-button">
                         <Icon className='Settings' data={ArrowShapeRight}/>
                     </button>
                 </div>

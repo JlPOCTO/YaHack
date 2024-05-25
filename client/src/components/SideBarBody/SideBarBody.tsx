@@ -68,7 +68,7 @@ function SideBarBody() {
                 })} className="come-back">
                     {t('addChat.back')}
                 </button>
-                //Здесь нужен запрос, который будет возвращать пользователей по имени searchInput
+
                 <p>
                     {t('addChat.chat')}
                 </p>

@@ -142,7 +142,6 @@
 }
 
 
-
 .heart-button {
     display: none;
     transform: scale(0.7);
@@ -157,7 +156,7 @@
     display: block;
 }
 
-.container:hover .heart-button {
+.container:hover .heart-button-left {
     display: block;
 }
 
@@ -187,4 +186,9 @@
     padding-left: 4px;
     padding-right: 4px;
     border-radius: 10px;
+}
+
+.heart-button-left {
+    display: none;
+    transform: scale(0.7) translate(-37px, 10%);
 }
