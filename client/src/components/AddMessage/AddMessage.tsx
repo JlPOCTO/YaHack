@@ -14,7 +14,7 @@ const getInitialCurrentMessage = () => {
 }
 
 function AddMessage() {
-    const {dialogID, userID} = useUserStore()
+    const {dialogID, userID, setFlag, flag} = useUserStore()
     const ref = useRef<HTMLTextAreaElement>(null)
     const {t, i18n} = useTranslation();
     const [messages, setMessage] = useState([])
@@ -27,6 +27,10 @@ function AddMessage() {
         sessionStorage.setItem('currentMessage', newMessage)
     }
     const handleAddMessage = async () => {
+        console.log('flag1', flag)
+        let g = flag
+        setFlag(!g)
+        console.log('flag', flag)
         const date = Date.now() + 10800000;
         const showTime = date
         if (currrentMessage !== "") {
@@ -45,8 +49,10 @@ function AddMessage() {
             });
             const messages = await res.json();
             setMessage(messages)
+            console.log("jjj"+typeof messages)
+            
             setCurrentMessage('')
-
+            
             sessionStorage.setItem('currentMessage', '')
         }
     }

@@ -36,6 +36,10 @@ export default class UserStore {
     setSearchInput = (input: string | any) => {
         this.searchInput = input
     }
+    flag: boolean| any = true
+    setFlag = (input: boolean | any) => {
+        this.setFlag = input
+    }
 
 }
 const UserStoreContext = React.createContext<UserStore>(
