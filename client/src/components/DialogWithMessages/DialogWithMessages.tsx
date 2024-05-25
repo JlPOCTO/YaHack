@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
 
 
 import '../../css/DialogWithMessages.css';
@@ -20,11 +20,16 @@ function DialogWithMessages(props: DialogWithMessages) {
         setLen(messages.length);
     }, [messages]);
 
-    useEffect(() => {
-        if ((lastMessage.current) && (len !== messages.length)) {
-            setLen(messages.length)
+
+    useLayoutEffect(() => {
+        // setTimeout(() => {
+            // console.log("text", lastMessage.current, lastMessage.current?.scrollHeight)
+            if ((lastMessage.current)) {
+                setLen(messages.length)
                 lastMessage.current.scrollTop = lastMessage.current.scrollHeight
-        }
+            }
+        // }, 0)
+        
     }, [messages]);
 
 

@@ -29,18 +29,18 @@ function Message(props: Message) {
     }
 
     const [isReaction, setIsReaction] = useState(false);
-    const ref = useRef<null | HTMLDivElement>(null)
+    // const ref = useRef<null | HTMLDivElement>(null)
     const [currentReaction, setCurrentReaction] = useState('😄');
     const onEmojiClick = (curEmoji: EmojiClickData) => {
         setIsReaction(true)
         setCurrentReaction(curEmoji.emoji)
-        if (ref.current) {
-            ref.current.style.height = `${ref.current.scrollHeight}px`
-        }
-        setScrollPos(ref.current?.scrollTop || 0)
-        if (ref.current) {
-            ref.current.scrollTop = scrollPos
-        }
+        // if (ref.current) {
+        //     ref.current.style.height = `${ref.current.scrollHeight}px`
+        // }
+        // setScrollPos(ref.current?.scrollTop || 0)
+        // if (ref.current) {
+            // ref.current.scrollTop = scrollPos
+        // }
         // const currentMessage = sessionStorage.getItem('currentMessage')
         // const newMessage = currentMessage ? currentMessage + curEmoji.emoji : curEmoji.emoji
         // setCurrentMessage(newMessage)
@@ -48,14 +48,11 @@ function Message(props: Message) {
     }
 
     function msToTime(duration: number) { 
-        console.log(duration)
         let minutes = Math.floor((duration / (1000 * 60)) % 60) 
         let hours = Math.floor((duration / (1000 * 60 * 60)) % 24); 
        
         let hourslength = (hours < 10) ? "0" + hours : hours; 
         let minuteslength = (minutes < 10) ? "0" + minutes : minutes; 
-
-        console.log(hourslength + ":" + minuteslength)
        
         return hourslength + ":" + minuteslength; 
       }
