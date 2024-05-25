@@ -7,10 +7,12 @@ import {observer} from 'mobx-react-lite';
 
 function SideBar() {
     return (
+        <React.StrictMode>
         <div className="side-bar">
             <SideBarHeader/>
             <SideBarBody/>
         </div>
+        </React.StrictMode>
     );
 
 }

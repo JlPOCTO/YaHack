@@ -79,3 +79,13 @@
   border: none;
   padding: 1px;
 }
+.start-dialig-button{
+  width: 100%;
+  height: 80px;
+
+}
+.buttons-to-add{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

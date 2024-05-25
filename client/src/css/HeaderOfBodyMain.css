@@ -1,14 +1,37 @@
 .header-of-body-main {
     height: 60px;
     width: 100%;
-    background-color: #4aa1f2;
+    margin-right: 5px;
+    /*border-left-style: solid;*/
+    /*border-left-width: 1px;*/
 }
-.dialog-name{
+
+.dialog-name {
     font-size: large;
     font-weight: bold;
-    color: blue;
+    /*color: blue;*/
 }
-.status{
-    font-size:small;
-    color: white;
+
+.status {
+    font-size: small;
+    /*color: white;*/
+}
+
+.someSpace {
+    height: 50px;
+    width: 53px;
+    background-color: midnightblue;
+    border-radius: 50px;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+.header-of-body-main-pro {
+    border-left-color: dimgrey;
+    border-right-style: solid;
+    border-right-width: 1px;
+    padding-top: 5px;
+    display: flex;
+    flex-direction: row;
+    height: 6%;
 }
