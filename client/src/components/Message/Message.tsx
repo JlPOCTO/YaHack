@@ -6,7 +6,6 @@ import {FaceSmile} from "@gravity-ui/icons";
 import Picker, {EmojiClickData} from "emoji-picker-react";
 import Popup from "reactjs-popup";
 import {Heart} from "@gravity-ui/icons";
-import {isReaction} from "mobx/dist/core/reaction";
 
 
 type Message = {
@@ -47,7 +46,19 @@ function Message(props: Message) {
         // setCurrentMessage(newMessage)
         // sessionStorage.setItem('currentMessage', newMessage)
     }
-    const [currrentMessage, setCurrentMessage] = useState(getInitialCurrentMessage())
+
+    function msToTime(duration: number) { 
+        console.log(duration)
+        let minutes = Math.floor((duration / (1000 * 60)) % 60) 
+        let hours = Math.floor((duration / (1000 * 60 * 60)) % 24); 
+       
+        let hourslength = (hours < 10) ? "0" + hours : hours; 
+        let minuteslength = (minutes < 10) ? "0" + minutes : minutes; 
+
+        console.log(hourslength + ":" + minuteslength)
+       
+        return hourslength + ":" + minuteslength; 
+      }
 
     return (
         <>
@@ -67,7 +78,7 @@ function Message(props: Message) {
                                     <p>{message.message}</p>
                                 </div>
                                 <div className="data">
-                                    <p>{message.time}</p>
+                                    <p>{msToTime(message.time)}</p>
                                 </div>
                             </div>
                             {isReaction && <div className="block-of-reaction" onClick={deleteReaction}>
@@ -76,7 +87,7 @@ function Message(props: Message) {
                             }
                         </div>
                     </div>
-                    <div className="heart-button">
+                    <div className="heart-button-left">
                         <Popup
                             trigger={
                                 <button className='currentSettingsMessage'>
@@ -108,7 +119,7 @@ function Message(props: Message) {
                                     <p>{message.message}</p>
                                 </div>
                                 <div className="data">
-                                    <p>{message.time}</p>
+                                    <p>{msToTime(message.time)}</p>
                                 </div>
                             </div>
                             {isReaction && <div className="block-of-reaction" onClick={deleteReaction}>
