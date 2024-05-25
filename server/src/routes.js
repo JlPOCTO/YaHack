@@ -1,7 +1,8 @@
 const express = require('express');
 const passport = require('passport');
 const {getBasePage} = require("./statics/getBasePage");
-const {isAuthenticatedMiddleware} = require("./middlewares/isAuthenticatedMiddleware")
+const {isAuthenticated} = require("./middlewares/isAuthenticated");
+const {isAuthenticatedAPI} = require("./middlewares/isAuthenticatedAPI");
 const dbChats = require('./database/dbChats');
 const dbUsers = require('./database/dbUsers');
 
@@ -9,6 +10,7 @@ const routers = express.Router();
 
 const version = process.env.API_VERSION;
 
+// Руты, связанные со страницами
 routers.get(
     '/auth/github',
     passport.authenticate('github')
@@ -33,10 +35,9 @@ routers.get(
     }
 )
 
-routers.use(isAuthenticatedMiddleware);
-
 routers.get(
     '/logout',
+    isAuthenticated,
     (req, res, next) => {
         req.logout(function (err) {
             if (err) {
@@ -46,6 +47,19 @@ routers.get(
         });
     }
 );
+
+routers.get(
+    '/home',
+    isAuthenticated,
+    (req, res) => {
+        res.set('Content-Type', 'text/html');
+        res.send(Buffer.from(getBasePage()));
+    }
+);
+
+// Руты, связанные с API
+
+routers.use(isAuthenticatedAPI);
 
 routers.get(
     version + '/chats',
@@ -92,11 +106,13 @@ routers.post(
     }
 )
 
+// Рут по умолчанию (для неизвестных)
 routers.get(
     '*',
+    isAuthenticated,
     (req, res) => {
         res.set('Content-Type', 'text/html');
-        res.send(Buffer.from(getBasePage()));
+        res.send(Buffer.from(getBasePage())); //TODO Страница ошибки
     }
 );
 

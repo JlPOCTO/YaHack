@@ -10,6 +10,7 @@
     "fill-test-db": "node src/utilities/fillTestDB.js \"./src/sqlite.db\""
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.540.0",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -17,6 +18,7 @@
     "express": "^4.19.2",
     "express-session": "1.18.0",
     "express-session-sqlite": "^2.1.1",
+    "identicon": "^3.1.1",
     "nodemon": "^3.1.0",
     "passport": "0.7.0",
     "passport-github": "1.1.0",
