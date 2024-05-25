@@ -53,6 +53,12 @@ body {
     color: ${(props) => props.theme.text};
  }
 
+ .p-sidebar-header {
+    padding: 10px 15px 10px 15px;
+    background: ${(props) => props.theme.body};
+    color: ${(props) => props.theme.text};
+ }
+
  .itemNaming {
     color: ${(props) => props.theme.text};
  }
