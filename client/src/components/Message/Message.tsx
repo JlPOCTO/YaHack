@@ -76,7 +76,7 @@ function Message(props: Message) {
                             }
                         </div>
                     </div>
-                    <div className="heart-button">
+                    <div className="heart-button-left">
                         <Popup
                             trigger={
                                 <button className='currentSettingsMessage'>
