@@ -28,7 +28,7 @@ async function addMessage(senderId, chatId, message, imagePath, time) {
             logError("addMessage", arguments, "Не получилось добавить сообщение")
             return
         }
-        newMessage.reactions = await db.database.all(`SELECT * FROM reactions WHERE message_id = ?`, newMessage.id)
+        newMessage.reactions = []
         return convertMessage(newMessage)
     } catch (e) {
         logError("addMessage", arguments, e)
