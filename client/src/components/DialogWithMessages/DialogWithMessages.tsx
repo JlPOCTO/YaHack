@@ -20,11 +20,16 @@ function DialogWithMessages(props: DialogWithMessages) {
         setLen(messages.length);
     }, [messages]);
 
+
     useEffect(() => {
-        if ((lastMessage.current) && (len !== messages.length)) {
-            setLen(messages.length)
-                lastMessage.current.scrollTop = lastMessage.current.scrollHeight
-        }
+        setTimeout(() => {
+            console.log("text", lastMessage.current, lastMessage.current?.scrollHeight)
+            if ((lastMessage.current)) {
+                setLen(messages.length)
+                lastMessage.current.scrollTop = 99999999
+            }
+        }, 0)
+        
     }, [messages]);
 
 

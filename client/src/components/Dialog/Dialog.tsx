@@ -13,18 +13,20 @@ import {observer} from "mobx-react-lite";
 
 
 function Dialog() {
-    const {dialogID} = useUserStore()
+    const {dialogID,setFlag, flag} = useUserStore()
     const [messages, setMessages] = useState([])
     useEffect(() => {
-
+    console.log("dialog")
         const getMessages = async () => {
             const res = await fetch(`/messages?id=${dialogID}`)
             const messages = await res.json()
             setMessages(messages)
+            console.log(flag)
+            // setFlag(!flag) 
 
         }
         getMessages()
-    }, [{dialogID}])
+    }, [dialogID, flag])
 
     function isDefault() {
         return dialogID === 0

@@ -86,6 +86,7 @@ function SideBarHeader() {
                 <menu className='HeaderMenu'>
                     <nav className='HeaderNav'>
                         <div className="profile-input">
+
                             <ProfileModalWindow/>
                             <div className="searchPlace">
                                 <form method='get'>

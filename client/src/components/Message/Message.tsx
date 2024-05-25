@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState, useRef} from 'react';
 import '../../css/Message.css';
 import {useUserStore} from "../../stores/UserStore";
 import {Icon} from "@gravity-ui/uikit";
@@ -12,12 +12,13 @@ type Message = {
     message: any;
 }
 const getInitialCurrentMessage = () => {
-    return sessionStorage.getItem('currentMessage') || '';
+    return sessionStorage.getItem('currentMessage')  '';
 }
 
 function Message(props: Message) {
     const {message} = props;
     const {userID} = useUserStore()
+    const [scrollPos, setScrollPos] = useState(0)
 
     function isMine() {
         return message.sender_id === userID
@@ -28,28 +29,33 @@ function Message(props: Message) {
     }
 
     const [isReaction, setIsReaction] = useState(false);
+    // const ref = useRef<null | HTMLDivElement>(null)
     const [currentReaction, setCurrentReaction] = useState('😄');
     const onEmojiClick = (curEmoji: EmojiClickData) => {
         setIsReaction(true)
         setCurrentReaction(curEmoji.emoji)
+        // if (ref.current) {
+        //     ref.current.style.height = `${ref.current.scrollHeight}px`
+        // }
+        // setScrollPos(ref.current?.scrollTop  0)
+        // if (ref.current) {
+        // ref.current.scrollTop = scrollPos
+        // }
         // const currentMessage = sessionStorage.getItem('currentMessage')
         // const newMessage = currentMessage ? currentMessage + curEmoji.emoji : curEmoji.emoji
         // setCurrentMessage(newMessage)
         // sessionStorage.setItem('currentMessage', newMessage)
     }
 
-    function msToTime(duration: number) { 
-        console.log(duration)
-        let minutes = Math.floor((duration / (1000 * 60)) % 60) 
-        let hours = Math.floor((duration / (1000 * 60 * 60)) % 24); 
-       
-        let hourslength = (hours < 10) ? "0" + hours : hours; 
-        let minuteslength = (minutes < 10) ? "0" + minutes : minutes; 
+    function msToTime(duration: number) {
+        let minutes = Math.floor((duration / (1000 * 60)) % 60)
+        let hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
 
-        console.log(hourslength + ":" + minuteslength)
-       
-        return hourslength + ":" + minuteslength; 
-      }
+        let hourslength = (hours < 10) ? "0" + hours : hours;
+        let minuteslength = (minutes < 10) ? "0" + minutes : minutes;
+
+        return hourslength + ":" + minuteslength;
+    }
 
     return (
         <>
@@ -78,7 +84,7 @@ function Message(props: Message) {
                             }
                         </div>
                     </div>
-                    <div className="heart-button">
+                    <div className="heart-button-left">
                         <Popup
                             trigger={
                                 <button className='currentSettingsMessage'>
