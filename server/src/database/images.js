@@ -4,14 +4,14 @@ let storage;
 
 function initClient() {
     if (!storage) {
-        storage = new st.S3Client([{
+        storage = new st.S3Client({
             region: 'us-east-1',
             endpoint: 'https://storage.yandexcloud.net',
             credentials: {
                 accessKeyId: process.env.AWS_ACCESS_KEY_ID,
                 secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
             },
-        }]);
+        });
     }
 }
 
@@ -23,9 +23,8 @@ async function uploadImage(name, imageData) {
     };
     try {
         const command = new st.PutObjectCommand(params);
-        const result = await storage.send(command);
-        console.log(`Файл ${name} успешно загружен`, result);
-
+        await storage.send(command);
+        console.log(`Файл ${name} успешно загружен`);
         return true;
     } catch (error) {
         console.error(`Ошибка при загрузке файла ${name}`, error);
@@ -41,12 +40,10 @@ async function getImage(name) {
     try {
         const command = new st.GetObjectCommand(params);
         const result = await storage.send(command);
-        console.log(`Файл ${name} успешно получен`, result);
-
+        console.log(`Файл ${name} успешно получен`);
         return result.Body;
     } catch (error) {
         console.error(`Ошибка при получении файла ${name}`, error);
-        return undefined;
     }
 }
 
@@ -57,9 +54,8 @@ async function deleteImage(name) {
     };
     try {
         const command = new st.DeleteObjectCommand(params);
-        const result = await storage.send(command);
-        console.log(`Файл ${name} успешно удален`, result);
-
+        await storage.send(command);
+        console.log(`Файл ${name} успешно удален`);
         return true;
     } catch (error) {
         console.error(`Ошибка при удалении файла ${name}`, error);
@@ -67,4 +63,18 @@ async function deleteImage(name) {
     }
 }
 
-module.exports = {initClient, uploadImage, getImage, deleteImage};
+async function listAllImages() {
+    const params = {
+        Bucket: process.env.BUCKET,
+    };
+    try {
+        const command = new st.ListObjectsCommand(params);
+        const result = await storage.send(command);
+        console.log(`Список файлов:\n`, ...result.Contents.map(res => res.Key));
+    } catch (error) {
+        console.error(`Ошибка при получении списка всех файлов`, error);
+    }
+}
+
+
+module.exports = {initClient, uploadImage, getImage, deleteImage, listAllImages};

@@ -10,9 +10,7 @@ const sqliteStoreFactory = require('express-session-sqlite');
 const sqliteStore = sqliteStoreFactory.default(expressSession);
 const {routers} = require('./routes');
 const {myPassport} = require('./myPassport');
-const {launchDB, closeDB} = require("./database/launchDB");
-const users = require('./database/dbUsers');
-const chats = require('./database/dbChats');
+const {launchDB} = require("./database/launchDB");
 const {initClient} = require('./database/images');
 initClient();
 
@@ -39,10 +37,3 @@ initClient();
     app.use(routers);
     app.listen(process.env.PORT);
 })();
-
-process.on('exit', async () => {
-    await closeDB();
-});
-process.on('SIGINT', async () => {
-    await closeDB();
-});
