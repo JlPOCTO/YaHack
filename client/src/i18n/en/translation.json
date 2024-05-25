@@ -1,0 +1,31 @@
+{
+  "title": "Welcome {{name}}",
+  "description": {
+    "part1": "Search",
+    "part2": "Type your message"
+  },
+  "profile": {
+    "contacts": "Contacts",
+    "savedMessages": "Saved messages"
+  },
+  "contactsTitle":  "My Contacts",
+  "status": "online",
+  "userMessagesUnread_one": "You have {{count}} unread message.",
+  "userMessagesUnread_other": "You have {{count}} unread messages.",
+  "error": {
+    "500": "500 Internal server error",
+    "404": "404 Page not found",
+    "other": "Unknown error, code {{code}}"
+  },
+  "addDialid": {
+    "message": "Start the dialog",
+    "group-chat": "Add to group-chat"
+  },
+  "nesting": "Title of this page is \"$t(title, {\"count\": \"{{name}}\"})\"",
+  "read_message": "{{name}} read message",
+   "addChat": {
+     "chat" : "Chats",
+     "back" : "Back to your dialogs"
+   }
+
+}

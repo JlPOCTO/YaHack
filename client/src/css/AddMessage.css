@@ -1,30 +1,52 @@
-#message {
+.message {
     width: 100%;
-    height: 40px;
-    background-color: aliceblue;
-    background: #fff;
-    margin: 0 auto;
+    min-height: 53px;
     flex: 0 0 auto;
     box-sizing: border-box;
-    /* padding: 10px; */
     bottom: 0;
-    /* position: absolute; */
-    margin: 0;
-    padding: 8px 40px;
+    padding: 10px 110px 10px 40px;
+    overflow-y: auto;
+    scrollbar-width: none;
+    border: none;
+    font-size: medium;
+    color: rgb(54, 62, 69);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    border-radius: 10px;
+    border-color: beige;
+    margin-left: 3px;
+    height: auto;
+    resize: none;
+    align-content: center;
+    max-height: 300px;
 }
 
+.message::placeholder {
+    color: rgb(54, 62, 69);
+}
+
+.box {
+    padding-top: 3px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: none;
+    height: 12%;
+}
+
+
 .messageContainer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    display: inline-block;
+    position: relative;
+    border: none;
+    width: 60%;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
 }
 
 .emojiPopup {
-    /* right: 40%; */
     position: fixed;
-    bottom: 50px;
-    right: 30px;
+    bottom: 12%;
+    right: 5%;
 }
 
 
@@ -33,13 +55,28 @@
     align-items: center;
     justify-content: space-between;
     position: absolute;
-    right: 15px;
-    bottom: 0;
+    bottom: 14px;
     gap: 15px;
-    margin-bottom: 3px;
+    right: 0;
 }
 
 .currentSettings {
     background: none;
     border: none;
+    bottom: 4%;
+}
+
+.firstCurrentSettings {
+    background: none;
+    border: none;
+    bottom: 14px;
+    position: absolute;
+}
+
+.photo-box {
+    height: 100px;
+    width: 65%;
+    background-color: #CCCCCC;
+    border-radius: 10px;
+    margin-bottom: 5px;
 }

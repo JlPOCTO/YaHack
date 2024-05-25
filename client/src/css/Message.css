@@ -1,9 +1,12 @@
-
 .container {
     margin-bottom: 10px;
     clear: both;
     position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
 }
+
 .container .arrow {
     width: 12px;
     height: 20px;
@@ -13,16 +16,18 @@
     top: 6px;
     right: -1px;
 }
+
 .container .arrow .outer {
     width: 0;
     height: 0;
-    border-right: 20px solid #000000;
+    border-right: 20px solid #ffffff;
     border-top: 10px solid transparent;
     border-bottom: 10px solid transparent;
     position: absolute;
     top: 0;
     left: 0;
 }
+
 .container .arrow .inner {
     width: 0;
     height: 0;
@@ -33,33 +38,33 @@
     top: 0;
     left: 2px;
 }
-.container .message-body {
-    max-width:400px;
-    float: left;
-    word-wrap:break-word;
 
-    /*height: auto;*/
-    border: 1px solid #CCC;
+.container .message-body {
+    max-width: 400px;
+    float: left;
+    word-wrap: break-word;
     background-color: #ffffff;
-    border: 1px solid #000000;
+    border: 1px solid #a0b3c4;
     padding: 6px 8px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
-    -o-border-radius: 5px;
-    border-radius: 5px;
-    /*display: flex;*/
-    /*flex-direction: column;*/
+    -o-border-radius: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
 }
-.data{
+
+.data {
     float: right;
-    color: dimgray;
     font-size: small;
 }
+
 .container .message-body p {
     margin: 0;
     color: #2b6fae;
 }
-.author{
+
+.author {
     color: #2b6fae;
     font-weight: bold;
 }
@@ -68,7 +73,11 @@
     margin-bottom: 10px;
     clear: both;
     position: relative;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-end;
 }
+
 .myContainer .arrow {
     width: 12px;
     height: 20px;
@@ -76,55 +85,106 @@
     position: relative;
     float: right;
     top: 6px;
-    right: -1px;
+    right: 1px;
+    transform: rotate(0.5turn);
 }
-.myContainer.arrow .outer {
+
+.myContainer .arrow .outer {
     width: 0;
     height: 0;
-    border-right: 20px solid #000000;
+    border-right: 20px solid #a0b3c4;
     border-top: 10px solid transparent;
     border-bottom: 10px solid transparent;
     position: absolute;
     top: 0;
     left: 0;
 }
+
 .myContainer .arrow .inner {
     width: 0;
     height: 0;
-    border-right: 20px solid #ffffff;
+    border-right: 20px solid #a0b3c4;
     border-top: 10px solid transparent;
     border-bottom: 10px solid transparent;
     position: absolute;
     top: 0;
     left: 2px;
 }
-.myContainer .message-body {
-    max-width:400px;
-    float: right;
-    word-wrap:break-word;
 
-    /*height: auto;*/
-    border: 1px solid #CCC;
+.myContainer .message-body {
+    max-width: 400px;
+    float: right;
+    word-wrap: break-word;
+    border: 1px solid #a0b3c4;
     background-color: #a0b3c4;
-    border: 1px solid #000000;
     padding: 6px 8px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
-    -o-border-radius: 5px;
-    border-radius: 5px;
-    /*display: flex;*/
-    /*flex-direction: column;*/
+    -o-border-radius: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
 }
-.myContainer.data{
+
+.myContainer.data {
     float: right;
-    color: dimgray;
     font-size: small;
 }
+
 .myContainer .message-body p {
     margin: 0;
     color: #2b6fae;
 }
-.myContainer.author{
+
+.myContainer.author {
     color: #2b6fae;
     font-weight: bold;
+}
+
+
+
+.heart-button {
+    display: none;
+    transform: scale(0.7);
+}
+
+.heart-button-left {
+    display: none;
+    transform: scale(0.7) translate(-37px, 10%);
+}
+
+.myContainer:hover .heart-button {
+    display: block;
+}
+
+.container:hover .heart-button {
+    display: block;
+}
+
+.myReaction {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.Reaction {
+    display: flex;
+    flex-direction: row;
+}
+
+.currentSettingsMessage {
+    position: relative;
+    top: 90%;
+    left: 50%;
+    background: none;
+    border: none;
+
+}
+
+.block-of-reaction {
+    background-color: deepskyblue;
+    width: max-content;
+    padding-bottom: 3px;
+    padding-left: 4px;
+    padding-right: 4px;
+    border-radius: 10px;
 }

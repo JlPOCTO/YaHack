@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../../css/ChatBar.css';
 import {Button, Modal} from "@gravity-ui/uikit";
 // import settings from "../../settings-svgrepo-com.svg";
@@ -8,41 +8,44 @@ import {useUserStore} from "../../stores/UserStore";
 import {action} from "mobx";
 import {observer} from "mobx-react-lite";
 import {NavLink} from "react-router-dom";
+import ProfileOfEnotherUser from "../ProfileOfEnotherUser/ProfileOfEnotherUser";
 
-type ChatBarProps = {
-    dialog: any;
-}
+// type SearchPersonBarProps = {
+//     dialog: any;
+// }
 
-function ChatBar(props: ChatBarProps) {
-    const {dialog} = props;
-    const {dialogID, setDialogID, userID, setChatName} = useUserStore()
+function SearchPersonBar () {
+    let dialog = {
+        id : 2,
+        time :1
+    }
+    // const {dialog} = props;
+    const {dialogID, setDialogID} = useUserStore()
 
-    // const [isShown, setIsShown] = useState(false);
     const [isActual, setIsActual] = useState(false);
     const handleClick = (event: any) => {
         setIsActual(current => dialog.id === dialogID);
     };
     const className = ["button", dialog.id === dialogID ? "notactual" : ""].join("");
 
-    function getchatName() {
-        if (dialog.type === "direct") {
-            let partner = 0
-            // dialog.users.forEach((u) => {if (u !== userID) partner = u})
-            setChatName("Dialog" + dialog.id)
-            return "Dialog" + dialog.id
-        } else {
-            setChatName(dialog.name)
-            return dialog.name
+    const [open, setOpen] = useState(false);
+    const [me, setMyInfo] = useState([])
+    useEffect(() => {
+        const getMyInfo = async () => {
+            const res = await fetch('\me')
+            const me = await res.json();
+            setMyInfo(me)
         }
-    }
-
+        getMyInfo()
+    }, [])
     return (
         <div className="chat-bar">
             <Button onClick={action((e) => {
-                setDialogID(dialog.id)
+                // setDialogID(dialog.id)
+                setOpen(true)
             })} className={className}
                     style={{
-                        borderRadius: "10px"
+                        borderRadius:"10px"
                     }}>
                 <div className="chat-bar-pro">
                     <div className="space-for-avatar">
@@ -51,25 +54,27 @@ function ChatBar(props: ChatBarProps) {
                     <div id="chat-information">
                         <div id="chatName-time">
                             <div id="chatName">
-                                {getchatName()}
+                                {dialogID}
                             </div>
                             <div id="time">
-                                Time: {dialog.id}
+
                             </div>
                         </div>
                         <div id="last-message">
                             <div id="to-left">
-                                LastMessage: {dialog.id}
+                                Chat information
                             </div>
                         </div>
                     </div>
                 </div>
             </Button>
-
+            <Modal open={open} onClose={() => setOpen(false)}>
+                <ProfileOfEnotherUser me={me} />
+            </Modal>
         </div>
 
 
     );
 }
 
-export default observer(ChatBar);
+export default observer(SearchPersonBar);

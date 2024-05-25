@@ -49,6 +49,7 @@ async function getChatsByUser(userID) {
     `);
 }
 
+
 async function addMessage(chatID, senderID, message, time, imagePath) {
     await database().run(`
         INSERT INTO messages(message, time, sender_id, chat_id, image_path)
