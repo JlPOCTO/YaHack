@@ -10,9 +10,9 @@ const githubStrategy = new passportGithub.Strategy({
     },
     async (accessToken, refreshToken, profile, done) => {
         const avatar = await createAvatar();
-        const avatarPath = profile.id + ".jpg";
+        const avatarPath = "user_" + profile.id + ".svg";
         await images.uploadImage(avatarPath, avatar);
-        addUser(profile.id, profile.displayName, profile.username, avatarPath).then(done(null, profile.id))
+        addUser(profile.id, profile.displayName, profile.username, avatarPath).then(done(null, profile.id));
     }
 );
 

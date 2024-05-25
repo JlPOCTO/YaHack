@@ -41,7 +41,7 @@ async function getImage(name) {
         const command = new st.GetObjectCommand(params);
         const result = await storage.send(command);
         console.log(`Файл ${name} успешно получен`);
-        return result.Body;
+        return Buffer.from(await result.Body.transformToByteArray());
     } catch (error) {
         console.error(`Ошибка при получении файла ${name}`, error);
     }
