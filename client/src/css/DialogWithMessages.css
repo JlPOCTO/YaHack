@@ -1,11 +1,23 @@
 .dialog-with-messages {
-
     display: flex;
+    /*flex-direction: column-reverse;*/
     flex-direction: column;
-    justify-content: flex-end;
-    position:relative;
-    overflow-y: scroll;
-    /* height: 630px; */
-    overflow-x: hidden;
-    height: 89%;
+    width: 65%;
+    /* justify-content: flex-end; */
+    overflow-y: auto;
+    margin-top: auto;
+}
+
+.dialog-container {
+    display: flex;
+    flex-direction: column-reverse;
+    max-height: 82%;
+    height: 82%;
+    align-items: center;
+    overflow-y: auto;
+}
+
+div {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }

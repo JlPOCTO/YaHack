@@ -11,9 +11,21 @@ const messages = require('../database/dbMessages');
     await users.addUser(3, "Ryan Gosling", "gosling123", "");
 
     await chats.addChat([1, 2], 'direct', "", "");
-    await chats.addChat([1, 2, 3], 'group', "All There", "");
-    await chats.addChat([2, 3], 'group', "Get 'em all", "");
-    await chats.addChat([], 'group', "Empty", "");
+    await chats.addChat([1, 2, 3], 'group', "Group1", "");
+    await chats.addChat([2, 3], 'group', "Group2", "");
+    await chats.addChat([1, 3], 'group', "Group3", "");
+    await chats.addChat([1, 2, 3], 'group', "Group1", "");
+    await chats.addChat([2, 3], 'group', "Group2", "");
+    await chats.addChat([1, 3], 'group', "Group3", "");
+    await chats.addChat([1, 2, 3], 'group', "Group1", "");
+    await chats.addChat([2, 3], 'group', "Group22", "");
+    await chats.addChat([1, 3], 'group', "������", "");
+    await chats.addChat([1, 2, 3], 'group', "���", "");
+    await chats.addChat([2, 3], 'group', "/*-+5+6-*", "");
+    await chats.addChat([1, 3], 'group', "DROP DATABASE chats", "");
+    await chats.addChat([1, 2, 3], 'group', "wwqe", "");
+    await chats.addChat([2, 3], 'group', "33", "");
+    await chats.addChat([1, 3], 'group', "332es", "");
 
     await messages.addMessage(1, 1, "Hello Petr", "", 0);
     await messages.addMessage(2, 1, "Hello Danil", "", 1);
