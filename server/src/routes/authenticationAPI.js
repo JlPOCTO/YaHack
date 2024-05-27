@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('passport');
-const {getBasePage} = require("./statics/getBasePage");
+const {getBasePage} = require("../statics/getBasePage");
+const {isAuthenticated} = require('../middlewares/isAuthenticated')
 
 const routers = express.Router();
 
@@ -49,3 +50,5 @@ routers.get(
         res.send(Buffer.from(getBasePage()));
     }
 );
+
+module.exports = {authRouter: routers}

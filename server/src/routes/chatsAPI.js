@@ -1,6 +1,6 @@
 const express = require('express');
-const {isAuthenticatedAPI} = require("./middlewares/isAuthenticatedAPI");
-const chats = require('./database/dbChats');
+const {isAuthenticatedAPI} = require("../middlewares/isAuthenticatedAPI");
+const chats = require('../database/dbChats');
 
 const chatsRouter = express.Router();
 
@@ -52,3 +52,5 @@ chatsRouter.delete(
         )
     }
 )
+
+module.exports = {chatsRouter}

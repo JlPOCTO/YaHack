@@ -8,11 +8,16 @@ const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3')
 const sqliteStoreFactory = require('express-session-sqlite');
 const sqliteStore = sqliteStoreFactory.default(expressSession);
-const {routers} = require('./routes');
 const {myPassport} = require('./myPassport');
 const {launchDB} = require("./database/launchDB");
 const {initClient} = require('./database/images');
 initClient();
+
+const {authRouter} = require('./routes/authenticationAPI');
+const {chatsRouter} = require('./routes/chatsAPI');
+const {usersRouter} = require('./routes/userAPI');
+const {messagesRouter} = require('./routes/messagesAPI');
+const {deprecatedRouter} = require('./routes/deprecated');
 
 (async () => {
     await launchDB(process.env.DATABASE)
@@ -34,6 +39,10 @@ initClient();
     }));
     app.use(myPassport.initialize());
     app.use(myPassport.session({}));
-    app.use(routers);
+    app.use(authRouter);
+    app.use(chatsRouter);
+    app.use(usersRouter);
+    app.use(messagesRouter);
+    app.use(deprecatedRouter);
     app.listen(process.env.PORT);
 })();
