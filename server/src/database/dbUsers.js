@@ -45,6 +45,24 @@ async function getUserByLogin(login) {
     }
 }
 
+// TODO
+async function getUserContacts(userId) {
+    const TAG = "getUserContacts"
+
+    try {
+        const contacts = db.database.all(`
+            SELECT chat_id 
+            FROM users_in_chats 
+            WHERE user_id = ?
+                JOIN chats ON chats.id = users_in_chats.chats_id
+        `)
+
+
+    } catch (e) {
+        logError(TAG, arguments, e)
+    }
+}
+
 async function isUserExists(id) {
     try {
         const userId = await db.database.get(`SELECT id FROM users WHERE id = ?`, id)

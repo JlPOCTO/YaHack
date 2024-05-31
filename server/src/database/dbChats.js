@@ -80,6 +80,15 @@ async function deleteUserFromChat(chatId, userId) {
     }
 }
 
+async function updateChatAvatarPath(chatId, avatarPath) {
+    try {
+        await db.database.run(`UPDATE chats SET avatar_path = ? WHERE id = ?`, avatarPath, chatId)
+        return true
+    } catch (e) {
+        logError("updateChatAvatarPath", arguments, e)
+    }
+}
+
 //not tested
 async function addInviteLink(chatId, userId, link) {
     try {
@@ -154,6 +163,7 @@ module.exports = {
     deleteChat,
     addUserInChat,
     deleteUserFromChat,
+    updateChatAvatarPath,
     addInviteLink,
     getChatsByUser,
     addChat,

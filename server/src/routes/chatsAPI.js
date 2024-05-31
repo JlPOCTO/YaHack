@@ -1,6 +1,9 @@
 const express = require('express');
-const {isAuthenticatedAPI} = require("../middlewares/isAuthenticatedAPI");
+const {isAuthenticatedAPI} = require("./middlewares/isAuthenticatedAPI");
 const chats = require('../database/dbChats');
+const images = require('../database/images');
+const validator = require('../utilities/checkCorrect');
+const { v4: uuidv4 } = require('uuid');
 
 const chatsRouter = express.Router();
 
@@ -15,21 +18,8 @@ chatsRouter.get(
     }
 )
 
-chatsRouter.get(
-    '/api/v2/chat',
-    isAuthenticatedAPI,
-    (req, res) => {
-        if (req.query.id) {
-            chats.getChat(id).then(
-                result => res.send(result),
-                error => res.status(500).send()
-            )
-        }
-    }
-)
-
 chatsRouter.post(
-    '/api/v2/chat',
+    '/api/v2/chats',
     isAuthenticatedAPI,
     async (req, res) => {
         let data = await createAvatar();
@@ -42,14 +32,106 @@ chatsRouter.post(
     }
 )
 
-chatsRouter.delete(
-    '/api/v2/chat',
+chatsRouter.get(
+    '/api/v2/chats/:id',
     isAuthenticatedAPI,
     (req, res) => {
-        chats.deleteChat(req.query.id).then(
-            result => res.send(result),
-            error => res.status(500).send()
-        )
+        id = req.params.id
+        if (id) {
+            chats.getChat(id).then(
+                result => res.send(result),
+                error => res.status(500).send()
+            )
+        }
+    }
+)
+
+chatsRouter.delete(
+    '/api/v2/chats/:id',
+    isAuthenticatedAPI,
+    (req, res) => {
+        id = req.params.id
+        if (id) {
+            chats.deleteChat(id).then(
+                result => res.send(result),
+                error => res.status(500).send()
+            )
+        }
+    }
+)
+
+chatsRouter.post(
+    '/api/v2/chats/:id/user',
+    isAuthenticatedAPI,
+    (req, res) => {
+        chatId = req.params.id
+        if (chatId) {
+            userId = req.query.userId
+            chats.addUserInChat(chatId, userId).then(
+                result => res.send(result),
+                error => res.status(500).send
+            )
+        }
+    }
+)
+
+chatsRouter.delete(
+    '/api/v2/chats/:id/user',
+    isAuthenticatedAPI,
+    (req, res) => {
+        chatId = req.params.id
+        if (chatId) {
+            userId = req.query.userId
+            chats.deleteUserFromChat(chatId, userId).then(
+                result => res.send(result),
+                error => res.status(500).send
+            )
+        }
+    }
+)
+
+chatsRouter.get(
+    '/api/v2/chats/:id/avatar',
+    isAuthenticatedAPI,
+    (req, res) => {
+        chatId = req.params.id
+        if (chatId) {
+            userId = req.query.userId
+            chats.getChat(chatId).then(
+                chatInfo => {
+                    images.getImage(chatInfo.avatarPath).then(
+                        avatar => {
+                            res.contentType('image/png');           // I hope it will be PNG
+                            res.send(Buffer.from(data, 'binary'))
+                        },
+                        error => res.status(500).send
+                    )
+                },
+                error => res.status(404).send
+            )
+        }
+    }
+)
+
+chatsRouter.post(
+    '/api/v2/chats/:id/avatar',
+    isAuthenticatedAPI,
+    (req, res) => {
+        chatId = req.params.id
+        if (chatId) {
+            userId = req.query.userId
+            if (!validator.checkValidId(userId)) {
+                res.status(400).send
+                return
+            }
+            const name = "chat_avatar_" + uuidv4() + "_" + userId + ".png";
+            chats.updateChatAvatarPath(chatId, name)
+
+            images.uploadImage(name, req.file.buffer).then(
+                sucess => req.status(200).send,
+                error => res.status(500).send
+            )
+        }
     }
 )
 

@@ -1,7 +1,7 @@
 const maxNameLength = 128;
 const maxTextLength = 4096;
 
-function checkValidID(id) {
+function checkValidId(id) {
     if (!id) return false;
     if (Number.isSafeInteger(id) && Number(id) >= 0) {
         return true;
@@ -19,10 +19,6 @@ function checkValidName(name) {
 
 function checkValidText(text) {
     return typeof text === 'string' && text.length <= maxTextLength && text.length > 0;
-}
-
-function checkChatID(req) {
-    return checkValidID(req.query.chatID);
 }
 
 function checkPostChat(req) {
@@ -86,7 +82,8 @@ function checkGetOrDeleteReaction(req) {
 }
 
 module.exports = {
-    checkChatID,
+    checkValidName,
+    checkValidId,
     checkPostChat,
     checkAddOrDeleteUserToChat,
     checkGetOrDeleteMessage,
