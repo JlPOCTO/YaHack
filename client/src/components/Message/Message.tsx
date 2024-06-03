@@ -12,7 +12,7 @@ type Message = {
     message: any;
 }
 const getInitialCurrentMessage = () => {
-    return sessionStorage.getItem('currentMessage')  '';
+    return sessionStorage.getItem('currentMessage')  || '';
 }
 
 function Message(props: Message) {

@@ -28,8 +28,8 @@ function AddMessage() {
     }
     const handleAddMessage = async () => {
         console.log('flag1', flag)
-        let g = flag
-        setFlag(!g)
+        const gkk = flag
+        setFlag(!gkk)
         console.log('flag', flag)
         const date = Date.now() + 10800000;
         const showTime = date
