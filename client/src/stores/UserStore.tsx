@@ -38,7 +38,7 @@ export default class UserStore {
     }
     flag: boolean| any = true
     setFlag = (input: boolean | any) => {
-        this.setFlag = input
+        this.flag = input
     }
 
 }
