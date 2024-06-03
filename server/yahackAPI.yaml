@@ -21,9 +21,10 @@ tags:
     description: Операции, связанные с чатами
   - name: message
     description: Операции, связанные с сообщениями
-  - name: reaction TODO
+  - name: reaction
     description: Операции, связанные с реакциями
-  - name: invite-link TODO
+  - name: invite-link
+    description: Операции, связанные с пригласительными ссылками
 
 paths:
   /users/{idOrLogin}:
@@ -31,15 +32,15 @@ paths:
       tags:
         - user
       summary: Получить информацию о каком-либо пользователе
-      description: Если указан id, возвращает пользователя по id.
+      description: Возвращает пользователя по указанной информации
       operationId: getUser
       parameters: 
         - name: idOrLogin
-          description: Айди пользователя
+          description: Id или логин пользователя
           in: path
           required: true
           schema: 
-            type: integer
+            type: string
       responses:
         '200':
           description: Успешно
@@ -60,7 +61,7 @@ paths:
     get:
       tags:
         - user
-      summary: Получить информацию о себе
+      summary: Получить информацию об авторизованном пользователе
       operationId: getMe
       responses:
         '200':
@@ -69,12 +70,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-        '400':
-          description: Неверный запрос
         '401':
           description: Клиент не авторизован
-        '404':
-          description: Пользователя с переданными параметрами не существует
         '500':
           description: Ошибка на сервере
 
@@ -83,7 +80,7 @@ paths:
       tags:
         - user
       summary: Получить аватар какого-либо пользователя
-      description: Возвращает аватар какого-либо пользователя по пути к файлу
+      description: Возвращает аватар какого-либо пользователя по id
       operationId: getUserAvatar
       parameters:
         - name: id
@@ -108,12 +105,12 @@ paths:
           description: Пользователя не существует
         '500':
           description: Ошибка на сервере
+
   /users/myAvatar:
     get:
       tags:
         - user
-      summary: Получить мой аватар
-      description: Возвращает аватар
+      summary: Получить аватар авторизованного пользователя
       operationId: getMyAvatar
       responses:
         '200':
@@ -127,8 +124,6 @@ paths:
           description: Неверный запрос
         '401':
           description: Клиент не авторизован
-        '404':
-          description: Пользователя не существует
         '500':
           description: Ошибка на сервере
     post:
@@ -137,7 +132,6 @@ paths:
       summary: Обновить аватар авторизованного пользователя
       operationId: updateMyAvatar
       requestBody:
-        description: Новый аватар
         required: true
         content: 
           image/png:
@@ -167,8 +161,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-        '400':
-          description: Неверный запрос
         '401':
           description: Клиент не авторизован
         '500':
@@ -177,7 +169,7 @@ paths:
     get:
       tags:
         - user
-      summary: Получить информацию о пользователях, с которыми есть диалоги
+      summary: Получить информацию о пользователях, с которыми есть диалоги у авторизованного пользователя
       operationId: getContacts
       responses:
         '200':
@@ -188,8 +180,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-        '400':
-          description: Неверный запрос
         '401':
           description: Клиент не авторизован
         '500':
@@ -237,6 +227,10 @@ paths:
           description: Неверный запрос
         '401':
           description: Клиент не авторизован
+        '403':
+          description: Клиент создает чат без себя
+        '404':
+          description: Клиент создает чат с несуществующими пользователями
         '500':
           description: Ошибка на сервере
 
@@ -245,7 +239,7 @@ paths:
       tags:
         - chat
       summary: Получить информацию о чате по id
-      operationId: getChatById
+      operationId: getChat
       parameters: 
         - name: id
           in: path
@@ -273,7 +267,7 @@ paths:
       tags:
         - chat
       summary: Удалить чат по id
-      operationId: deleteChatById
+      operationId: deleteChat
       parameters: 
         - name: id
           in: path
@@ -425,7 +419,7 @@ paths:
       summary: Получить пригласительную ссылку для чата
       operationId: createInviteLink
       parameters: 
-        - name: id
+        - name: chatId
           in: path
           required: true
           schema: 
@@ -612,7 +606,7 @@ paths:
     get:
       tags:
         - message
-      summary: Получить изображение из сообщения по пути
+      summary: Получить изображение из сообщения по id
       operationId: getImage
       parameters: 
         - name: id
@@ -648,18 +642,12 @@ paths:
       tags:
         - chat
       summary: Получить сообщения, находящиеся в чате
-      description: Если указать lastMessageId, то вернутся все сообщения с большим id
       operationId: getMessages
       parameters: 
         - name: chatId
           in: path
           required: true
           schema: 
-            type: integer
-        - name: lastMessageId
-          in: query
-          required: false
-          schema:
             type: integer
       responses: 
         '200':
@@ -798,8 +786,6 @@ paths:
             description: Сообщения не существует
           '500':
             description: Ошибка на сервере
-  
-  
 
 components:
   schemas:
@@ -835,7 +821,7 @@ components:
         type:
           description: Тип чата
           type: string
-          example: direct
+          example: group
           enum:
             - direct
             - group
@@ -943,17 +929,13 @@ components:
           description: Картинка
           type: string
           nullable: true
-        sendingTime:
-          description: Время отправки сообщения
-          type: string
-          format: date-time
     
     ReactionRequest:
       description: Запрос на создание реакции
       type: object
       properties:
         messageId:
-          description: Идентификатор сообщения, на котором стоит реакция
+          description: Идентификатор сообщения, на котором будет стоять реакция
           type: integer
           example: 9
         reaction:

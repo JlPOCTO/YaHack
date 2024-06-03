@@ -1,6 +1,6 @@
 const db = require("./launchDB")
 const {logError} = require("../utilities/logging")
-const {convertMessage} = require("../utilities/converters")
+const {renameMessageFields} = require("../utilities/converters")
 
 
 async function getMessage(id) {
@@ -11,7 +11,7 @@ async function getMessage(id) {
             return
         }
         message.reactions = await db.database.all(`SELECT * FROM reactions WHERE message_id = ?`, id)
-        return convertMessage(message)
+        return renameMessageFields(message)
     } catch (e) {
         logError("getMessage", arguments, e)
     }
@@ -29,7 +29,7 @@ async function addMessage(senderId, chatId, message, imagePath, time) {
             return
         }
         newMessage.reactions = []
-        return convertMessage(newMessage)
+        return renameMessageFields(newMessage)
     } catch (e) {
         logError("addMessage", arguments, e)
     }
@@ -59,7 +59,7 @@ async function getLastMessage(chatId) {
             return
         }
         last.reactions = await db.database.all(`SELECT * FROM reactions WHERE message_id = ?`, last.id)
-        return convertMessage(last)
+        return renameMessageFields(last)
     } catch (e) {
         logError("getLastMessage", arguments, e)
     }
@@ -75,36 +75,9 @@ async function getMessagesFromChat(chatId, lastId) {
         for (let message of messages) {
             message.reactions = await db.database.all(`SELECT * FROM reactions WHERE message_id = ?`, message.id)
         }
-        return messages.map(convertMessage)
+        return messages.map(renameMessageFields)
     } catch (e) {
         logError("getMessagesFromChat", arguments, e)
-    }
-}
-
-async function isMessageExists(id) {
-    try {
-        const message = await db.database.get(`SELECT id FROM messages WHERE id = ?`, id)
-        return message !== undefined
-    } catch (e) {
-        logError("isMessageExists", arguments, e)
-    }
-}
-
-async function isMessageFromUser(id, userId) {
-    try {
-        const message = await db.database.get(`SELECT id FROM messages WHERE id = ? AND sender_id = ?`, id, userId)
-        return message !== undefined
-    } catch (e) {
-        logError("isMessageFromUser", arguments, e)
-    }
-}
-
-async function isMessageInChat(id, chatId) {
-    try {
-        const message = await db.database.get(`SELECT id FROM messages WHERE id = ? AND chat_id = ?`, id, chatId)
-        return message !== undefined
-    } catch (e) {
-        logError("isMessageInChat", arguments, e)
     }
 }
 
@@ -115,7 +88,5 @@ module.exports = {
     getMessage,
     deleteMessage,
     getLastMessage,
-    isMessageExists,
-    isMessageFromUser,
-    isMessageInChat
+
 }

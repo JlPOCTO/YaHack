@@ -1,7 +1,7 @@
-function logError(func, args, error) {
-    console.error("Произошла ошибка в функции", func)
-    console.error("Аргументы вызова:", Object.values(args))
-    console.error(error)
+function logError(tag, args, error) {
+    console.error(tag, ": произошла ошибка")
+    console.error("Данные:", Object.values(args))
+    console.error("Ошибка:", error)
 }
 
 module.exports = {logError}

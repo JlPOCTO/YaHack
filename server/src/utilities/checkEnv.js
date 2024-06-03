@@ -13,7 +13,6 @@ const PARAMS = [
     'PORT',
     'EXPRESS_SESSION_SECRET',
     'DATABASE',
-    'API_VERSION',
     'AWS_ACCESS_KEY_ID',
     'AWS_SECRET_ACCESS_KEY',
     'BUCKET'

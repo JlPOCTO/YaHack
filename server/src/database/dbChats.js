@@ -1,12 +1,16 @@
 const db = require("./launchDB")
 const {logError} = require("../utilities/logging")
-const {convertChat} = require("../utilities/converters")
+const {renameChatFields} = require("../utilities/converters")
+const {getUserById} = require("./dbUsers");
+const {getLastMessage} = require("./dbMessages");
+const {isChatEmpty} = require("./dbChecks");
 
 async function getChat(id) {
+    const TAG = "getChat"
     try {
         const chat = await db.database.get(`SELECT * FROM chats WHERE id = ?`, id)
         if (!chat) {
-            logError("getChat", arguments, "Чат с заданным id не существует")
+            logError(TAG, arguments, "Чат с заданным id не существует")
             return
         }
         chat.users = (await db.database.all(`SELECT user_id FROM users_in_chats WHERE chat_id = ?`, id))
@@ -17,9 +21,26 @@ async function getChat(id) {
                     throw "Результат sql запроса не содержит поле userId"
                 }
             })
-        return convertChat(chat)
+        chat.users = await Promise.all(chat.users.map(async id => await getUserById(id)))
+        for (const user of chat.users) {
+            if (user === undefined) {
+                logError(TAG, arguments, "Не получилось достать информацию о пользователе")
+                return
+            }
+        }
+        const isEmpty = await isChatEmpty(id)
+        if (isEmpty === undefined) {
+            logError(TAG, arguments, "Не получилось достать информацию о сообщениях в чате")
+        }
+        if (!isEmpty) {
+            chat.lastMessage = await getLastMessage(id)
+            if (chat.lastMessage === undefined) {
+                logError(TAG, arguments, "Не получилось достать последнее сообщение в чате")
+            }
+        }
+        return renameChatFields(chat)
     } catch (e) {
-        logError("getChat", arguments, e)
+        logError(TAG, arguments, e)
     }
 }
 
@@ -39,7 +60,7 @@ async function addChat(users, type, name, avatarPath) {
             }
             await db.database.run("COMMIT")
             newChat.users = users
-            return convertChat(newChat)
+            return renameChatFields(newChat)
         }
     } catch (e) {
         console.error("addChat", arguments, e)
@@ -89,7 +110,6 @@ async function updateChatAvatarPath(chatId, avatarPath) {
     }
 }
 
-//not tested
 async function addInviteLink(chatId, userId, link) {
     try {
         await db.database.run(`INSERT INTO invite_links(creator_id, chat_id, link) VALUES (?, ?, ?)`, ...arguments)
@@ -99,7 +119,6 @@ async function addInviteLink(chatId, userId, link) {
     }
 }
 
-//not tested
 async function deleteInviteLink(link) {
     try {
         await db.database.run(`DELETE FROM invite_links WHERE ? = link`, link)
@@ -130,33 +149,6 @@ async function getChatsByUser(userId) {
     }
 }
 
-async function isChatExists(id) {
-    try {
-        const chat = await db.database.get(`SELECT id FROM chats WHERE id = ?`, id)
-        return chat !== undefined
-    } catch (e) {
-        logError("isChatExists", arguments, e)
-    }
-}
-
-async function isUserInChat(userId, chatId) {
-    try {
-        const entry = await db.database.get(`SELECT * FROM users_in_chats WHERE user_id = ? AND chat_id = ?`,
-            userId, chatId)
-        return entry !== undefined
-    } catch (e) {
-        logError("isUserInChat", arguments, e)
-    }
-}
-
-async function isChatEmpty(id) {
-    try {
-        const entry = await db.database.get(`SELECT id FROM messages WHERE chat_id = ? LIMIT 1`, id)
-        return entry === undefined
-    } catch (e) {
-        logError("isChatEmpty", arguments, e)
-    }
-}
 
 module.exports = {
     getChat,
@@ -167,8 +159,5 @@ module.exports = {
     addInviteLink,
     getChatsByUser,
     addChat,
-    deleteInviteLink, //not tested
-    isChatExists,
-    isUserInChat,
-    isChatEmpty
+    deleteInviteLink,
 }

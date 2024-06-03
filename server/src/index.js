@@ -12,10 +12,9 @@ const {myPassport} = require('./myPassport');
 const {launchDB} = require("./database/launchDB");
 const {initClient} = require('./database/images');
 initClient();
-
 const {authRouter} = require('./routes/authenticationAPI');
 const {chatsRouter} = require('./routes/chatsAPI');
-const {usersRouter} = require('./routes/userAPI');
+const {usersRouter} = require('./routes/usersAPI');
 const {messagesRouter} = require('./routes/messagesAPI');
 const {deprecatedRouter} = require('./routes/deprecated');
 

@@ -16,18 +16,16 @@ async function getReaction(id) {
     }
 }
 
-async function getAllMessageReactions(message_id) {
-    const TAG = "getAllMessageReactionst"
-
+async function getReactionsByMessage(messageId) {
+    const TAG = "getReactionsByMessage"
     try {
-        const reactions = await db.database.all(`SELECT * FROM reactions WHERE message_id = ?`, id)
-        return reactions
+        return await db.database.all(`SELECT * FROM reactions WHERE message_id = ?`, messageId)
     } catch (e) {
         logError(TAG, arguments, e)
     }
 }
 
-async function addReaction(message_id, user_id, reaction) {
+async function addReaction(messageId, userId, reaction) {
     const TAG = "addReaction"
 
     try {
@@ -59,11 +57,11 @@ async function deleteReaction(id) {
     }
 }
 
-async function deleteReactionsByMessageId(message_id) {
-    const TAG = "deleteReaction"
+async function deleteReactionsFromMessage(messageId) {
+    const TAG = "deleteReactionsFromMessage"
 
     try {
-        await db.database.run(`DELETE FROM reactions WHERE message_id = ?`, message_id)
+        await db.database.run(`DELETE FROM reactions WHERE message_id = ?`, messageId)
         return true
     } catch (e) {
         logError(TAG, arguments, e)
@@ -74,6 +72,6 @@ module.exports = {
     getReaction,
     addReaction,
     deleteReaction,
-    deleteReactionsByMessageId,
-    getAllMessageReactions
+    deleteReactionsFromMessage,
+    getReactionsByMessage
 }

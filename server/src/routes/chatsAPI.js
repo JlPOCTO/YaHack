@@ -1,9 +1,13 @@
 const express = require('express');
-const {isAuthenticatedAPI} = require("./middlewares/isAuthenticatedAPI");
 const chats = require('../database/dbChats');
+const messages = require('../database/dbMessages');
 const images = require('../database/images');
-const validator = require('../utilities/checkCorrect');
-const { v4: uuidv4 } = require('uuid');
+const {isAuthenticatedAPI} = require("../middlewares/isAuthenticatedAPI");
+const validate = require('../middlewares/validationMiddleware');
+const uuid = require('uuid');
+const {createAvatar} = require("../utilities/avatars");
+const {prepareChat, prepareMessage} = require("../utilities/converters");
+const {wrapWithNext} = require("../middlewares/wrapWithNext");
 
 const chatsRouter = express.Router();
 
@@ -12,8 +16,13 @@ chatsRouter.get(
     isAuthenticatedAPI,
     (req, res) => {
         chats.getChatsByUser(req.user.id).then(
-            result => res.send(result),
-            error => res.status(500).send()
+            result => {
+                if (result) {
+                    res.send(result.map(prepareChat))
+                } else {
+                    res.status(500).send()
+                }
+            }
         )
     }
 )
@@ -21,118 +30,185 @@ chatsRouter.get(
 chatsRouter.post(
     '/api/v2/chats',
     isAuthenticatedAPI,
+    validate.chatRequestMiddleware,
     async (req, res) => {
-        let data = await createAvatar();
-        let avatarPath = "chat_" + createRandomString(8) + ".svg"
-        await images.uploadImage(avatarPath, data);
-        chats.addChat(req.body.users, req.body.chatType, req.body.name, avatarPath).then(
-            result => res.send(result),
-            error => res.status(500).send()
+        let data = createAvatar()
+        let avatarPath = "chat_" + uuid.v4() + ".svg"
+        const isUploaded = await images.uploadImage(avatarPath, data)
+        if (isUploaded) {
+            chats.addChat(req.body.users, req.body.chatType, req.body.name, avatarPath).then(
+                chat => {
+                    if (chat) {
+                        res.send(prepareChat(chat))
+                    } else {
+                        res.sendStatus(500)
+                    }
+                }
+            )
+            return
+        }
+        res.sendStatus(500)
+    }
+)
+
+chatsRouter.get(
+    '/api/v2/chats/:id',
+    isAuthenticatedAPI,
+    wrapWithNext(x => x.params.id = Number.parseInt(x.params.id)),
+    validate.isCorrectId(x => x.params.id),
+    validate.isChatExists(x => x.params.id),
+    validate.isChatAccessible(x => x.params.id, x => x.user.id),
+    (req, res) => {
+        chats.getChat(req.params.id).then(
+            chat => {
+                if (chat) {
+                    res.send(prepareChat(chat))
+                } else {
+                    res.sendStatus(500)
+                }
+            }
+        )
+    }
+)
+
+chatsRouter.delete(
+    '/api/v2/chats/:id',
+    isAuthenticatedAPI,
+    wrapWithNext(x => x.params.id = Number.parseInt(x.params.id)),
+    validate.isCorrectId(x => x.params.id),
+    validate.isChatExists(x => x.params.id),
+    validate.isChatAccessible(x => x.params.id, x => x.user.id),
+    (req, res) => {
+        chats.deleteChat(req.params.id).then(
+            bool => {
+                if (bool) {
+                    res.send()
+                } else {
+                    res.sendStatus(500)
+                }
+            }
+        )
+    }
+)
+
+chatsRouter.post(
+    '/api/v2/chats/:chatId/user',
+    isAuthenticatedAPI,
+    wrapWithNext(x => x.params.chatId = Number.parseInt(x.params.chatId)),
+    wrapWithNext(x => x.query.userId = Number.parseInt(x.query.userId)),
+    validate.isCorrectId(x => x.params.chatId),
+    validate.isCorrectId(x => x.query.userId),
+    validate.isChatExists(x => x.params.chatId),
+    validate.isUserExists(x => x.query.userId),
+    validate.isChatChangeable(x => x.params.chatId),
+    validate.isChatNotAccessible(x => x.params.chatId, x => x.query.userId),
+    validate.isChatAccessible(x => x.params.chatId, x => x.user.id),
+    (req, res) => {
+        chats.addUserInChat(req.params.chatId, req.query.userId).then(
+            bool => {
+                if (bool) {
+                    res.send()
+                } else {
+                    res.sendStatus(500)
+                }
+            }
+        )
+    }
+)
+
+chatsRouter.delete(
+    '/api/v2/chats/:chatId/user',
+    isAuthenticatedAPI,
+    wrapWithNext(x => x.params.chatId = Number.parseInt(x.params.chatId)),
+    wrapWithNext(x => x.query.userId = Number.parseInt(x.query.userId)),
+    validate.isCorrectId(x => x.params.chatId),
+    validate.isCorrectId(x => x.query.userId),
+    validate.isChatExists(x => x.params.chatId),
+    validate.isUserExists(x => x.query.userId),
+    validate.isChatChangeable(x => x.params.chatId),
+    validate.isChatAccessible(x => x.params.chatId, x => x.query.userId),
+    validate.isChatAccessible(x => x.params.chatId, x => x.user.id),
+    (req, res) => {
+        chats.deleteUserFromChat(req.params.chatId, req.query.userId).then(
+            bool => {
+                if (bool) {
+                    res.send()
+                } else {
+                    res.sendStatus(500)
+                }
+            }
         )
     }
 )
 
 chatsRouter.get(
-    '/api/v2/chats/:id',
+    '/api/v2/chats/:chatId/avatar',
     isAuthenticatedAPI,
+    wrapWithNext(x => x.params.chatId = Number.parseInt(x.params.chatId)),
+    validate.isCorrectId(x => x.params.chatId),
+    validate.isChatExists(x => x.params.chatId),
+    validate.isChatAccessible(x => x.params.chatId, x => x.user.id),
     (req, res) => {
-        id = req.params.id
-        if (id) {
-            chats.getChat(id).then(
-                result => res.send(result),
-                error => res.status(500).send()
-            )
-        }
-    }
-)
-
-chatsRouter.delete(
-    '/api/v2/chats/:id',
-    isAuthenticatedAPI,
-    (req, res) => {
-        id = req.params.id
-        if (id) {
-            chats.deleteChat(id).then(
-                result => res.send(result),
-                error => res.status(500).send()
-            )
-        }
+        chats.getChat(req.params.chatId).then(
+            chatInfo => {
+                if (chatInfo === undefined) {
+                    res.sendStatus(500)
+                }
+                images.getImage(chatInfo.avatarPath).then(
+                    data => {
+                        if (data === undefined) {
+                            res.sendStatus(500)
+                            return
+                        }
+                        res.contentType('image/png');
+                        res.send(Buffer.from(data, 'binary'))
+                    }
+                )
+            }
+        )
     }
 )
 
 chatsRouter.post(
-    '/api/v2/chats/:id/user',
+    '/api/v2/chats/:chatId/avatar',
     isAuthenticatedAPI,
+    wrapWithNext(x => x.params.chatId = Number.parseInt(x.params.chatId)),
+    validate.isCorrectId(x => x.params.chatId),
+    validate.isChatExists(x => x.params.chatId),
+    validate.isChatAccessible(x => x.params.chatId, x => x.user.id),
     (req, res) => {
-        chatId = req.params.id
-        if (chatId) {
-            userId = req.query.userId
-            chats.addUserInChat(chatId, userId).then(
-                result => res.send(result),
-                error => res.status(500).send
-            )
-        }
-    }
-)
-
-chatsRouter.delete(
-    '/api/v2/chats/:id/user',
-    isAuthenticatedAPI,
-    (req, res) => {
-        chatId = req.params.id
-        if (chatId) {
-            userId = req.query.userId
-            chats.deleteUserFromChat(chatId, userId).then(
-                result => res.send(result),
-                error => res.status(500).send
-            )
-        }
+        const name = "chat_" + req.params.chatId + ".png";
+        images.uploadImage(name, req.body).then(
+            async result => {
+                if (result && await chats.updateChatAvatarPath(req.params.chatId, name)) {
+                    res.send();
+                } else {
+                    res.status(500).send()
+                }
+            }
+        )
     }
 )
 
 chatsRouter.get(
-    '/api/v2/chats/:id/avatar',
+    '/api/v2/chats/:chatId/messages',
     isAuthenticatedAPI,
+    wrapWithNext(x => x.params.chatId = Number.parseInt(x.params.chatId)),
+    validate.isCorrectId(x => x.params.chatId),
+    validate.isChatExists(x => x.params.chatId),
+    validate.isChatAccessible(x => x.params.chatId, x => x.user.id),
     (req, res) => {
-        chatId = req.params.id
-        if (chatId) {
-            userId = req.query.userId
-            chats.getChat(chatId).then(
-                chatInfo => {
-                    images.getImage(chatInfo.avatarPath).then(
-                        avatar => {
-                            res.contentType('image/png');           // I hope it will be PNG
-                            res.send(Buffer.from(data, 'binary'))
-                        },
-                        error => res.status(500).send
-                    )
-                },
-                error => res.status(404).send
-            )
-        }
-    }
-)
-
-chatsRouter.post(
-    '/api/v2/chats/:id/avatar',
-    isAuthenticatedAPI,
-    (req, res) => {
-        chatId = req.params.id
-        if (chatId) {
-            userId = req.query.userId
-            if (!validator.checkValidId(userId)) {
-                res.status(400).send
-                return
+        messages.getMessagesFromChat(req.params.chatId).then(
+            entries => {
+                if (entries === undefined) {
+                    res.sendStatus(500)
+                } else {
+                    res.send(entries.map(prepareMessage))
+                }
             }
-            const name = "chat_avatar_" + uuidv4() + "_" + userId + ".png";
-            chats.updateChatAvatarPath(chatId, name)
-
-            images.uploadImage(name, req.file.buffer).then(
-                sucess => req.status(200).send,
-                error => res.status(500).send
-            )
-        }
+        )
     }
 )
+
 
 module.exports = {chatsRouter}

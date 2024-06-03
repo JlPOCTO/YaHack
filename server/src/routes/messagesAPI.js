@@ -1,20 +1,30 @@
 const express = require('express');
-const {isAuthenticatedAPI} = require("../middlewares/isAuthenticatedAPI");
 const messages = require('../database/dbMessages');
-const chats = require('../database/dbChats')
 const images = require('../database/images');
-const { v4: uuidv4 } = require('uuid');
-const {uploadImage} = require("../database/images");
+const {isAuthenticatedAPI} = require("../middlewares/isAuthenticatedAPI");
+const validate = require("../middlewares/validationMiddleware")
+const {wrapWithNext} = require("../middlewares/wrapWithNext");
+const uuid = require('uuid');
+const {prepareMessage} = require("../utilities/converters");
 
 const routers = express.Router();
 
 routers.get(
     '/api/v2/messages/:id',
     isAuthenticatedAPI,
+    wrapWithNext(x => x.params.id = Number.parseInt(x.params.id)),
+    validate.isCorrectId(x => x.params.id),
+    validate.isMessageExists(x => x.params.id),
+    validate.isMessageAccessible(x => x.params.id, x => x.user.id),
     (req, res) => {
         messages.getMessage(req.params.id).then(
-            result => res.send(result),
-            error => res.status(500).send()
+            result => {
+                if (result !== undefined) {
+                    res.send(prepareMessage(result))
+                } else {
+                    res.status(500).send()
+                }
+            }
         )
     }
 )
@@ -22,7 +32,11 @@ routers.get(
 routers.delete(
     '/api/v2/messages/:id',
     isAuthenticatedAPI,
-    (req, res) => {
+    wrapWithNext(x => x.params.id = Number.parseInt(x.params.id)),
+    validate.isCorrectId(x => x.params.id),
+    validate.isMessageExists(x => x.params.id),
+    validate.isMessageOwned(x => x.params.id, x => x.user.id),
+    async (req, res) => {
         messages.deleteMessage(req.params.id).then(
             result => {
                 if (result) {
@@ -30,8 +44,7 @@ routers.delete(
                 } else {
                     res.status(500).send()
                 }
-            },
-            error => res.status(500).send()
+            }
         )
     }
 )
@@ -39,11 +52,17 @@ routers.delete(
 routers.post(
     '/api/v2/messages',
     isAuthenticatedAPI,
+    validate.isCorrectMessageRequest(x => x.body),
+    validate.isChatExists(x => x.body.chatId),
+    validate.isChatAccessible(x => x.body.chatId, x => x.user.id),
     async (req, res) => {
         let name = ""
         if (req.body.imageContent) {
-            const name = "message_" + uuidv4() + "_" + req.user.id + ".png";
-            await uploadImage(name, req.body.imageContent);
+            name = "message_" + uuid.v4() + ".png"
+            if (!await images.uploadImage(name, req.body.imageContent)) {
+                res.status(500).send()
+                return
+            }
         }
         messages.addMessage(req.user.id, req.body.chatId, req.body.content, name, Date.now()).then(
             result => {
@@ -52,8 +71,7 @@ routers.post(
                 } else {
                     res.status(500).send()
                 }
-            },
-            error => res.status(500).send()
+            }
         )
     }
 )
@@ -61,18 +79,20 @@ routers.post(
 routers.get(
     '/api/v2/messages/:id/image',
     isAuthenticatedAPI,
+    wrapWithNext(x => x.params.id = Number.parseInt(x.params.id)),
+    validate.isCorrectId(x => x.params.id),
+    validate.isMessageExists(x => x.params.id),
+    validate.isMessageAccessible(x => x.params.id, x => x.user.id),
     (req, res) => {
-        chats.getChat(req.params.id).then(
-            chat => {
-                if (chat) {
-                    images.getImage(chat.imageContent).then(
-                        result => res.send(result)
-                    )
-                } else {
+        messages.getMessage(req.params.id).then(
+            async message => {
+                const data = await images.getImage(message.imageContent)
+                if (data === undefined) {
                     res.status(500).send()
+                } else {
+                    res.send(data)
                 }
-            },
-            error => res.status(500).send()
+            }
         )
     }
 )

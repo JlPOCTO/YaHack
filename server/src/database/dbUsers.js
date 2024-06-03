@@ -1,6 +1,6 @@
 const db = require("./launchDB")
 const {logError} = require('../utilities/logging')
-const {convertUser} = require("../utilities/converters")
+const {renameUserFields} = require("../utilities/converters")
 
 async function addUser(id, name, login, avatarPath) {
     try {
@@ -17,7 +17,7 @@ async function getUserById(id) {
     try {
         const user = await db.database.get(`SELECT * FROM users WHERE id = ?`, id)
         if (user) {
-            return convertUser(user)
+            return renameUserFields(user)
         }
         logError("getUserById", arguments, "Пользователя с заданным id не существует")
     } catch (e) {
@@ -27,7 +27,7 @@ async function getUserById(id) {
 
 async function getAllUsers() {
     try {
-        return (await db.database.all(`SELECT * FROM users`)).map(convertUser)
+        return (await db.database.all(`SELECT * FROM users`)).map(renameUserFields)
     } catch (e) {
         logError("getAllUsers", arguments, e)
     }
@@ -37,11 +37,20 @@ async function getUserByLogin(login) {
     try {
         const user = await db.database.get(`SELECT * FROM users WHERE login = ?`, login)
         if (user) {
-            return convertUser(user)
+            return renameUserFields(user)
         }
         logError("getUserByLogin", arguments, "Пользователя с заданным логином не существует")
     } catch (e) {
         logError("getUserByLogin", arguments, e)
+    }
+}
+
+async function updateUserAvatar(id, avatarPath) {
+    try {
+        await db.database.run(`UPDATE users SET avatar_path = ? WHERE id = ?`, avatarPath, id)
+        return true
+    } catch (e) {
+        logError("updateUserAvatar", arguments, e)
     }
 }
 
@@ -63,15 +72,6 @@ async function getUserContacts(userId) {
     }
 }
 
-async function isUserExists(id) {
-    try {
-        const userId = await db.database.get(`SELECT id FROM users WHERE id = ?`, id)
-        return userId !== undefined
-    } catch (e) {
-        logError("isUserExists", arguments, e)
-    }
-}
-
 module.exports = {
-    addUser, getUserById, getUserByLogin, getAllUsers, isUserExists
+    addUser, getUserById, getUserByLogin, getAllUsers, updateUserAvatar
 }
