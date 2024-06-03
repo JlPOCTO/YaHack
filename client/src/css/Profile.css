@@ -55,7 +55,7 @@
 
 .item {
   height: 65px;
-  padding: 16px 30px;
+  /*padding: 16px 30px;*/
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
