@@ -22,15 +22,13 @@ const API_HOST = 'http://localhost:3000';
 
 
 function SideBarBody() {
-    let dialog = {
-        id: 2,
-        time: 1
-    }
+
     const [contacts, setMyContacts] = useState([])
     const [visible, setVisible] = useState(false);
     const { searchInput, setSearchInput, apiVersion } = useUserStore();
     const {t, i18n} = useTranslation();
     const [dialogs, setDialogs] = useState([])
+    const [user, setUser] = useState({})
     const [open, setOpen] = useState(false);
 
     function isSearchInputEmpty() {
@@ -49,6 +47,7 @@ function SideBarBody() {
         getMyInfo()
     }, [])
 
+
     useEffect(() => {
 
         const getDialogs = async () => {
@@ -60,7 +59,17 @@ function SideBarBody() {
         getDialogs()
     }, [])
 
+    useEffect(() => {
+        const getUser = async () => {
+            console.log( "User@@@" , searchInput)
+            const res = await fetch(apiVersion + `/users/${searchInput}`)
+            const user1 = await res.json()
+            console.log( "User" ,user1)
+            setUser(user1)
+        }
 
+        getUser()
+    }, [searchInput])
     return (
         <>
             {isSearchInputEmpty() && <div style={{
@@ -91,7 +100,7 @@ function SideBarBody() {
                 <p>
                     {t('addChat.chat')}
                 </p>
-                <SearchPersonBar/>
+                <SearchPersonBar dialog={user}/>
 
 
             </div>}

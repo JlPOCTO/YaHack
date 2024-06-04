@@ -10,15 +10,12 @@ import {observer} from "mobx-react-lite";
 import {NavLink} from "react-router-dom";
 import ProfileOfEnotherUser from "../ProfileOfEnotherUser/ProfileOfEnotherUser";
 
-// type SearchPersonBarProps = {
-//     dialog: any;
-// }
+type SearchPersonBarProps = {
+    dialog: any;
+}
 
-function SearchPersonBar () {
-    let dialog = {
-        id : 2,
-        time :1
-    }
+function SearchPersonBar (props: SearchPersonBarProps) {
+    const { dialog } = props;
     // const {dialog} = props;
     const { dialogID, setDialogID, apiVersion } = useUserStore()
 
@@ -54,7 +51,7 @@ function SearchPersonBar () {
                     <div id="chat-information">
                         <div id="chatName-time">
                             <div id="chatName">
-                                {dialogID}
+                                {dialog.name}
                             </div>
                             <div id="time">
 
@@ -69,7 +66,7 @@ function SearchPersonBar () {
                 </div>
             </Button>
             <Modal open={open} onClose={() => setOpen(false)}>
-                <ProfileOfEnotherUser me={me} />
+                <ProfileOfEnotherUser dialog={dialog} />
             </Modal>
         </div>
 
