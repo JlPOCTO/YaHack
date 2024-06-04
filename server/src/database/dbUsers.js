@@ -1,30 +1,77 @@
-const {database} = require("./launchDB");
+const db = require("./launchDB")
+const {logError} = require('../utilities/logging')
+const {renameUserFields} = require("../utilities/converters")
 
 async function addUser(id, name, login, avatarPath) {
-    await database().run(`
-        INSERT OR IGNORE INTO users(id, name, login, avatar_path)
-        VALUES(${id}, '${name}', '${login}', '${avatarPath}');
-    `);
+    try {
+        await db.database.run(`
+            INSERT OR IGNORE INTO users(id, name, login, avatar_path)
+            VALUES(?, ?, ?, ?)`, ...arguments)
+        return true
+    } catch (e) {
+        logError("addUser", arguments, e)
+    }
 }
 
-async function deleteUser(id) {
-    await database().run(`DELETE FROM users WHERE id = ${id};`);
+async function getUserById(id) {
+    try {
+        const user = await db.database.get(`SELECT * FROM users WHERE id = ?`, id)
+        if (user) {
+            return renameUserFields(user)
+        }
+        logError("getUserById", arguments, "Пользователя с заданным id не существует")
+    } catch (e) {
+        logError("getUserById", arguments, e)
+    }
 }
 
-async function findUserByID(id) {
-    const user = await database().get(`SELECT * FROM users WHERE id = ${id};`);
-    return user ? user : [];
+async function getAllUsers() {
+    try {
+        return (await db.database.all(`SELECT * FROM users`)).map(renameUserFields)
+    } catch (e) {
+        logError("getAllUsers", arguments, e)
+    }
 }
 
-async function findAllUsers() {
-    return await database().all(`SELECT name FROM users;`);
+async function getUserByLogin(login) {
+    try {
+        const user = await db.database.get(`SELECT * FROM users WHERE login = ?`, login)
+        if (user) {
+            return renameUserFields(user)
+        }
+        logError("getUserByLogin", arguments, "Пользователя с заданным логином не существует")
+    } catch (e) {
+        logError("getUserByLogin", arguments, e)
+    }
 }
 
-async function findUserByLogin(login) {
-    const user = await database().get(`SELECT * FROM users WHERE login = '${login}';`);
-    return user ? user : [];
+async function updateUserAvatar(id, avatarPath) {
+    try {
+        await db.database.run(`UPDATE users SET avatar_path = ? WHERE id = ?`, avatarPath, id)
+        return true
+    } catch (e) {
+        logError("updateUserAvatar", arguments, e)
+    }
+}
+
+// TODO
+async function getUserContacts(userId) {
+    const TAG = "getUserContacts"
+
+    try {
+        const contacts = db.database.all(`
+            SELECT chat_id 
+            FROM users_in_chats 
+            WHERE user_id = ?
+                JOIN chats ON chats.id = users_in_chats.chats_id
+        `)
+
+
+    } catch (e) {
+        logError(TAG, arguments, e)
+    }
 }
 
 module.exports = {
-    addUser, deleteUser, findUserByID, findUserByLogin, findAllUsers
+    addUser, getUserById, getUserByLogin, getAllUsers, updateUserAvatar
 }

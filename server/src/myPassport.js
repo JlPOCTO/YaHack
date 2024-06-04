@@ -1,6 +1,6 @@
 const myPassport = require('passport');
 const {githubStrategy} = require('./strategies/github');
-const {findUserByID} = require('./database/dbUsers')
+const {getUserById} = require('./database/dbUsers')
 
 myPassport.use(githubStrategy);
 
@@ -9,7 +9,7 @@ myPassport.serializeUser((id, done) => {
 });
 
 myPassport.deserializeUser((id, done) => {
-    findUserByID(id).then(user => {
+    getUserById(id).then(user => {
         done(null, user);
     })
 });

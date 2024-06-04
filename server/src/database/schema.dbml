@@ -32,6 +32,20 @@ Table messages {
   image_path TEXT
 }
 
+Table reactions {
+  id INTEGER [pk]
+  message_id INTEGER [ref: > messages.id]
+  user_id INTEGER [ref: > users.id]
+  reaction TEXT
+}
+
+Table invite_links {
+  id INTEGER [pk]
+  creator_id INTEGER [ref: > users.id]
+  chat_id INTEGER [ref: > chats.id]
+  link TEXT
+}
+
 enum chat_type {
   direct
   group
