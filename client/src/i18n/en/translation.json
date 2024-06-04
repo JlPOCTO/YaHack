@@ -23,6 +23,8 @@
   },
   "nesting": "Title of this page is \"$t(title, {\"count\": \"{{name}}\"})\"",
   "read_message": "{{name}} read message",
+  "label": "Add members",
+  "chat": "Add chat name",
    "addChat": {
      "chat" : "Chats",
      "back" : "Back to your dialogs"

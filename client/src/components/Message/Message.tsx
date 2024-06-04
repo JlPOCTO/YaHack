@@ -12,7 +12,7 @@ type Message = {
     message: any;
 }
 const getInitialCurrentMessage = () => {
-    return sessionStorage.getItem('currentMessage') || '';
+    return sessionStorage.getItem('currentMessage')  || '';
 }
 
 function Message(props: Message) {
@@ -37,9 +37,9 @@ function Message(props: Message) {
         // if (ref.current) {
         //     ref.current.style.height = `${ref.current.scrollHeight}px`
         // }
-        // setScrollPos(ref.current?.scrollTop || 0)
+        // setScrollPos(ref.current?.scrollTop  0)
         // if (ref.current) {
-            // ref.current.scrollTop = scrollPos
+        // ref.current.scrollTop = scrollPos
         // }
         // const currentMessage = sessionStorage.getItem('currentMessage')
         // const newMessage = currentMessage ? currentMessage + curEmoji.emoji : curEmoji.emoji
@@ -47,15 +47,15 @@ function Message(props: Message) {
         // sessionStorage.setItem('currentMessage', newMessage)
     }
 
-    function msToTime(duration: number) { 
-        let minutes = Math.floor((duration / (1000 * 60)) % 60) 
-        let hours = Math.floor((duration / (1000 * 60 * 60)) % 24); 
-       
-        let hourslength = (hours < 10) ? "0" + hours : hours; 
-        let minuteslength = (minutes < 10) ? "0" + minutes : minutes; 
-       
-        return hourslength + ":" + minuteslength; 
-      }
+    function msToTime(duration: number) {
+        let minutes = Math.floor((duration / (1000 * 60)) % 60)
+        let hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+        let hourslength = (hours < 10) ? "0" + hours : hours;
+        let minuteslength = (minutes < 10) ? "0" + minutes : minutes;
+
+        return hourslength + ":" + minuteslength;
+    }
 
     return (
         <>

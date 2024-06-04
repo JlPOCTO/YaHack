@@ -27,8 +27,10 @@ function AddMessage() {
         sessionStorage.setItem('currentMessage', newMessage)
     }
     const handleAddMessage = async () => {
+
         const g = !flag
         setFlag(g)
+
         const date = Date.now() + 10800000;
         const showTime = date
         if (currrentMessage !== "") {
@@ -52,6 +54,7 @@ function AddMessage() {
             sessionStorage.setItem('currentMessage', '')
         }
     }
+
     const handleSetCurrentMessage = (e: any) => {
         setCurrentMessage(e.target.value)
         sessionStorage.setItem('currentMessage', e.target.value)
@@ -72,7 +75,7 @@ function AddMessage() {
         setOpen(!isOpen)
     }
 
-    const handleKeyDown =  (e: any) => {
+    const handleKeyDown = (e: any) => {
         const link = document.getElementById('super-button');
         if (e.keyCode == 13) {
             if (e.shiftKey == false) {
@@ -88,7 +91,6 @@ function AddMessage() {
         <div className="box">
             {isOpen &&
                 <div className="photo-box">
-
                 </div>}
             <div className='messageContainer'>
                 <button type="submit" className='firstCurrentSettings' onClick={isPhotoBoxOpen}>
