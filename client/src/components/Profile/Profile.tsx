@@ -17,6 +17,12 @@ function Profile(props: Profile) {
   const {t, i18n} = useTranslation();
   const [open, setOpen] = useState(false);
   const [contacts, setMyContacts] = useState([])
+  function find(name : any) {
+    console.log(name)
+    if (name !== 'null') {
+      return <div className='profileName'>{name}</div>
+    } 
+  }
   useEffect(() => {
 
     const getMyInfo = async () => {
@@ -33,7 +39,7 @@ function Profile(props: Profile) {
         <div className='userProfile'>
           <div className='userPhoto'></div>
           <div className='userData'>
-            <div className='profileName'>{me.name}</div>
+            {find(me.name)}
             <div className='profileLogin'>{me.login}</div>
           </div>
         </div>
