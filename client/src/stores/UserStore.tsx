@@ -40,6 +40,10 @@ export default class UserStore {
     setFlag = (input: boolean | any) => {
         this.flag = input
     }
+    apiVersion: string | any = "/api/v2"
+    setApiVersion = (input: string | any) => {
+        this.apiVersion = input
+    }
 
 }
 const UserStoreContext = React.createContext<UserStore>(

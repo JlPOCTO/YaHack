@@ -12,6 +12,7 @@ usersRouter.get(
     '/api/v2/users/me',
     isAuthenticatedAPI,
     (req, res) => {
+        console.log(req.user);
         res.send(prepareUser(req.user))
     }
 );
@@ -67,6 +68,30 @@ usersRouter.get(
             }
         )
     }
+)
+
+
+usersRouter.get(
+  '/api/v2/users/find/:loginPart',
+  isAuthenticatedAPI,
+  validate.isCorrectLogin(x => x.params.loginPart),
+  (req, res) => {
+    users.getAllUsers().then(
+      result => {
+        console.log(result);
+        if (result !== undefined) {
+          const newResult = result.filter((user) => {
+            console.log(user.login.includes(req.params.loginPart))
+            user.login.includes(req.params.loginPart);
+          })
+          console.log(newResult);
+          res.send(newResult);
+        } else {
+          res.sendStatus(500)
+        }
+      }
+    )
+  }
 )
 
 usersRouter.get(

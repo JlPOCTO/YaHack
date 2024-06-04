@@ -14,7 +14,7 @@ const getInitialCurrentMessage = () => {
 }
 
 function AddMessage() {
-    let {dialogID, userID, setFlag, flag} = useUserStore()
+    let { dialogID, userID, setFlag, flag, apiVersion } = useUserStore()
     const ref = useRef<HTMLTextAreaElement>(null)
     const {t, i18n} = useTranslation();
     const [messages, setMessage] = useState([])
@@ -27,22 +27,22 @@ function AddMessage() {
         sessionStorage.setItem('currentMessage', newMessage)
     }
     const handleAddMessage = async () => {
+
         const g = !flag
         setFlag(g)
+
         const date = Date.now() + 10800000;
         const showTime = date
         if (currrentMessage !== "") {
-            const res = await fetch(`/addMessage`, {
+            const res = await fetch(apiVersion + `/messages`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    message: currrentMessage,
+                    content: currrentMessage,
                     chatID: dialogID,
-                    senderID: userID,
-                    time: showTime,
-                    imagePath: " "
+                    imageContent: ""
                 })
             });
             const messages = await res.json();
@@ -54,6 +54,7 @@ function AddMessage() {
             sessionStorage.setItem('currentMessage', '')
         }
     }
+
     const handleSetCurrentMessage = (e: any) => {
         setCurrentMessage(e.target.value)
         sessionStorage.setItem('currentMessage', e.target.value)
@@ -74,7 +75,7 @@ function AddMessage() {
         setOpen(!isOpen)
     }
 
-    const handleKeyDown =  (e: any) => {
+    const handleKeyDown = (e: any) => {
         const link = document.getElementById('super-button');
         if (e.keyCode == 13) {
             if (e.shiftKey == false) {
@@ -90,7 +91,6 @@ function AddMessage() {
         <div className="box">
             {isOpen &&
                 <div className="photo-box">
-
                 </div>}
             <div className='messageContainer'>
                 <button type="submit" className='firstCurrentSettings' onClick={isPhotoBoxOpen}>
