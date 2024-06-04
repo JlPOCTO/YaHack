@@ -62,11 +62,13 @@
 .currentSettings {
     border: none;
     bottom: 4%;
+    background: none;
 }
 
 .firstCurrentSettings {
     border: none;
     bottom: 14px;
+    background: none;
     position: absolute;
 }
 
