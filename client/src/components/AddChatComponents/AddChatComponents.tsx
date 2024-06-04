@@ -52,7 +52,7 @@ function AddChatComponents(props: Contacts) {
     return (
         <div className="ll">
             <header>
-                <div className="label" >
+                <div>
                     <label>{t('label')}</label>
                 </div>
                 <div className="add-place">

@@ -19,12 +19,13 @@ import AddChatComponents from "../AddChatComponents/AddChatComponents";
 
 
 function AddChat() {
+    let { apiVersion } = useUserStore()
     const [contacts, setMyContacts] = useState([])
     const [visible, setVisible] = useState(false);
     useEffect(() => {
 
-        const getMyInfo = async () => {
-            const res = await fetch('\contacts')
+      const getMyInfo = async () => {
+        const res = await fetch(apiVersion + '/users')
             const contacts = await res.json();
             setMyContacts(contacts)
             console.log(contacts)
@@ -36,8 +37,7 @@ function AddChat() {
             <button onClick={() => setVisible(true)} className="add-chat">
                 <Icon className="pencil" data={Pencil}/>
             </button>
-            <Sidebar visible={visible} onHide={() => setVisible(false)}
-                     style={{background: 'none', padding: '15px 10px 15px 10px'}}>
+            <Sidebar visible={visible} onHide={() => setVisible(false)}>
                 <AddChatComponents contacts={contacts}/>
             </Sidebar>
             {visible && <div style={{

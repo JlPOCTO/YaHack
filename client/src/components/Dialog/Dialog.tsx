@@ -18,11 +18,12 @@ function Dialog() {
     useEffect(() => {
         console.log("dialog")
         const getMessages = async () => {
-            const res = await fetch(apiVersion + `/messages/${dialogID}`)
+            const res = await fetch(apiVersion + `/chats/${dialogID}/messages`)
             const messages = await res.json()
+            console.log(messages);
             setMessages(messages)
         }
-        getMessages()
+        getMessages() 
     }, [dialogID, flag])
 
     function isDefault() {

@@ -42,20 +42,11 @@ function ProfileModalWindow() {
                         stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
                 </svg>
             </button>
-            <Sidebar visible={visible} onHide={() => setVisible(false)}
-                     style={{background: '', padding: '15px 10px 15px 10px'}}>
-                <Profile me={me}/>
-            </Sidebar>
-            {visible && <div style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                background: 'rgba(0, 0, 0, 0.5)',
-                zIndex: 999
-            }}
-                             onClick={() => setVisible(false)}></div>}
+        <Sidebar visible={visible} onHide={() => setVisible(false)}>
+          <Profile me={me} />
+        </Sidebar>
+        {visible && <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0, 0, 0, 0.5)', zIndex: 999 }}
+          onClick={() => setVisible(false)}></div>}
         </div>
     );
 }
