@@ -7,27 +7,45 @@ import {useTranslation} from 'react-i18next';
 import {useUserStore} from "../../stores/UserStore";
 
 type Profile = {
-    me: any;
+    dialog: any;
 }
 
-function Profile(props: Profile) {
-    const { setSearchInput,setDialogID} = useUserStore();
-    const {me} = props;
+function ProfileOfEnotherUser(props: Profile) {
+    const {setSearchInput, setDialogID, apiVersion} = useUserStore();
+    const {dialog} = props;
     const {t, i18n} = useTranslation();
     const [open, setOpen] = useState(false);
     const [contacts, setMyContacts] = useState([])
 
-    function HandleChatAdd(){
-        setSearchInput("")
-        sessionStorage.setItem('currentInput', '')
-        setDialogID(2)
-    }
+    const HandleChatAdd =
+        async () => {
+            const res = await fetch(apiVersion + `/chats`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: "string",
+                    chatType: "direct",
+                    users: [dialog.id]
+                })
+            });
+            const newDialog = await res.json();
+            console.log("newChat", newDialog.id)
+
+            sessionStorage.setItem('currentMessage', '')
+            setSearchInput("")
+            sessionStorage.setItem('currentInput', '')
+            setDialogID(newDialog.id)
+        }
+
+
     return (
         <div className='profile'>
             <header>
                 <div className='userProfile'>
                     <div className='userPhoto'></div>
-                    <div className='profileName'>{me.name}</div>
+                    <div className='profileName'>{dialog.name}</div>
                 </div>
             </header>
             <main>
@@ -43,4 +61,4 @@ function Profile(props: Profile) {
     );
 }
 
-export default Profile;
+export default ProfileOfEnotherUser;

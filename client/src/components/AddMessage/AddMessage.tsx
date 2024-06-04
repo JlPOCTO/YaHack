@@ -14,7 +14,7 @@ const getInitialCurrentMessage = () => {
 }
 
 function AddMessage() {
-    let { dialogID, userID, setFlag, flag, apiVersion } = useUserStore()
+    let {dialogID, userID, setFlag, flag, apiVersion} = useUserStore()
     const ref = useRef<HTMLTextAreaElement>(null)
     const {t, i18n} = useTranslation();
     const [messages, setMessage] = useState([])
@@ -47,10 +47,10 @@ function AddMessage() {
             });
             const messages = await res.json();
             setMessage(messages)
-            console.log("jjj"+typeof messages)
-            
+            console.log("jjj" + typeof messages)
+
             setCurrentMessage('')
-            
+
             sessionStorage.setItem('currentMessage', '')
         }
     }
