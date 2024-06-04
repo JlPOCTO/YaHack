@@ -57,6 +57,35 @@ paths:
         '500':
           description: Ошибка на сервере
 
+  /users/find/{loginPart}:
+    get:
+      tags:
+        - user
+      summary: Получить информацию о пользователях, у которых логин содержит заданную строку
+      operationId: getUsersByLoginPart
+      parameters:
+        - name: loginPart
+          description: Часть логина
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Успешно
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Неверный запрос
+        '401':
+          description: Клиент не авторизован
+        '500':
+          description: Ошибка на сервере
+
   /users/me:
     get:
       tags:
