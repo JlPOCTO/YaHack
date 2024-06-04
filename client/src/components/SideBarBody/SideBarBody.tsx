@@ -21,7 +21,7 @@ function SideBarBody() {
         id : 2,
         time :1
     }
-    const {searchInput, setSearchInput} = useUserStore();
+    const { searchInput, setSearchInput, apiVersion } = useUserStore();
     const {t, i18n} = useTranslation();
     const [dialogs, setDialogs] = useState([])
     const [open, setOpen] = useState(false);
@@ -35,7 +35,7 @@ function SideBarBody() {
     useEffect(() => {
 
         const getDialogs = async () => {
-            const res = await fetch(`/dialogs`)
+            const res = await fetch(apiVersion + `/chats`)
             const dialogs1 = await res.json()
             setDialogs(dialogs1)
         }

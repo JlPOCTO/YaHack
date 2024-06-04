@@ -12,6 +12,7 @@ usersRouter.get(
     '/api/v2/users/me',
     isAuthenticatedAPI,
     (req, res) => {
+        console.log(req.user);
         res.send(prepareUser(req.user))
     }
 );

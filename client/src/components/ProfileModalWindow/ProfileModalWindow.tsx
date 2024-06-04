@@ -4,19 +4,26 @@ import Profile from "../Profile/Profile";
 import { useEffect, useState } from 'react'
 import { observer } from "mobx-react-lite";
 import { Sidebar } from 'primereact/sidebar';
+import { useUserStore } from "../../stores/UserStore";
 
 type ProfileModalWindow = {
   me: any;
 }
 
 function ProfileModalWindow() {
+  let { apiVersion } = useUserStore()
   const [visible, setVisible] = useState(false);
   const [me, setMyInfo] = useState([])
   useEffect(() => {
 
     const getMyInfo = async () => {
-      const res = await fetch('\me')
+      console.log(apiVersion + '/users/me');
+      const res = await fetch(apiVersion + '/users/me')
       const me = await res.json();
+      if (!me.name) {
+        me.name = me.login;
+      }
+      console.log(me);
       setMyInfo(me)
     }
     getMyInfo()

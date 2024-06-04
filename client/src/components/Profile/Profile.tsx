@@ -3,7 +3,8 @@ import { Modal } from '@gravity-ui/uikit';
 import { useState, useEffect } from 'react'
 import Contacts from "../Contacts/Contacts";
 import '../../i18n/config';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+import { useUserStore } from "../../stores/UserStore";
 
 type Profile = {
   me: any;
@@ -11,6 +12,7 @@ type Profile = {
 
 function Profile(props: Profile) {
 
+  let { apiVersion } = useUserStore();
   const { me } = props;
   const {t, i18n} = useTranslation();
   const [open, setOpen] = useState(false);
@@ -18,7 +20,7 @@ function Profile(props: Profile) {
   useEffect(() => {
 
     const getMyInfo = async () => {
-      const res = await fetch('\contacts')
+      const res = await fetch(apiVersion + '/users/contacts')
       const contacts = await res.json();
       setMyContacts(contacts)
     }
@@ -30,7 +32,10 @@ function Profile(props: Profile) {
       <header>
         <div className='userProfile'>
           <div className='userPhoto'></div>
-          <div className='profileName'>{me.name}</div>
+          <div className='userData'>
+            <div className='profileName'>{me.name}</div>
+            <div className='profileLogin'>{me.login}</div>
+          </div>
         </div>
       </header>
       <main>

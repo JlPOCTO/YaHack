@@ -20,7 +20,7 @@ function SearchPersonBar () {
         time :1
     }
     // const {dialog} = props;
-    const {dialogID, setDialogID} = useUserStore()
+    const { dialogID, setDialogID, apiVersion } = useUserStore()
 
     const [isActual, setIsActual] = useState(false);
     const handleClick = (event: any) => {
@@ -32,7 +32,7 @@ function SearchPersonBar () {
     const [me, setMyInfo] = useState([])
     useEffect(() => {
         const getMyInfo = async () => {
-            const res = await fetch('\me')
+            const res = await fetch(apiVersion + '/users/me')
             const me = await res.json();
             setMyInfo(me)
         }

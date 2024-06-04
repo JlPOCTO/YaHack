@@ -14,7 +14,7 @@ const getInitialCurrentMessage = () => {
 }
 
 function AddMessage() {
-    let {dialogID, userID, setFlag, flag} = useUserStore()
+    let { dialogID, userID, setFlag, flag, apiVersion } = useUserStore()
     const ref = useRef<HTMLTextAreaElement>(null)
     const {t, i18n} = useTranslation();
     const [messages, setMessage] = useState([])
@@ -32,17 +32,15 @@ function AddMessage() {
         const date = Date.now() + 10800000;
         const showTime = date
         if (currrentMessage !== "") {
-            const res = await fetch(`/addMessage`, {
+            const res = await fetch(apiVersion + `/messages`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    message: currrentMessage,
+                    content: currrentMessage,
                     chatID: dialogID,
-                    senderID: userID,
-                    time: showTime,
-                    imagePath: " "
+                    imageContent: ""
                 })
             });
             const messages = await res.json();
