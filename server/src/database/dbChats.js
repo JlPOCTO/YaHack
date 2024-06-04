@@ -63,7 +63,7 @@ async function addChat(users, type, name, avatarPath) {
             return renameChatFields(newChat)
         }
     } catch (e) {
-        console.error("addChat", arguments, e)
+        logError("addChat", arguments, e)
     }
     await db.database.run("ROLLBACK")
 }
@@ -130,14 +130,17 @@ async function deleteInviteLink(link) {
 
 async function getChatsByUser(userId) {
     try {
-        const chatIds = (await db.database.all(`SELECT chat_id FROM users_in_chats WHERE user_id = ?`, userId))
-            .map(entry => {
-                if ("chat_id" in entry) {
-                    return entry.chat_id
-                } else {
-                    throw "Возвращенное значение не содержит chatId"
-                }
-            })
+        const chatIds = await db.database.all(`SELECT chat_id FROM users_in_chats WHERE user_id = ?`, userId)
+
+        for (let i = 0; i < chatIds.length; i++) {
+            if ("chat_id" in chatIds[i]) {
+                chatIds[i] = chatIds[i]["chat_id"]
+            } else {
+                logError("getChatsByUser", arguments, "Возвращенное значение не содержит chatId")
+                return
+            }
+        }
+
         return (await Promise.all(chatIds.map(chatId => getChat(chatId).then(chat => {
             if (!chat) {
                 logError("getChatsByUser", [userId, {chatId: chatId}], "Не получилось достать чат")
