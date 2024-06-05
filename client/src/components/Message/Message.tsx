@@ -21,7 +21,7 @@ function Message(props: Message) {
     const [scrollPos, setScrollPos] = useState(0)
 
     function isMine() {
-        return message.sender_id === userID
+        return message.senderId === userID
     }
 
     function deleteReaction() {
@@ -110,13 +110,13 @@ function Message(props: Message) {
                         <div className="message-body">
                             <div className="block-of-message">
                                 <div className="author">
-                                    <p>{message.sender_id}</p>
+                                    <p>{message.senderId}</p>
                                 </div>
                                 <div className="text">
-                                    <p>{message.message}</p>
+                                    <p>{message.content}</p>
                                 </div>
                                 <div className="data">
-                                    <p>{msToTime(message.time)}</p>
+                                    <p>{msToTime(message.sendingTime)}</p>
                                 </div>
                             </div>
                             {isReaction && <div className="block-of-reaction" onClick={deleteReaction}>
