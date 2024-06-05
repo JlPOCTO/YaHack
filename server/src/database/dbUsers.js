@@ -54,24 +54,6 @@ async function updateUserAvatar(id, avatarPath) {
     }
 }
 
-// TODO
-async function getUserContacts(userId) {
-    const TAG = "getUserContacts"
-
-    try {
-        const contacts = db.database.all(`
-            SELECT chat_id 
-            FROM users_in_chats 
-            WHERE user_id = ?
-                JOIN chats ON chats.id = users_in_chats.chats_id
-        `)
-
-
-    } catch (e) {
-        logError(TAG, arguments, e)
-    }
-}
-
 module.exports = {
     addUser, getUserById, getUserByLogin, getAllUsers, updateUserAvatar
 }
