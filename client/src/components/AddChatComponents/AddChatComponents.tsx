@@ -52,7 +52,7 @@ function AddChatComponents(props: Contacts) {
     useEffect(() => {
 
         const getMyInfo = async () => {
-            console.log(apiVersion + '/users/me');
+            // console.log(apiVersion + '/users/me');
             const res = await fetch(apiVersion + '/users/me')
             const me = await res.json();
             if (!me.name) {
@@ -118,7 +118,7 @@ function AddChatComponents(props: Contacts) {
                             const currentInput = sessionStorage.getItem('currentName')
                             // console.log("cuur: " + currentInput)
                             // searchInput = currentInput
-                            console.log("search: " + searchInput)
+                            // console.log("search: " + searchInput)
                             setcurrentName('')
 
 

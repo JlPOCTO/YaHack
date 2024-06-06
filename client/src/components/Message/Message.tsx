@@ -1,50 +1,43 @@
-import {useState, useRef, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import '../../css/Message.css';
-import {useUserStore} from "../../stores/UserStore";
-import {Icon} from "@gravity-ui/uikit";
-import {FaceSmile} from "@gravity-ui/icons";
-import Picker, {EmojiClickData} from "emoji-picker-react";
+import { useUserStore } from "../../stores/UserStore";
+import { Icon } from "@gravity-ui/uikit";
+import Picker, { EmojiClickData } from "emoji-picker-react";
 import Popup from "reactjs-popup";
-import {Heart} from "@gravity-ui/icons";
-import {observer} from "mobx-react-lite";
+import { Heart } from "@gravity-ui/icons";
+import { observer } from "mobx-react-lite";
 
 
 type Message = {
     message: any;
+    dialogType: any;
 }
 const getInitialCurrentMessage = () => {
-    return sessionStorage.getItem('currentMessage')  || '';
+    return sessionStorage.getItem('currentMessage') || '';
 }
 
 function Message(props: Message) {
-    const {message} = props;
-    let {userID, apiVersion} = useUserStore()
+    const { message, dialogType } = props;
+    let { apiVersion, currentUserID } = useUserStore()
     const [scrollPos, setScrollPos] = useState(0)
-    const [me, setMyInfo] = useState([0])
+    const [userName, setName] = useState([])
+    function isMine() {
+        return message.senderId === currentUserID;
+    }
     useEffect(() => {
-
-        const getMyInfo = async () => {
-            console.log(apiVersion + '/users/me');
-            const res = await fetch(apiVersion + '/users/me')
-            const me = await res.json();
-            if (!me.name) {
-                me.name = me.login;
+        const getUserName = async () => {
+            const res = await fetch(apiVersion + `/users/${message.senderId}`)
+            const curMessage = await res.json()
+            let user = currentUserID
+            if (!curMessage.name) {
+                user = curMessage.login
+            } else {
+                user = curMessage.name
             }
-            setMyInfo(me)
-            // userID = me.id
+            setName(user)
         }
-        getMyInfo()
+        getUserName()
     }, [])
-
-    let isMine  = async() =>{
-        // @ts-ignore
-        let n = await me.id
-        return message.senderId === n
-    }
-
-    function deleteReaction() {
-        setIsReaction(false)
-    }
 
     const [isReaction, setIsReaction] = useState(false);
     // const ref = useRef<null | HTMLDivElement>(null)
@@ -52,27 +45,18 @@ function Message(props: Message) {
     const onEmojiClick = (curEmoji: EmojiClickData) => {
         setIsReaction(true)
         setCurrentReaction(curEmoji.emoji)
-        // if (ref.current) {
-        //     ref.current.style.height = `${ref.current.scrollHeight}px`
-        // }
-        // setScrollPos(ref.current?.scrollTop  0)
-        // if (ref.current) {
-        // ref.current.scrollTop = scrollPos
-        // }
-        // const currentMessage = sessionStorage.getItem('currentMessage')
-        // const newMessage = currentMessage ? currentMessage + curEmoji.emoji : curEmoji.emoji
-        // setCurrentMessage(newMessage)
-        // sessionStorage.setItem('currentMessage', newMessage)
+    }
+    function deleteReaction() {
+        setIsReaction(false)
     }
 
-    function msToTime(duration: number) {
-        let minutes = Math.floor((duration / (1000 * 60)) % 60)
-        let hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
 
-        let hourslength = (hours < 10) ? "0" + hours : hours;
-        let minuteslength = (minutes < 10) ? "0" + minutes : minutes;
+    function getMessageTime(time: number) {
+        const date = new Date(time);
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
 
-        return hourslength + ":" + minuteslength;
+        return `${hours}:${minutes}`;
     }
 
     return (
@@ -86,14 +70,14 @@ function Message(props: Message) {
                         </div>
                         <div className="message-body">
                             <div className="block-of-message">
-                                <div className="author">
-                                    <p>{message.senderId}</p>
-                                </div>
+                                {dialogType === "group" && <div className="author">
+                                    <p>{userName}</p>
+                                </div>}
                                 <div className="text">
                                     <p>{message.content}</p>
                                 </div>
                                 <div className="data">
-                                    <p>{msToTime(message.sendingTime)}</p>
+                                    <p>{getMessageTime(message.sendingTime)}</p>
                                 </div>
                             </div>
                             {isReaction && <div className="block-of-reaction" onClick={deleteReaction}>
@@ -106,12 +90,12 @@ function Message(props: Message) {
                         <Popup
                             trigger={
                                 <button className='currentSettingsMessage'>
-                                    <Icon className='Settings' data={Heart}/>
+                                    <Icon className='Settings' data={Heart} />
                                 </button>}
                             position="top left"
                         >
                             <div className='emojiPopupMyReaction'>
-                                <Picker onEmojiClick={onEmojiClick}/>
+                                <Picker onEmojiClick={onEmojiClick} />
                             </div>
                         </Popup>
                     </div>
@@ -127,14 +111,14 @@ function Message(props: Message) {
                         </div>
                         <div className="message-body">
                             <div className="block-of-message">
-                                <div className="author">
-                                    <p>{message.senderId}</p>
-                                </div>
+                                {dialogType === "group" && <div className="author">
+                                    <p>{userName}</p>
+                                </div>}
                                 <div className="text">
                                     <p>{message.content}</p>
                                 </div>
                                 <div className="data">
-                                    <p>{msToTime(message.sendingTime)}</p>
+                                    <p>{getMessageTime(message.sendingTime)}</p>
                                 </div>
                             </div>
                             {isReaction && <div className="block-of-reaction" onClick={deleteReaction}>
@@ -147,12 +131,12 @@ function Message(props: Message) {
                         <Popup
                             trigger={
                                 <button className='currentSettingsMessage'>
-                                    <Icon className='Settings' data={Heart}/>
+                                    <Icon className='Settings' data={Heart} />
                                 </button>}
                             position="top left"
                         >
                             <div className='emojiPopupMyReaction'>
-                                <Picker onEmojiClick={onEmojiClick}/>
+                                <Picker onEmojiClick={onEmojiClick} />
                             </div>
                         </Popup>
                     </div>

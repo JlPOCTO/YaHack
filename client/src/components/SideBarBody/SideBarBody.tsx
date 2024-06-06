@@ -32,7 +32,6 @@ function SideBarBody() {
     const [open, setOpen] = useState(false);
 
     function isSearchInputEmpty() {
-        console.log(searchInput)
         return searchInput === "";
 
     }
@@ -40,7 +39,7 @@ function SideBarBody() {
     useEffect(() => {
 
         const getMyInfo = async () => {
-            const res = await fetch('\contacts')
+            const res = await fetch('/contacts')
             const contacts = await res.json();
             setMyContacts(contacts)
         }
@@ -61,10 +60,10 @@ function SideBarBody() {
 
     useEffect(() => {
         const getUser = async () => {
-            console.log( "User@@@" , searchInput)
+            // console.log( "User@@@" , searchInput)
             const res = await fetch(apiVersion + `/users/${searchInput}`)
             const user1 = await res.json()
-            console.log( "User" ,user1)
+            // console.log( "User" ,user1)
             setUser(user1)
         }
 

@@ -12,7 +12,7 @@ type Profile = {
 }
 
 function ProfileOfEnotherUser(props: Profile) {
-    let {setSearchInput, setDialogID, apiVersion, userID} = useUserStore();
+    let {setSearchInput, setDialogID, apiVersion, userID, currentUserID, setChatName} = useUserStore();
     const {dialog} = props;
     const {t, i18n} = useTranslation();
     const [open, setOpen] = useState(false);
@@ -49,12 +49,21 @@ function ProfileOfEnotherUser(props: Profile) {
                 })
             });
             const newDialog = await res.json();
-            console.log("newChat", newDialog.id)
-
             sessionStorage.setItem('currentMessage', '')
             setSearchInput("")
             sessionStorage.setItem('currentInput', '')
             setDialogID(newDialog.id)
+            let partner = currentUserID
+            dialog.users.forEach((u: any) => {
+                if (u.id !== currentUserID) {
+                    if (!u.name) {
+                        partner = u.login
+                    } else {
+                        partner = u.name
+                    }
+                }
+            })
+            setChatName(partner)
         }
 
 

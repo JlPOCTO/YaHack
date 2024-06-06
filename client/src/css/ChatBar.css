@@ -3,6 +3,7 @@
     /*height: 80px;*/
     /*background-color: #2b6fae;*/
     /*border: solid;*/
+    width: 100%;
 }
 
 .button {
@@ -36,7 +37,7 @@
     display: flex;
     flex-direction: column;
     /*background-color: #a0b3c4;*/
-    width: 100%;
+    width: 87%;
     float: right;
     padding-left: 5px;
 
@@ -44,11 +45,11 @@
 
 
 #chatName-time{
-    /*display: inline;*/
-    /*flex-direction: row;*/
-    /*gap: 120px;*/
-    /*float: left;*/
-    /*align-items: stretch;*/
+    display: inline;
+    flex-direction: row;
+    gap: 120px;
+    float: left;
+    align-items: stretch;
 }
 #chatName{
     float: left;
@@ -69,17 +70,26 @@ span {
 }
 #to-left{
     float: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    /* max-width: 250px; */
+    text-align: start;
+
 }
 
 .space-for-avatar{
     height: 60px;
-    width: 70px;
+    width: 13%;
     background-color: midnightblue;
     border-radius: 50px;
 }
 .chat-bar-pro{
     padding-top: 5px;
+    padding-right: 3px;
     display: flex;
     flex-direction: row;
+    width: 100%;
     /*display: inline;*/
 }

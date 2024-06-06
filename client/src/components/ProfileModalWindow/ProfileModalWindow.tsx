@@ -11,7 +11,7 @@ type ProfileModalWindow = {
 }
 
 function ProfileModalWindow() {
-  let { apiVersion } = useUserStore()
+  let { apiVersion, setCurrentUserID } = useUserStore()
   const [visible, setVisible] = useState(false);
   const [me, setMyInfo] = useState([])
   useEffect(() => {
@@ -23,6 +23,7 @@ function ProfileModalWindow() {
       if (!me.name) {
         me.name = me.login;
       }
+      setCurrentUserID(me.id)
       setMyInfo(me)
     }
     getMyInfo()

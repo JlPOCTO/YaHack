@@ -24,7 +24,7 @@ function ContactBar(props: Contacts) {
     const {t} = useTranslation();
 
     function find(name: any) {
-        console.log(name)
+        // console.log(name)
         if (name !== 'null') {
             return <p className='myContactsNames'>{name}</p>
         }
@@ -34,7 +34,7 @@ function ContactBar(props: Contacts) {
         let set = new Set;
         for (let n of chatUsers) {
             set.add(n)
-            console.log("n",n)
+            // console.log("n",n)
         }
         if (!isTic) {
             console.log(" я зашел сюда")
