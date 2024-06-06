@@ -32,7 +32,7 @@ routers.delete(
                 res.send(200)
             )
         } else {
-            reactions.deleteReaction(req.params.id, req.user.id, req.body.reaction).then(
+            reactions.deleteReactionById(req.params.id).then(
                 res.send(200)
             )
         }
