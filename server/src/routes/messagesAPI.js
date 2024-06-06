@@ -1,5 +1,6 @@
 const express = require('express');
 const messages = require('../database/dbMessages');
+const reactions = require('../database/dbReactions');
 const images = require('../database/images');
 const {isAuthenticatedAPI} = require("../middlewares/isAuthenticatedAPI");
 const validate = require("../middlewares/validationMiddleware")
@@ -94,6 +95,57 @@ routers.get(
                 }
             }
         )
+    }
+)
+
+routers.get(
+    '/api/v2/messages/:id/reactions',
+    isAuthenticatedAPI,
+    wrapWithNext(x => x.params.id = Number.parseInt(x.params.id)),
+    validate.isCorrectId(x => x.params.id),
+    validate.isMessageExists(x => x.params.id),
+    validate.isMessageAccessible(x => x.params.id, x => x.user.id),
+    (req, res) => {
+        messages.getMessage(req.params.id).then(
+            async message => {
+                res.send(message.reactions)
+            }
+        )
+    }
+)
+
+routers.post(
+    '/api/v2/messages/:id/reactions',
+    isAuthenticatedAPI,
+    wrapWithNext(x => x.params.id = Number.parseInt(x.params.id)),
+    validate.isCorrectId(x => x.params.id),
+    validate.isMessageExists(x => x.params.id),
+    validate.isMessageAccessible(x => x.params.id, x => x.user.id),
+    (req, res) => {
+        reactions.addReaction(req.params.id, req.user.id, req.body.reaction).then(
+            res.send(200)
+        )
+    }
+)
+
+routers.delete(
+    '/api/v2/messages/:id/reactions',
+    isAuthenticatedAPI,
+    wrapWithNext(x => x.params.id = Number.parseInt(x.params.id)),
+    validate.isCorrectId(x => x.params.id),
+    validate.isMessageExists(x => x.params.id),
+    validate.isMessageAccessible(x => x.params.id, x => x.user.id),
+    (req, res) => {
+        maybeId = req.body.reaction
+        if (maybeId && Number.isInteger(maybeId) && Number(maybeId) > 0) {
+            reactions.deleteReactionById(req.body.reaction).then(
+                res.send(200)
+            )
+        } else {
+            reactions.deleteReaction(req.params.id, req.user.id, req.body.reaction).then(
+                res.send(200)
+            )
+        }
     }
 )
 

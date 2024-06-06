@@ -698,7 +698,7 @@ paths:
         '500':
           description: Ошибка на сервере
 
-  /reaction:
+  /reactions/{id}:
     get:
       tags:
         - reaction
@@ -707,7 +707,7 @@ paths:
       operationId: getReaction
       parameters: 
         - name: id
-          in: query
+          in: path
           required: true
           schema: 
             type: integer
@@ -724,35 +724,6 @@ paths:
           description: Клиент не авторизован
         '403':
           description: Клиент не имеет доступа к сообщению
-        '404':
-          description: Сообщения не существует
-        '500':
-          description: Ошибка на сервере
-    post:
-      tags:
-        - reaction
-      summary: Отправить реакцию
-      operationId: createReaction
-      requestBody: 
-        description: Новая реакция
-        required: true
-        content: 
-          application/json: 
-            schema:
-                $ref: '#/components/schemas/ReactionRequest'
-      responses:
-        '200':
-          description: Успешно, возвращает новую реакцию
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Reaction'
-        '400':
-          description: Некорректный запрос
-        '401':
-          description: Клиент не авторизован
-        '403':
-          description: У клиента нет доступа к сообщению
         '404':
           description: Сообщения не существует
         '500':
@@ -784,7 +755,39 @@ paths:
         '500':
           description: Ошибка на сервере
 
+    
   /reactions:
+    post:
+      tags:
+        - reaction
+      summary: Отправить реакцию
+      operationId: createReaction
+      requestBody: 
+        description: Новая реакция
+        required: true
+        content: 
+          application/json: 
+            schema:
+                $ref: '#/components/schemas/ReactionRequest'
+      responses:
+        '200':
+          description: Успешно, возвращает новую реакцию
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reaction'
+        '400':
+          description: Некорректный запрос
+        '401':
+          description: Клиент не авторизован
+        '403':
+          description: У клиента нет доступа к сообщению
+        '404':
+          description: Сообщения не существует
+        '500':
+          description: Ошибка на сервере
+
+  /messages/{id}/reactions:
       get:
         tags:
           - reaction
@@ -792,7 +795,67 @@ paths:
         operationId: getReactions
         parameters: 
           - name: messageId
-            in: query
+            in: path
+            required: true
+            schema: 
+              type: integer
+        responses: 
+          '200':
+            description: Успешно
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Reaction'
+          '400':
+            description: Некорректный запрос
+          '401':
+            description: Клиент не авторизован
+          '403':
+            description: Клиент не имеет доступа к сообщению
+          '404':
+            description: Сообщения не существует
+          '500':
+            description: Ошибка на сервере
+      post:
+        tags:
+          - reaction
+        summary: Добавить реакцию на сообщение
+        operationId: addReaction
+        parameters: 
+          - name: messageId
+            in: path
+            required: true
+            schema: 
+              type: integer
+        responses: 
+          '200':
+            description: Успешно
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Reaction'
+          '400':
+            description: Некорректный запрос
+          '401':
+            description: Клиент не авторизован
+          '403':
+            description: Клиент не имеет доступа к сообщению
+          '404':
+            description: Сообщения не существует
+          '500':
+            description: Ошибка на сервере
+      delete:
+        tags:
+          - reaction
+        summary: Удалить реакцию пользователя с сообщения
+        operationId: deleteReaction
+        parameters: 
+          - name: messageId
+            in: path
             required: true
             schema: 
               type: integer
