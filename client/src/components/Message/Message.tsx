@@ -1,4 +1,4 @@
-import {useState, useRef} from 'react';
+import {useState, useRef, useEffect} from 'react';
 import '../../css/Message.css';
 import {useUserStore} from "../../stores/UserStore";
 import {Icon} from "@gravity-ui/uikit";
@@ -6,6 +6,7 @@ import {FaceSmile} from "@gravity-ui/icons";
 import Picker, {EmojiClickData} from "emoji-picker-react";
 import Popup from "reactjs-popup";
 import {Heart} from "@gravity-ui/icons";
+import {observer} from "mobx-react-lite";
 
 
 type Message = {
@@ -17,11 +18,28 @@ const getInitialCurrentMessage = () => {
 
 function Message(props: Message) {
     const {message} = props;
-    const {userID} = useUserStore()
+    let {userID, apiVersion} = useUserStore()
     const [scrollPos, setScrollPos] = useState(0)
+    const [me, setMyInfo] = useState([0])
+    useEffect(() => {
 
-    function isMine() {
-        return message.senderId === userID
+        const getMyInfo = async () => {
+            console.log(apiVersion + '/users/me');
+            const res = await fetch(apiVersion + '/users/me')
+            const me = await res.json();
+            if (!me.name) {
+                me.name = me.login;
+            }
+            setMyInfo(me)
+            // userID = me.id
+        }
+        getMyInfo()
+    }, [])
+
+    let isMine  = async() =>{
+        // @ts-ignore
+        let n = await me.id
+        return message.senderId === n
     }
 
     function deleteReaction() {
@@ -147,4 +165,4 @@ function Message(props: Message) {
 
 }
 
-export default Message;
+export default observer(Message);

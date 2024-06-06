@@ -5,13 +5,14 @@ import Contacts from "../Contacts/Contacts";
 import '../../i18n/config';
 import {useTranslation} from 'react-i18next';
 import {useUserStore} from "../../stores/UserStore";
+import {observer} from "mobx-react-lite";
 
 type Profile = {
     dialog: any;
 }
 
 function ProfileOfEnotherUser(props: Profile) {
-    const {setSearchInput, setDialogID, apiVersion, userID} = useUserStore();
+    let {setSearchInput, setDialogID, apiVersion, userID} = useUserStore();
     const {dialog} = props;
     const {t, i18n} = useTranslation();
     const [open, setOpen] = useState(false);
@@ -27,6 +28,7 @@ function ProfileOfEnotherUser(props: Profile) {
                 me.name = me.login;
             }
             setMyInfo(me)
+            userID = me.id
         }
         getMyInfo()
     }, [])
@@ -77,4 +79,4 @@ function ProfileOfEnotherUser(props: Profile) {
     );
 }
 
-export default ProfileOfEnotherUser;
+export default observer(ProfileOfEnotherUser);
