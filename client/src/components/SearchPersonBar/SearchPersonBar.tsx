@@ -51,7 +51,7 @@ function SearchPersonBar (props: SearchPersonBarProps) {
                     <div id="chat-information">
                         <div id="chatName-time">
                             <div id="chatName">
-                                {dialog.name}
+                                {dialog.login}
                             </div>
                             <div id="time">
 

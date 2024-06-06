@@ -45,7 +45,7 @@ function ProfileOfEnotherUser(props: Profile) {
             <header>
                 <div className='userProfile'>
                     <div className='userPhoto'></div>
-                    <div className='profileName'>{dialog.name}</div>
+                    <div className='profileName'>{dialog.login}</div>
                 </div>
             </header>
             <main>
