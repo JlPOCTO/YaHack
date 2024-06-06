@@ -33,21 +33,21 @@ chatsRouter.post(
     validate.chatRequestMiddleware,
     async (req, res) => {
         let data = createAvatar()
-        let avatarPath = "chat_" + uuid.v4() + ".svg"
-        const isUploaded = await images.uploadImage(avatarPath, data)
-        if (isUploaded) {
-            chats.addChat(req.body.users, req.body.chatType, req.body.name, avatarPath).then(
-                chat => {
-                    if (chat) {
-                        res.send(prepareChat(chat))
-                    } else {
-                        res.sendStatus(500)
-                    }
-                }
-            )
+        let key = "chat_" + uuid.v4()
+        const isUploaded = await images.uploadImage(key, data, key, "image/png")
+        if (!isUploaded) {
+            res.sendStatus(500)
             return
         }
-        res.sendStatus(500)
+        chats.addChat(req.body.users, req.body.chatType, req.body.name, key + ".png").then(
+            chat => {
+                if (chat) {
+                    res.send(prepareChat(chat))
+                } else {
+                    res.sendStatus(500)
+                }
+            }
+        )
     }
 )
 
@@ -160,8 +160,9 @@ chatsRouter.get(
                             res.sendStatus(500)
                             return
                         }
-                        res.contentType('image/png');
-                        res.send(Buffer.from(data, 'binary'))
+                        res.setHeader('Content-Disposition', 'inline; filename="' + data.name + '"');
+                        res.type(data.mimetype)
+                        res.send(data.buffer)
                     }
                 )
             }
@@ -169,18 +170,20 @@ chatsRouter.get(
     }
 )
 
+// TODO Добавить удаление старого аватара
 chatsRouter.post(
     '/api/v2/chats/:chatId/avatar',
     isAuthenticatedAPI,
     wrapWithNext(x => x.params.chatId = Number.parseInt(x.params.chatId)),
+    validate.isCorrectImage(x => x.files ? x.files.avatar : undefined),
     validate.isCorrectId(x => x.params.chatId),
     validate.isChatExists(x => x.params.chatId),
     validate.isChatAccessible(x => x.params.chatId, x => x.user.id),
     (req, res) => {
-        const name = "chat_" + req.params.chatId + ".png";
-        images.uploadImage(name, req.body).then(
+        const key = "chat_" + req.params.chatId;
+        images.uploadImage(key, req.files.avatar.data, req.files.avatar.name, req.files.avatar.mimetype).then(
             async result => {
-                if (result && await chats.updateChatAvatarPath(req.params.chatId, name)) {
+                if (result && await chats.updateChatAvatarPath(req.params.chatId, key)) {
                     res.send();
                 } else {
                     res.status(500).send()

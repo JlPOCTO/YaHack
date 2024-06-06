@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: YaHack Kilogram API
-  description: Набор методов для обращения к серверу мессенджера Kilogram. <br> 
+  description: Набор методов для обращения к серверу мессенджера Kilogram. <br>
     ВАЖНО!! Обратите внимание, что ко всем методам сначала нужен префикс /api/{version}
   version: 2.0.0
   contact:
@@ -27,19 +27,40 @@ tags:
     description: Операции, связанные с пригласительными ссылками
 
 paths:
+  /users:
+    get:
+      tags:
+        - user
+      summary: Получить информацию о всех пользователях
+      operationId: getUsers
+      responses:
+        '200':
+          description: Успешно
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: Клиент не авторизован
+        '500':
+          description: Ошибка на сервере
+
   /users/{idOrLogin}:
     get:
       tags:
         - user
       summary: Получить информацию о каком-либо пользователе
-      description: Возвращает пользователя по указанной информации
+      description: Возвращает пользователя по указанной информации.
+        Не поддерживает числовые логины, и логины me, myAvatar, contacts
       operationId: getUser
-      parameters: 
+      parameters:
         - name: idOrLogin
           description: Id или логин пользователя
           in: path
           required: true
-          schema: 
+          schema:
             type: string
       responses:
         '200':
@@ -57,11 +78,50 @@ paths:
         '500':
           description: Ошибка на сервере
 
+  /users/me:
+    get:
+      tags:
+        - user
+      summary: Получить информацию об авторизованном пользователе
+      operationId: getMe
+      responses:
+        '200':
+          description: Успешно
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Клиент не авторизован
+        '500':
+          description: Ошибка на сервере
+
+  /users/contacts:
+    get:
+      tags:
+        - user
+      summary: Получить информацию о пользователях, с которыми есть диалоги у авторизованного пользователя
+      operationId: getContacts
+      responses:
+        '200':
+          description: Успешно
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: Клиент не авторизован
+        '500':
+          description: Ошибка на сервере
+
   /users/find/{loginPart}:
     get:
       tags:
         - user
       summary: Получить информацию о пользователях, у которых логин содержит заданную строку
+      description: Возвращает пользователей, чьи логины содержит заданную строку как подстроку
       operationId: getUsersByLoginPart
       parameters:
         - name: loginPart
@@ -86,19 +146,45 @@ paths:
         '500':
           description: Ошибка на сервере
 
-  /users/me:
+  /users/myAvatar:
     get:
       tags:
         - user
-      summary: Получить информацию об авторизованном пользователе
-      operationId: getMe
+      summary: Получить аватар авторизованного пользователя
+      operationId: getMyAvatar
       responses:
         '200':
           description: Успешно
           content:
-            application/json:
+            image/png:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: "#/components/schemas/Image"
+            image/jpeg:
+              schema:
+                $ref: "#/components/schemas/Image"
+        '401':
+          description: Клиент не авторизован
+        '500':
+          description: Ошибка на сервере
+    post:
+      tags:
+        - user
+      summary: Обновить аватар авторизованного пользователя
+      operationId: updateMyAvatar
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  $ref: "#/components/schemas/Image"
+      responses:
+        '200':
+          description: Успешно
+        '400':
+          description: Неверный запрос
         '401':
           description: Клиент не авторизован
         '500':
@@ -116,16 +202,18 @@ paths:
           description: Id пользователя
           in: path
           required: true
-          schema: 
-            type: string
-      responses: 
+          schema:
+            type: integer
+      responses:
         '200':
           description: Успешно
           content:
             image/png:
               schema:
-                type: string
-                description: Изображение
+                $ref: "#/components/schemas/Image"
+            image/jpeg:
+              schema:
+                $ref: "#/components/schemas/Image"
         '400':
           description: Неверный запрос
         '401':
@@ -135,92 +223,13 @@ paths:
         '500':
           description: Ошибка на сервере
 
-  /users/myAvatar:
-    get:
-      tags:
-        - user
-      summary: Получить аватар авторизованного пользователя
-      operationId: getMyAvatar
-      responses:
-        '200':
-          description: Успешно
-          content:
-            image/png:
-              schema:
-                type: string
-                description: Изображение
-        '400':
-          description: Неверный запрос
-        '401':
-          description: Клиент не авторизован
-        '500':
-          description: Ошибка на сервере
-    post:
-      tags:
-        - user
-      summary: Обновить аватар авторизованного пользователя
-      operationId: updateMyAvatar
-      requestBody:
-        required: true
-        content: 
-          image/png:
-            schema:
-              type: string
-      responses: 
-        '200':
-          description: Успешно
-        '400':
-          description: Неверный запрос
-        '401':
-          description: Клиент не авторизован
-        '500':
-          description: Ошибка на сервере
-  /users:
-    get:
-      tags:
-        - user
-      summary: Получить информацию о всех пользователях
-      operationId: getUsers
-      responses:
-        '200':
-          description: Успешно
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
-        '401':
-          description: Клиент не авторизован
-        '500':
-          description: Ошибка на сервере
-  /users/contacts:
-    get:
-      tags:
-        - user
-      summary: Получить информацию о пользователях, с которыми есть диалоги у авторизованного пользователя
-      operationId: getContacts
-      responses:
-        '200':
-          description: Успешно
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
-        '401':
-          description: Клиент не авторизован
-        '500':
-          description: Ошибка на сервере
-
   /chats:
     get:
       tags:
         - chat
       summary: Получить чаты, в которых состоит авторизованный пользоватеть
       operationId: getChats
-      responses: 
+      responses:
         '200':
           description: Успешно
           content:
@@ -239,7 +248,7 @@ paths:
       summary: Создать новый чат
       operationId: createChat
       requestBody:
-        description: Новый чат.
+        description: Новый чат
         required: true
         content:
           application/json:
@@ -269,13 +278,13 @@ paths:
         - chat
       summary: Получить информацию о чате по id
       operationId: getChat
-      parameters: 
+      parameters:
         - name: id
           in: path
           required: true
-          schema: 
+          schema:
             type: integer
-      responses: 
+      responses:
         '200':
           description: Успешно
           content:
@@ -297,13 +306,13 @@ paths:
         - chat
       summary: Удалить чат по id
       operationId: deleteChat
-      parameters: 
+      parameters:
         - name: id
           in: path
           required: true
-          schema: 
+          schema:
             type: integer
-      responses: 
+      responses:
         '200':
           description: Успешно
         '400':
@@ -311,7 +320,7 @@ paths:
         '401':
           description: Клиент не авторизован
         '403':
-          description: Пользователь не имеет прав удалять чат
+          description: Пользователь не имеет доступа к чату
         '404':
           description: Чат с таким id не существует
         '500':
@@ -323,18 +332,18 @@ paths:
         - chat
       summary: Добавить нового пользователя в чат
       operationId: addUserInChat
-      parameters: 
+      parameters:
         - name: chatId
           in: path
           required: true
-          schema: 
+          schema:
             type: integer
         - name: userId
           in: query
           required: true
-          schema: 
+          schema:
             type: integer
-      responses: 
+      responses:
         '200':
           description: Успех
         '400':
@@ -342,29 +351,29 @@ paths:
         '401':
           description: Клиент не авторизован
         '403':
-          description: Пользователь не имеет доступа к чату
+          description: В чат невозможно добавить пользователя, или добавляющий пользователь отсутствует в чате,
+            или добавляемый пользователь уже есть в чате
         '404':
           description: Чат или добавляемый пользователь не существуют
         '500':
           description: Ошибка на сервере
-
     delete:
       tags:
         - chat
       summary: Удалить пользователя из чата
       operationId: deleteUserFromChat
-      parameters: 
+      parameters:
         - name: chatId
           in: path
           required: true
-          schema: 
+          schema:
             type: integer
         - name: userId
           in: query
           required: true
-          schema: 
+          schema:
             type: integer
-      responses: 
+      responses:
         '200':
           description: Успех
         '400':
@@ -372,7 +381,8 @@ paths:
         '401':
           description: Клиент не авторизован
         '403':
-          description: Пользователь не имеет доступа к чату
+          description: В чат невозможно добавить пользователя, или удаляющий пользователь отсутствует в чате,
+            или удаляемый пользователь уже удален из чата
         '404':
           description: Чат или удаляемый пользователь не существуют
         '500':
@@ -390,14 +400,16 @@ paths:
           required: true
           schema:
             type: integer
-      responses: 
+      responses:
         '200':
           description: Успешно
           content:
             image/png:
               schema:
-                type: string
-                description: Изображение
+                $ref: "#/components/schemas/Image"
+            image/jpeg:
+              schema:
+                $ref: "#/components/schemas/Image"
         '400':
           description: Неверный запрос
         '401':
@@ -408,7 +420,6 @@ paths:
           description: Чат не существует
         '500':
           description: Ошибка на сервере
-
     post:
       tags:
         - chat
@@ -421,13 +432,15 @@ paths:
           schema:
             type: integer
       requestBody:
-        description: Новый аватар чата
         required: true
         content:
-          image/png:
+          multipart/form-data:
             schema:
-              type: string
-      responses: 
+              type: object
+              properties:
+                avatar:
+                  $ref: "#/components/schemas/Image"
+      responses:
         '200':
           description: Успешно
         '400':
@@ -441,19 +454,81 @@ paths:
         '500':
           description: Ошибка на сервере
 
+  /chats/{chatId}/messages:
+    get:
+      tags:
+        - chat
+      summary: Получить сообщения, находящиеся в чате
+      operationId: getMessages
+      parameters:
+        - name: chatId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешно
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+        '400':
+          description: Некорректный запрос
+        '401':
+          description: Клиент не авторизован
+        '403':
+          description: Клиент не имеет прав доступа к чату
+        '404':
+          description: Чат не существует
+        '500':
+          description: Ошибка на сервере
+
+  /chats/{chatId}/lastMessage:
+    get:
+      tags:
+        - chat
+      summary: TODO Получить последнее сообщение в чате
+      operationId: getLastMessage
+      parameters:
+        - name: chatId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешно
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '400':
+          description: Некорректный запрос
+        '401':
+          description: Клиент не авторизован
+        '403':
+          description: Клиент не имеет доступа к чату
+        '404':
+          description: Чат или сообщение не существуют
+        '500':
+          description: Ошибка на сервере
+
   /chats/{chatId}/invite-link:
     get:
       tags:
         - chat
-      summary: Получить пригласительную ссылку для чата
+      summary: TODO Получить пригласительную ссылку для чата
       operationId: createInviteLink
-      parameters: 
+      parameters:
         - name: chatId
           in: path
           required: true
-          schema: 
+          schema:
             type: integer
-      responses: 
+      responses:
         '200':
           description: Успешно
           content:
@@ -475,15 +550,15 @@ paths:
     get:
       tags:
         - invite-link
-      summary: Пригласительная ссылка
+      summary: TODO Пригласительная ссылка
       operationId: inviteLink
       parameters:
         - name: link
           in: path
           required: true
-          schema: 
+          schema:
             type: string
-      responses: 
+      responses:
         '200':
           description: Успешно, пользователь добавлен в чат
         '401':
@@ -496,15 +571,15 @@ paths:
     delete:
       tags:
         - invite-link
-      summary: Удалить пригласительную ссылку
+      summary: TODO Удалить пригласительную ссылку
       operationId: deleteInviteLink
       parameters:
         - name: link
           in: path
           required: true
-          schema: 
+          schema:
             type: string
-      responses: 
+      responses:
         '200':
           description: Успех
         '401':
@@ -521,13 +596,13 @@ paths:
       summary: Получить сообщение
       description: Возвращает сообщение по его id
       operationId: getMessage
-      parameters: 
+      parameters:
         - name: id
           in: path
           required: true
-          schema: 
+          schema:
             type: integer
-      responses: 
+      responses:
         '200':
           description: Успешно
           content:
@@ -550,13 +625,13 @@ paths:
       summary: Удалить сообщение
       description: Удаляет сообщение по его id
       operationId: deleteMessage
-      parameters: 
+      parameters:
         - name: id
           in: path
           required: true
-          schema: 
+          schema:
             type: integer
-      responses: 
+      responses:
         '200':
           description: Успешно
         '400':
@@ -580,7 +655,7 @@ paths:
         description: Новое сообщение
         required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/MessageRequest'
       responses:
@@ -601,60 +676,28 @@ paths:
         '500':
           description: Ошибка на сервере
 
-  /chats/{chatId}/lastMessage:
-    get:
-      tags:
-        - chat
-      summary: Получить последнее сообщение в чате
-      operationId: getLastMessage
-      parameters: 
-        - name: chatId
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses: 
-        '200':
-          description: Успешно
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Message'
-        '400':
-          description: Некорректный запрос
-        '401':
-          description: Клиент не авторизован
-        '403':
-          description: Клиент не имеет доступа к чату
-        '404':
-          description: Чат или сообщение не существуют
-        '500':
-          description: Ошибка на сервере
-  
   /messages/{id}/image:
     get:
       tags:
         - message
       summary: Получить изображение из сообщения по id
       operationId: getImage
-      parameters: 
+      parameters:
         - name: id
           in: path
           required: true
-          schema: 
+          schema:
             type: string
-      responses: 
+      responses:
         '200':
           description: Успешно
           content:
             image/png:
               schema:
-                type: string
-                description: Изображение, преобразованное в текстовый формат
+                $ref: "#/components/schemas/Image"
             image/jpeg:
               schema:
-                type: string
-                description: Изображение, преобразованное в текстовый формат
+                $ref: "#/components/schemas/Image"
         '400':
           description: Неверный запрос
         '401':
@@ -666,52 +709,20 @@ paths:
         '500':
           description: Ошибка на сервере
 
-  /chats/{chatId}/messages:
-    get:
-      tags:
-        - chat
-      summary: Получить сообщения, находящиеся в чате
-      operationId: getMessages
-      parameters: 
-        - name: chatId
-          in: path
-          required: true
-          schema: 
-            type: integer
-      responses: 
-        '200':
-          description: Успешно
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Message'
-        '400':
-          description: Некорректный запрос
-        '401':
-          description: Клиент не авторизован
-        '403':
-          description: Клиент не имеет прав доступа к чату
-        '404':
-          description: Чат не существует
-        '500':
-          description: Ошибка на сервере
-
   /reaction:
     get:
       tags:
         - reaction
-      summary: Получить реакцию
+      summary: TODO Получить реакцию
       description: Возвращает реакцию по ее id
       operationId: getReaction
-      parameters: 
+      parameters:
         - name: id
           in: query
           required: true
-          schema: 
+          schema:
             type: integer
-      responses: 
+      responses:
         '200':
           description: Успешно
           content:
@@ -731,15 +742,15 @@ paths:
     post:
       tags:
         - reaction
-      summary: Отправить реакцию
+      summary: TODO Отправить реакцию
       operationId: createReaction
-      requestBody: 
+      requestBody:
         description: Новая реакция
         required: true
-        content: 
-          application/json: 
+        content:
+          application/json:
             schema:
-                $ref: '#/components/schemas/ReactionRequest'
+              $ref: '#/components/schemas/ReactionRequest'
       responses:
         '200':
           description: Успешно, возвращает новую реакцию
@@ -761,16 +772,16 @@ paths:
     delete:
       tags:
         - reaction
-      summary: Удалить реакцию
+      summary: TODO Удалить реакцию
       description: Удаляет реакцию по ее id
       operationId: deleteReaction
-      parameters: 
+      parameters:
         - name: id
           in: query
           required: true
-          schema: 
+          schema:
             type: integer
-      responses: 
+      responses:
         '200':
           description: Успешно
         '400':
@@ -785,43 +796,49 @@ paths:
           description: Ошибка на сервере
 
   /reactions:
-      get:
-        tags:
-          - reaction
-        summary: Получить все реакции с сообщения
-        operationId: getReactions
-        parameters: 
-          - name: messageId
-            in: query
-            required: true
-            schema: 
-              type: integer
-        responses: 
-          '200':
-            description: Успешно
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Reaction'
-          '400':
-            description: Некорректный запрос
-          '401':
-            description: Клиент не авторизован
-          '403':
-            description: Клиент не имеет доступа к сообщению
-          '404':
-            description: Сообщения не существует
-          '500':
-            description: Ошибка на сервере
+    get:
+      tags:
+        - reaction
+      summary: TODO Получить все реакции с сообщения
+      operationId: getReactions
+      parameters:
+        - name: messageId
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешно
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reaction'
+        '400':
+          description: Некорректный запрос
+        '401':
+          description: Клиент не авторизован
+        '403':
+          description: Клиент не имеет доступа к сообщению
+        '404':
+          description: Сообщения не существует
+        '500':
+          description: Ошибка на сервере
 
 components:
   schemas:
+    Image:
+      description: Картинка
+      type: string
+      nullable: true
+      format: binary
+
     User:
       type: object
       description: Пользователь
-      properties: 
+      properties:
         id:
           description: Идентификатор пользователя
           type: integer
@@ -845,6 +862,7 @@ components:
           example: 10
         name:
           description: Название чата
+          example: Групповой Чат
           type: string
           nullable: true
         type:
@@ -857,7 +875,7 @@ components:
         users:
           description: Пользователи-участники чата
           type: array
-          items: 
+          items:
             $ref: '#/components/schemas/User'
         lastMessage:
           description: Последнее сообщение в чате
@@ -897,9 +915,9 @@ components:
         reactions:
           description: Реакции на сообщение
           type: array
-          items: 
+          items:
             $ref: '#/components/schemas/Reaction'
-    
+
     Reaction:
       description: Реакция на сообщение
       type: object
@@ -939,9 +957,9 @@ components:
         users:
           description: Пользователи, которые будут участниками чата
           type: array
-          items: 
+          items:
             type: integer
-    
+
     MessageRequest:
       description: Запрос на создание сообщения
       type: object
@@ -955,9 +973,8 @@ components:
           type: string
           example: What a wonderful world
         imageContent:
-          description: Картинка
-          type: string
-          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Image'
     
     ReactionRequest:
       description: Запрос на создание реакции

@@ -25,6 +25,20 @@ function checkUnique(numbers) {
     return numbers.length === set.size
 }
 
+function checkImage(image) {
+    if (!image) {
+        return false
+    }
+    return constants.IMAGES_TYPE.includes(image.mimetype) && image.size < constants.IMAGE_MAX_SIZE
+}
+
+function checkFile(file) {
+    if (file === undefined) {
+        return true
+    }
+    return checkImage(file)
+}
+
 function checkChatRequest(chat) {
     if (!Array.isArray(chat.users) || !checkChatType(chat.chatType) || !checkUnique(chat.users)) {
         return false
@@ -54,6 +68,8 @@ function checkEmoji() {
 module.exports = {
     checkId,
     checkLogin,
+    checkImage,
+    checkFile,
     checkChatRequest,
     checkMessageRequest,
     checkReactionRequest,

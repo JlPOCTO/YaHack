@@ -1,11 +1,7 @@
-const isAuthenticatedAPI = (req, res, next) => {
+const {getUserById} = require("../database/dbUsers");
+const isAuthenticatedAPI = async (req, res, next) => {
     if (process.env.MODE === "TEST") {
-        req.user = {
-            id: 1,
-            name: "Danil Gavrilov",
-            login: "gr33n-m1ner",
-            avatarPath: "user_78441661.svg"
-        }
+        req.user = await getUserById(1)
         return next()
     }
     if (!req.isAuthenticated()) {

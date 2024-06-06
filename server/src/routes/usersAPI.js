@@ -27,7 +27,9 @@ usersRouter.get(
                     res.sendStatus(500)
                     return
                 }
-                res.send(data)
+                res.setHeader('Content-Disposition', 'inline; filename="' + data.name + '"');
+                res.type(data.mimetype)
+                res.send(data.buffer)
             }
         )
     }
@@ -89,7 +91,9 @@ usersRouter.get(
                             res.sendStatus(500)
                             return
                         }
-                        res.send(data)
+                        res.setHeader('Content-Disposition', 'inline; filename="' + data.name + '"');
+                        res.type(data.mimetype)
+                        res.send(data.buffer)
                     }
                 )
             }
@@ -100,11 +104,12 @@ usersRouter.get(
 usersRouter.post(
     '/api/v2/users/myAvatar',
     isAuthenticatedAPI,
+    validate.isCorrectImage(x => x.files ? x.files.avatar : undefined),
     (req, res) => {
-        const name = "user_" + req.user.id + ".png";
-        images.uploadImage(name, req.body).then(
+        const key = "user_" + req.user.id;
+        images.uploadImage(key, req.files.avatar.data, req.files.avatar.name, req.files.avatar.mimetype).then(
             async result => {
-                if (result && await users.updateUserAvatar(req.user.id, name)) {
+                if (result && await users.updateUserAvatar(req.user.id, key)) {
                     res.send();
                 } else {
                     res.status(500).send()
