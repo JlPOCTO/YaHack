@@ -28,8 +28,10 @@ const getInitialcurrentName = () => {
 
 function AddChatComponents(props: Contacts) {
     const {contacts} = props;
-    let {language, setSearchInput, searchInput, apiVersion, chatUsers} = useUserStore();
+    let {language, setSearchInput, searchInput, apiVersion, chatUsers, visible, setVisible} = useUserStore();
+    const [flag, setFlag] = useState(false)
     const {t, i18n} = useTranslation();
+
     const [currentName, setcurrentName] = useState(getInitialcurrentName())
 
     const handleSetcurrentName = (e: any) => {
@@ -37,17 +39,7 @@ function AddChatComponents(props: Contacts) {
         setcurrentName(e.target.value)
         sessionStorage.setItem('currentName', e.target.value)
     }
-    const handleKeyDown = (e: any) => {
-        const link = document.getElementById('road-button');
-        if (e.keyCode == 13) {
-            if (e.shiftKey == false) {
-                e.preventDefault();
-                // @ts-ignore
-                link.click()
-            }
-        }
 
-    };
     const [me, setMyInfo] = useState([])
     useEffect(() => {
 
@@ -74,27 +66,42 @@ function AddChatComponents(props: Contacts) {
                 users.push(n)
                 // console.log("n",n)
             }
-            const res = await fetch(apiVersion + `/chats`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: currentName,
-                    chatType: "group",
-                    // @ts-ignore
-                    users: users
-                })
-            });
-            const newDialog = await res.json();
-            // console.log("newChat", newDialog.id)
+            if (users.length > 1) {
+                setFlag(false)
+                const res = await fetch(apiVersion + `/chats`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: currentName,
+                        chatType: "group",
+                        // @ts-ignore
+                        users: users
+                    })
+                });
+                const newDialog = await res.json();
+                // console.log("newChat", newDialog.id)
 
-            // sessionStorage.setItem('currentMessage', '')
-            setSearchInput("")
-            sessionStorage.setItem('currentInput', '')
+                // sessionStorage.setItem('currentMessage', '')
+                setSearchInput("")
+                sessionStorage.setItem('currentInput', '')
+                setVisible(false)
+            } else {
+                setFlag(true)
+            }
         }
 
-
+    const handleKeyDown = (e: any) => {
+        const link = document.getElementById('ro-button');
+        if (e.keyCode == 13) {
+            if (e.shiftKey == false) {
+                e.preventDefault();
+                // @ts-ignore
+                link.click()
+            }
+        }
+    };
 
     return (
         <div className="ll">
@@ -122,12 +129,14 @@ function AddChatComponents(props: Contacts) {
                             setcurrentName('')
 
 
-                        })} className='currentSettings' id="road-button">
+                        })} className='currentSettings' id="ro-button">
                             <Icon className='Settings-rotate-right' data={ArrowShapeRight}/>
                         </button>
                     </div>
                 </div>
             </header>
+            {flag && <div style={{color:"red"}}> {t("chatError")}</div>
+            }
             <div className="chat-bar">
                 {contacts.map((contact: any) =>
                     <ContactBar contact={contact}/>

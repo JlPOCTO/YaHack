@@ -13,15 +13,16 @@ import Contacts from "../Contacts/Contacts";
 import {Sidebar} from 'primereact/sidebar';
 import ContactBar from "../ContactBar/ContactBar";
 import AddChatComponents from "../AddChatComponents/AddChatComponents";
+import {observer} from "mobx-react-lite";
 
 
 
 
 
 function AddChat() {
-    let { apiVersion } = useUserStore()
+    let { apiVersion, visible,setVisible } = useUserStore()
     const [contacts, setMyContacts] = useState([])
-    const [visible, setVisible] = useState(false);
+    // const [visible, setVisible] = useState(false);
     useEffect(() => {
 
       const getMyInfo = async () => {
@@ -54,4 +55,4 @@ function AddChat() {
     );
 }
 
-export default AddChat;
+export default observer(AddChat);

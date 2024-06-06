@@ -25,6 +25,7 @@
   "read_message": "{{name}} read message",
   "label": "Add members",
   "chat": "Add chat name",
+  "chatError": "Choose members",
    "addChat": {
      "chat" : "Chats",
      "back" : "Back to your dialogs"
