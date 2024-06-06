@@ -23,7 +23,6 @@ function ProfileModalWindow() {
       if (!me.name) {
         me.name = me.login;
       }
-      console.log(me);
       setMyInfo(me)
     }
     getMyInfo()

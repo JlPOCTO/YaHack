@@ -1,13 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import '../../css/Dialog.css';
-import {Button, Modal} from "@gravity-ui/uikit";
-// import settings from "../../settings-svgrepo-com.svg";
-import Profile from "../Profile/Profile";
 import HeaderOfBodyMain from "../HeaderOfBodyMain/HeaderOfBodyMain";
 import AddMessage from "../AddMessage/AddMessage";
 import DialogWithMessages from "../DialogWithMessages/DialogWithMessages";
-import ChatBar from "../ChatBar/ChatBar";
-import message from "../Message/Message";
 import {useUserStore} from "../../stores/UserStore";
 import {observer} from "mobx-react-lite";
 
