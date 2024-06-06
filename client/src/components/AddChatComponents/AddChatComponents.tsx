@@ -21,21 +21,21 @@ import {action} from "mobx";
 type Contacts = {
     contacts: any;
 }
-const getInitialInput = () => {
-    return localStorage.getItem('currentInput') || "";
+const getInitialcurrentName = () => {
+    return localStorage.getItem('currentcurrentName') || "";
 }
 
 
 function AddChatComponents(props: Contacts) {
     const {contacts} = props;
-    let {language, setSearchInput, searchInput} = useUserStore();
+    let {language, setSearchInput, searchInput, apiVersion, chatUsers} = useUserStore();
     const {t, i18n} = useTranslation();
-    const [currrentInput, setCurrentInput] = useState(getInitialInput())
+    const [currentName, setcurrentName] = useState(getInitialcurrentName())
 
-    const handleSetCurrentInput = (e: any) => {
+    const handleSetcurrentName = (e: any) => {
         // console.log("handleSetCurrentInput"+ e.target.value)
-        setCurrentInput(e.target.value)
-        sessionStorage.setItem('currentInput', e.target.value)
+        setcurrentName(e.target.value)
+        sessionStorage.setItem('currentName', e.target.value)
     }
     const handleKeyDown = (e: any) => {
         const link = document.getElementById('road-button');
@@ -48,6 +48,53 @@ function AddChatComponents(props: Contacts) {
         }
 
     };
+    const [me, setMyInfo] = useState([])
+    useEffect(() => {
+
+        const getMyInfo = async () => {
+            console.log(apiVersion + '/users/me');
+            const res = await fetch(apiVersion + '/users/me')
+            const me = await res.json();
+            if (!me.name) {
+                me.name = me.login;
+            }
+            setMyInfo(me)
+        }
+        getMyInfo()
+    }, [])
+
+
+    const HandleChatAdd =
+        async () => {
+            const users = []
+            // @ts-ignore
+            const m = await me.id
+            users.push(m)
+            for (let n of chatUsers) {
+                users.push(n)
+                // console.log("n",n)
+            }
+            const res = await fetch(apiVersion + `/chats`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: currentName,
+                    chatType: "group",
+                    // @ts-ignore
+                    users: users
+                })
+            });
+            const newDialog = await res.json();
+            // console.log("newChat", newDialog.id)
+
+            // sessionStorage.setItem('currentMessage', '')
+            setSearchInput("")
+            sessionStorage.setItem('currentInput', '')
+        }
+
+
 
     return (
         <div className="ll">
@@ -60,19 +107,20 @@ function AddChatComponents(props: Contacts) {
                         <form method='get'>
                             <input type="text" id="search-messenger" placeholder={t('chat')}
                                    name='searchMessage'
-                                   value={currrentInput}
-                                   onChange={handleSetCurrentInput}
+                                   value={currentName}
+                                   onChange={handleSetcurrentName}
                                    onKeyDown={handleKeyDown}
                             >
                             </input>
                         </form>
                         <button onClick={action((e) => {
-                            const currentInput = sessionStorage.getItem('currentInput')
-                            console.log("cuur: " + currentInput)
-                            setSearchInput(currentInput)
+                            HandleChatAdd()
+                            const currentInput = sessionStorage.getItem('currentName')
+                            // console.log("cuur: " + currentInput)
                             // searchInput = currentInput
                             console.log("search: " + searchInput)
-                            setCurrentInput('')
+                            setcurrentName('')
+
 
                         })} className='currentSettings' id="road-button">
                             <Icon className='Settings-rotate-right' data={ArrowShapeRight}/>

@@ -44,7 +44,10 @@ export default class UserStore {
     setApiVersion = (input: string | any) => {
         this.apiVersion = input
     }
-
+    chatUsers : Set<number>|any = []
+    setChatUsers = (input:Set<number>|any)=>{
+        this.chatUsers = input
+    }
 }
 const UserStoreContext = React.createContext<UserStore>(
     null as unknown as UserStore
