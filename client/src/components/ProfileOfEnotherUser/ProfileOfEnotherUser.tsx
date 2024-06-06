@@ -5,29 +5,47 @@ import Contacts from "../Contacts/Contacts";
 import '../../i18n/config';
 import {useTranslation} from 'react-i18next';
 import {useUserStore} from "../../stores/UserStore";
+import {observer} from "mobx-react-lite";
 
 type Profile = {
     dialog: any;
 }
 
 function ProfileOfEnotherUser(props: Profile) {
-    const {setSearchInput, setDialogID, apiVersion} = useUserStore();
+    let {setSearchInput, setDialogID, apiVersion, userID} = useUserStore();
     const {dialog} = props;
     const {t, i18n} = useTranslation();
     const [open, setOpen] = useState(false);
     const [contacts, setMyContacts] = useState([])
+    const [me, setMyInfo] = useState([])
+    useEffect(() => {
+
+        const getMyInfo = async () => {
+            console.log(apiVersion + '/users/me');
+            const res = await fetch(apiVersion + '/users/me')
+            const me = await res.json();
+            if (!me.name) {
+                me.name = me.login;
+            }
+            setMyInfo(me)
+            userID = me.id
+        }
+        getMyInfo()
+    }, [])
 
     const HandleChatAdd =
         async () => {
+
             const res = await fetch(apiVersion + `/chats`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    name: "string",
+                    name: null,
                     chatType: "direct",
-                    users: [dialog.id]
+                    // @ts-ignore
+                    users: [me.id,dialog.id]
                 })
             });
             const newDialog = await res.json();
@@ -45,7 +63,7 @@ function ProfileOfEnotherUser(props: Profile) {
             <header>
                 <div className='userProfile'>
                     <div className='userPhoto'></div>
-                    <div className='profileName'>{dialog.name}</div>
+                    <div className='profileName'>{dialog.login}</div>
                 </div>
             </header>
             <main>
@@ -61,4 +79,4 @@ function ProfileOfEnotherUser(props: Profile) {
     );
 }
 
-export default ProfileOfEnotherUser;
+export default observer(ProfileOfEnotherUser);

@@ -52,22 +52,25 @@ routers.delete(
 routers.post(
     '/api/v2/messages',
     isAuthenticatedAPI,
+    wrapWithNext(x => x.body.chatId = Number.parseInt(x.body.chatId)),
     validate.isCorrectMessageRequest(x => x.body),
+    validate.isCorrectFile(x => x.files ? x.files.imageContent : undefined),
     validate.isChatExists(x => x.body.chatId),
     validate.isChatAccessible(x => x.body.chatId, x => x.user.id),
     async (req, res) => {
-        let name = ""
-        if (req.body.imageContent) {
-            name = "message_" + uuid.v4() + ".png"
-            if (!await images.uploadImage(name, req.body.imageContent)) {
+        let key = ""
+        if (req.files && req.files.imageContent) {
+            const image = req.files.imageContent
+            key = "message_" + uuid.v4()
+            if (!await images.uploadImage(key, image.data, image.name, image.mimetype)) {
                 res.status(500).send()
                 return
             }
         }
-        messages.addMessage(req.user.id, req.body.chatId, req.body.content, name, Date.now()).then(
+        messages.addMessage(req.user.id, req.body.chatId, req.body.content, key, Date.now()).then(
             result => {
                 if (result) {
-                    res.send(result)
+                    res.send(prepareMessage(result))
                 } else {
                     res.status(500).send()
                 }
@@ -82,6 +85,7 @@ routers.get(
     wrapWithNext(x => x.params.id = Number.parseInt(x.params.id)),
     validate.isCorrectId(x => x.params.id),
     validate.isMessageExists(x => x.params.id),
+    validate.doesMessageHaveFile(x => x.params.id),
     validate.isMessageAccessible(x => x.params.id, x => x.user.id),
     (req, res) => {
         messages.getMessage(req.params.id).then(
@@ -90,7 +94,9 @@ routers.get(
                 if (data === undefined) {
                     res.status(500).send()
                 } else {
-                    res.send(data)
+                    res.setHeader('Content-Disposition', 'inline; filename="' + data.name + '"');
+                    res.type(data.mimetype)
+                    res.send(data.buffer)
                 }
             }
         )

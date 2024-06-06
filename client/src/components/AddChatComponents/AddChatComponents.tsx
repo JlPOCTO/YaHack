@@ -75,7 +75,7 @@ function AddChatComponents(props: Contacts) {
                             setCurrentInput('')
 
                         })} className='currentSettings' id="road-button">
-                            <Icon id="21" className='Settings-rotate-right' data={ArrowShapeRight}/>
+                            <Icon className='Settings-rotate-right' data={ArrowShapeRight}/>
                         </button>
                     </div>
                 </div>

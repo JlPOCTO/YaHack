@@ -1,6 +1,7 @@
 const express = require('express');
 const images = require('../database/images');
 const users = require('../database/dbUsers');
+const chats = require('../database/dbChats');
 const {isAuthenticatedAPI} = require("../middlewares/isAuthenticatedAPI");
 const {wrapWithNext} = require("../middlewares/wrapWithNext");
 const validate = require("../middlewares/validationMiddleware");
@@ -12,7 +13,6 @@ usersRouter.get(
     '/api/v2/users/me',
     isAuthenticatedAPI,
     (req, res) => {
-        console.log(req.user);
         res.send(prepareUser(req.user))
     }
 );
@@ -27,7 +27,9 @@ usersRouter.get(
                     res.sendStatus(500)
                     return
                 }
-                res.send(data)
+                res.setHeader('Content-Disposition', 'inline; filename="' + data.name + '"');
+                res.type(data.mimetype)
+                res.send(data.buffer)
             }
         )
     }
@@ -53,45 +55,21 @@ usersRouter.get(
 );
 
 usersRouter.get(
-    '/api/v2/users/:login',
+    '/api/v2/users/find/:loginPart',
     isAuthenticatedAPI,
-    validate.isCorrectLogin(x => x.params.login),
-    validate.isUserExistsByLogin(x => x.params.login),
+    validate.isCorrectLogin(x => x.params.loginPart),
     (req, res) => {
-        users.getUserByLogin(req.params.login).then(
-            user => {
-                if (user) {
-                    res.send(prepareUser(user))
+        users.getAllUsers().then(
+            allUsers => {
+                if (allUsers !== undefined) {
+                    const filtered = allUsers.filter(user => user.login.includes(req.params.loginPart))
+                    res.send(filtered.map(prepareUser));
                 } else {
                     res.sendStatus(500)
                 }
             }
         )
     }
-)
-
-
-usersRouter.get(
-  '/api/v2/users/find/:loginPart',
-  isAuthenticatedAPI,
-  validate.isCorrectLogin(x => x.params.loginPart),
-  (req, res) => {
-    users.getAllUsers().then(
-      result => {
-        console.log(result);
-        if (result !== undefined) {
-          const newResult = result.filter((user) => {
-            console.log(user.login.includes(req.params.loginPart))
-            user.login.includes(req.params.loginPart);
-          })
-          console.log(newResult);
-          res.send(newResult);
-        } else {
-          res.sendStatus(500)
-        }
-      }
-    )
-  }
 )
 
 usersRouter.get(
@@ -113,7 +91,9 @@ usersRouter.get(
                             res.sendStatus(500)
                             return
                         }
-                        res.send(data)
+                        res.setHeader('Content-Disposition', 'inline; filename="' + data.name + '"');
+                        res.type(data.mimetype)
+                        res.send(data.buffer)
                     }
                 )
             }
@@ -124,11 +104,12 @@ usersRouter.get(
 usersRouter.post(
     '/api/v2/users/myAvatar',
     isAuthenticatedAPI,
+    validate.isCorrectImage(x => x.files ? x.files.avatar : undefined),
     (req, res) => {
-        const name = "user_" + req.user.id + ".png";
-        images.uploadImage(name, req.body).then(
+        const key = "user_" + req.user.id;
+        images.uploadImage(key, req.files.avatar.data, req.files.avatar.name, req.files.avatar.mimetype).then(
             async result => {
-                if (result && await users.updateUserAvatar(req.user.id, name)) {
+                if (result && await users.updateUserAvatar(req.user.id, key)) {
                     res.send();
                 } else {
                     res.status(500).send()
@@ -145,7 +126,7 @@ usersRouter.get(
         users.getAllUsers().then(
             result => {
                 if (result !== undefined) {
-                    res.send(result)
+                    res.send(result.map(prepareUser))
                 } else {
                     res.sendStatus(500)
                 }
@@ -154,14 +135,39 @@ usersRouter.get(
     }
 )
 
-// TODO
 usersRouter.get(
     '/api/v2/users/contacts',
     isAuthenticatedAPI,
     (req, res) => {
-        users.getAllUsers().then(
-            result => res.send(result),
-            error => res.status(500).send()
+        chats.getChatsByUser(req.user.id).then(
+            userChats => {
+                if (userChats === undefined) {
+                    res.sendStatus(500)
+                    return
+                }
+                const contacts = userChats.filter(x => x.type === "direct")
+                    .map(x => x.users.filter(user => user.id !== req.user.id)[0])
+                    .map(prepareUser)
+                res.send(contacts)
+            }
+        )
+    }
+)
+
+usersRouter.get(
+    '/api/v2/users/:login',
+    isAuthenticatedAPI,
+    validate.isCorrectLogin(x => x.params.login),
+    validate.isUserExistsByLogin(x => x.params.login),
+    (req, res) => {
+        users.getUserByLogin(req.params.login).then(
+            user => {
+                if (user) {
+                    res.send(prepareUser(user))
+                } else {
+                    res.sendStatus(500)
+                }
+            }
         )
     }
 )

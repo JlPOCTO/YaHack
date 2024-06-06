@@ -60,12 +60,14 @@
 }
 
 .currentSettings {
+    background: none;
     border: none;
     bottom: 4%;
     background: none;
 }
 
 .firstCurrentSettings {
+    background: none;
     border: none;
     bottom: 14px;
     background: none;
@@ -73,6 +75,7 @@
 }
 
 .photo-box {
+    background-color: #CCCCCC;
     height: 100px;
     width: 65%;
     border-radius: 10px;
