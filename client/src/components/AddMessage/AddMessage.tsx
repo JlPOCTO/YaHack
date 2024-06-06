@@ -31,8 +31,6 @@ function AddMessage() {
         const g = !flag
         setFlag(g)
 
-        const date = Date.now();
-        const showTime = date
         if (currrentMessage !== "") {
             const res = await fetch(apiVersion + `/messages`, {
                 method: 'POST',

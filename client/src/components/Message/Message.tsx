@@ -12,9 +12,6 @@ type Message = {
     message: any;
     dialogType: any;
 }
-const getInitialCurrentMessage = () => {
-    return sessionStorage.getItem('currentMessage') || '';
-}
 
 function Message(props: Message) {
     const { message, dialogType } = props;
@@ -42,12 +39,55 @@ function Message(props: Message) {
     const [isReaction, setIsReaction] = useState(false);
     // const ref = useRef<null | HTMLDivElement>(null)
     const [currentReaction, setCurrentReaction] = useState('😄');
-    const onEmojiClick = (curEmoji: EmojiClickData) => {
-        setIsReaction(true)
-        setCurrentReaction(curEmoji.emoji)
+    // const onEmojiClick = (curEmoji: EmojiClickData) => {
+    //     setIsReaction(true)
+    //     setCurrentReaction(curEmoji.emoji)
+    // }
+    const onEmojiClick = async (curEmoji: EmojiClickData) => {
+        if (curEmoji.emoji !== "") {
+            const res = await fetch(apiVersion + `/messages/${message.id}/reactions`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    reaction: curEmoji.emoji,
+                    messageId: message.id,
+                    userId: message.senderId
+                })
+            });
+        }
     }
-    function deleteReaction() {
-        setIsReaction(false)
+
+    function getReactions(r: any) {
+        return r.reaction
+    }
+
+    // useEffect(() => {
+    //     const getReactions = async () => {
+    //         const res = await fetch(apiVersion + `/messages/${message.id}/reactions`)
+    //         const reactions = await res.json()
+    //         // setIsReaction(true)
+    //         console.log(reactions)
+    //         // setCurrentReaction(reactions)
+    //     }
+    //     getReactions() 
+    // }, [])
+
+    // function deleteReaction() {
+    //     setIsReaction(false)
+    // }
+
+    const deleteReaction = async (r: any) => {
+        const res = await fetch(apiVersion + `/messages/${message.id}/reactions`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                reaction: r.reaction
+            })
+        })
     }
 
 
@@ -76,12 +116,19 @@ function Message(props: Message) {
                                 <div className="text">
                                     <p>{message.content}</p>
                                 </div>
-                                <div className="data">
+                                {message.reactions.length === 0 && <div className="data">
+                                    <p>{getMessageTime(message.sendingTime)}</p>
+                                </div>}
+                            </div>
+                            {message.reactions.length !== 0 && <div className="block-of-reaction">
+                                <div className='reactionsAndTime'>
+                                    {message.reactions.map((r: any) =>
+                                        <button className='reactionsBlock' onClick={() => deleteReaction(r)}>{getReactions(r)}</button>
+                                    )}
+                                </div>
+                                <div className="data_reaction">
                                     <p>{getMessageTime(message.sendingTime)}</p>
                                 </div>
-                            </div>
-                            {isReaction && <div className="block-of-reaction" onClick={deleteReaction}>
-                                <div>{currentReaction}</div>
                             </div>
                             }
                         </div>
@@ -117,12 +164,19 @@ function Message(props: Message) {
                                 <div className="text">
                                     <p>{message.content}</p>
                                 </div>
-                                <div className="data">
+                                {message.reactions.length === 0 && <div className="data">
+                                    <p>{getMessageTime(message.sendingTime)}</p>
+                                </div>}
+                            </div>
+                            {message.reactions.length !== 0 && <div className="block-of-reaction">
+                                <div className='reactionsAndTime'>
+                                    {message.reactions.map((r: any) =>
+                                        <button className='reactionsBlock' onClick={() => deleteReaction(r)}>{getReactions(r)}</button>
+                                    )}
+                                </div>
+                                <div className="data_reaction">
                                     <p>{getMessageTime(message.sendingTime)}</p>
                                 </div>
-                            </div>
-                            {isReaction && <div className="block-of-reaction" onClick={deleteReaction}>
-                                <div>{currentReaction}</div>
                             </div>
                             }
                         </div>

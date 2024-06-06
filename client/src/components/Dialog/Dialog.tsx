@@ -8,7 +8,7 @@ import {observer} from "mobx-react-lite";
 
 
 function Dialog() {
-    const { dialogID, flag, apiVersion, chatName } = useUserStore()
+    const { dialogID, flag, apiVersion } = useUserStore()
     const [messages, setMessages] = useState([])
     useEffect(() => {
         const getMessages = async () => {

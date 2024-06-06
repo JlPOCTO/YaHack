@@ -24,7 +24,6 @@ function DialogWithMessages(props: DialogWithMessages) {
         setLen(messages.length);
     }, [messages]);
 
-    const [nameOfTheDialog, setName] = useState([])
     useEffect(() => {
         const getDialogType = async () => {
             const res = await fetch(apiVersion + `/chats/${dialogId}`)

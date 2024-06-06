@@ -180,14 +180,30 @@
 }
 
 .block-of-reaction {
-    background-color: deepskyblue;
-    width: max-content;
+    width: 100%;
     padding-bottom: 3px;
     padding-left: 4px;
     padding-right: 4px;
-    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 3px;
 }
 
+.reactionsBlock {
+    background-color: deepskyblue;
+    border-radius: 10px;
+    border: none;
+}
+
+
+.data_reaction {
+    float: right;
+}
+.reactionsAndTime {
+    display: inline;
+}
 .heart-button-left {
     display: none;
     transform: scale(0.7) translate(-37px, 10%);

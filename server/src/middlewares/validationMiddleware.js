@@ -88,6 +88,10 @@ function isUserExistsByLogin(extractor) {
     return databaseUnaryCheckTemplate(databaseChecks.isUserExistsByLogin, extractor, 404)
 }
 
+function isReactionExists(extractor) {
+    return databaseUnaryCheckTemplate(databaseChecks.isReactionExists, extractor, 404)
+}
+
 function isChatChangeable(extractor) {
     return databaseUnaryCheckTemplate(databaseChecks.isChatChangeable, extractor, 403)
 }
@@ -145,6 +149,7 @@ module.exports = {
     isMessageExists,
     doesMessageHaveFile,
     isChatExists,
+    isReactionExists,
     isChatChangeable,
     isMessageAccessible,
     isMessageOwned,
