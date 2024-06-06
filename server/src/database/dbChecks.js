@@ -90,8 +90,18 @@ async function isMessageAccessible(messageId, userId) {
             if (!res) {
                 return
             }
-            return isUserInChat(userId, res.chatId)
+            return isUserInChat(res.chat_id, userId)
         })
+    } catch (e) {
+        logError(TAG, arguments, e)
+    }
+}
+
+async function doesMessageHaveFile(id) {
+    const TAG = "doesMessageHaveFile"
+    try {
+        const message = await db.database.get(`SELECT image_path FROM messages WHERE id = ?`, id)
+        return message.image_path !== ""
     } catch (e) {
         logError(TAG, arguments, e)
     }
@@ -118,5 +128,6 @@ module.exports = {
     isMessageFromUser,
     isMessageInChat,
     isMessageAccessible,
-    isReactionExists
+    doesMessageHaveFile,
+    isReactionExists,
 }

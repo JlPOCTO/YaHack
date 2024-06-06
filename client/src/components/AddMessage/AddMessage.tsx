@@ -41,7 +41,7 @@ function AddMessage() {
                 },
                 body: JSON.stringify({
                     content: currrentMessage,
-                    chatID: dialogID,
+                    chatId: dialogID,
                     imageContent: ""
                 })
             });
