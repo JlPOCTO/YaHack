@@ -18,7 +18,6 @@ function Profile(props: Profile) {
   const [open, setOpen] = useState(false);
   const [contacts, setMyContacts] = useState([])
   function find(name : any) {
-    console.log(name)
     if (name !== 'null') {
       return <div className='profileName'>{name}</div>
     } 

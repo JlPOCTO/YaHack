@@ -1,17 +1,10 @@
 import '../../css/AddMessage.css';
-import {FaceSmile, File, ArrowShapeRight, Pencil} from '@gravity-ui/icons';
+import { Pencil} from '@gravity-ui/icons';
 import {Icon} from '@gravity-ui/uikit';
-import Popup from 'reactjs-popup';
-import Picker, {EmojiClickData} from 'emoji-picker-react';
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useUserStore} from "../../stores/UserStore";
 import '../../i18n/config';
-import {useTranslation} from 'react-i18next';
-import {ChevronDown} from '@gravity-ui/icons';
-// import {Sidebar} from "lucide-react";
-import Contacts from "../Contacts/Contacts";
 import {Sidebar} from 'primereact/sidebar';
-import ContactBar from "../ContactBar/ContactBar";
 import AddChatComponents from "../AddChatComponents/AddChatComponents";
 import {observer} from "mobx-react-lite";
 
@@ -29,7 +22,7 @@ function AddChat() {
         const res = await fetch(apiVersion + '/users')
             const contacts = await res.json();
             setMyContacts(contacts)
-            console.log(contacts)
+            // console.log(contacts)
         }
         getMyInfo()
     }, [])

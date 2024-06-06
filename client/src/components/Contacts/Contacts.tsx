@@ -10,7 +10,6 @@ function Contacts(props: Contacts) {
   const { t } = useTranslation();
   const { contacts } = props;
   function find(name : any) {
-    console.log(name)
     if (name !== 'null') {
       return <p className='myContactsNames'>{name}</p>
     } 

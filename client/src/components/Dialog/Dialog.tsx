@@ -8,17 +8,16 @@ import {observer} from "mobx-react-lite";
 
 
 function Dialog() {
-    const { dialogID, flag, apiVersion } = useUserStore()
+    const {dialogID, flag, apiVersion, chatName} = useUserStore()
     const [messages, setMessages] = useState([])
     useEffect(() => {
-        // console.log("dialog")
+
         const getMessages = async () => {
             const res = await fetch(apiVersion + `/chats/${dialogID}/messages`)
             const messages = await res.json()
-            console.log(messages);
             setMessages(messages)
         }
-        getMessages() 
+        getMessages()
     }, [dialogID, flag])
 
     function isDefault() {
@@ -29,7 +28,7 @@ function Dialog() {
         <>
             {!isDefault() && <div className="dialog">
                 <HeaderOfBodyMain dialogId={dialogID}/>
-                <DialogWithMessages messages={messages}/>
+                <DialogWithMessages messages={messages} dialogId={dialogID}/>
                 <AddMessage/>
             </div>}
 

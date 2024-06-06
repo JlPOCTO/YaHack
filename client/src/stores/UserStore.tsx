@@ -17,12 +17,16 @@ export default class UserStore {
         this.dialogID = dialogID
     }
     chatName: string | any = ""
-    setChatName = (chat: string | any) => {
-        this.chatName = chat
+    setChatName = (chatName: string | any) => {
+        this.chatName = chatName
     }
     userID: number | any = 1
     setUserID = (userID: number | any) => {
         this.userID = userID
+    }
+    currentUserID: number | any = 1
+    setCurrentUserID = (currentUserID: number | any) => {
+        this.currentUserID = currentUserID
     }
     theme: string | any = 'light'
     setTheme = () => {

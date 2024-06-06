@@ -1,4 +1,5 @@
 import '../../css/HeaderOfBodyMain.css';
+import { useEffect, useState } from 'react';
 import '../../i18n/config';
 import {useTranslation} from 'react-i18next';
 import {useUserStore} from "../../stores/UserStore";
@@ -13,13 +14,36 @@ type DialogProps = {
     dialogId: any;
 }
 
-function HeaderOfBodyMain(props: any) {
-    // let {setSearchInput, setDialogID, apiVersion, userID} = useUserStore();
-    const {t} = useTranslation();
-    const [open, setOpen] = useState(false);
-    const {dialogID, chatName, apiVersion} = useUserStore();
 
-    return (
+function HeaderOfBodyMain(props:  any) {
+    const { apiVersion, chatName, dialogID, currentUserID } = useUserStore()
+    const { t } = useTranslation();
+    const [nameOfTheDialog, setName] = useState([])
+    useEffect(() => {
+        const getDialog = async () => {
+            const res = await fetch(apiVersion + `/chats/${dialogID}`)
+            const dialog = await res.json()
+            if (dialog.type === "direct") {
+                let partner = currentUserID
+                dialog.users.forEach((u: any) => {
+                    if (u.id !== currentUserID) {
+                        if (!u.name) {
+                            partner = u.login
+                        } else {
+                            partner = u.name
+                        }
+                    }
+                })
+                setName(partner)
+            } else {
+                setName(dialog.name)
+            }
+        }
+        getDialog() 
+    }, [dialogID])
+
+      return (
+
         <div className="header-of-body-main-pro">
             <div className="someSpace">
 
@@ -27,7 +51,7 @@ function HeaderOfBodyMain(props: any) {
             <div className="header-of-body-main">
                 <div className="info-chat">
                     <div className="dialog-name">
-                        {dialogID}
+                        {nameOfTheDialog}
                     </div>
                     <div className="status">
                         {t('status')}

@@ -14,7 +14,7 @@ const getInitialCurrentMessage = () => {
 }
 
 function AddMessage() {
-    let {dialogID, userID, setFlag, flag, apiVersion} = useUserStore()
+    let {dialogID, setFlag, flag, apiVersion} = useUserStore()
     const ref = useRef<HTMLTextAreaElement>(null)
     const {t, i18n} = useTranslation();
     const [messages, setMessage] = useState([])
@@ -31,7 +31,7 @@ function AddMessage() {
         const g = !flag
         setFlag(g)
 
-        const date = Date.now() + 10800000;
+        const date = Date.now();
         const showTime = date
         if (currrentMessage !== "") {
             const res = await fetch(apiVersion + `/messages`, {
@@ -47,7 +47,6 @@ function AddMessage() {
             });
             const messages = await res.json();
             setMessage(messages)
-            console.log("jjj" + typeof messages)
 
             setCurrentMessage('')
 
