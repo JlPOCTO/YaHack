@@ -59,7 +59,7 @@ function SearchPersonBar (props: SearchPersonBarProps) {
                         </div>
                         <div id="last-message">
                             <div id="to-left">
-                                Chat information
+                                {/*Chat information*/}
                             </div>
                         </div>
                     </div>

@@ -11,23 +11,39 @@ type Profile = {
 }
 
 function ProfileOfEnotherUser(props: Profile) {
-    const {setSearchInput, setDialogID, apiVersion} = useUserStore();
+    const {setSearchInput, setDialogID, apiVersion, userID} = useUserStore();
     const {dialog} = props;
     const {t, i18n} = useTranslation();
     const [open, setOpen] = useState(false);
     const [contacts, setMyContacts] = useState([])
+    const [me, setMyInfo] = useState([])
+    useEffect(() => {
+
+        const getMyInfo = async () => {
+            console.log(apiVersion + '/users/me');
+            const res = await fetch(apiVersion + '/users/me')
+            const me = await res.json();
+            if (!me.name) {
+                me.name = me.login;
+            }
+            setMyInfo(me)
+        }
+        getMyInfo()
+    }, [])
 
     const HandleChatAdd =
         async () => {
+
             const res = await fetch(apiVersion + `/chats`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    name: "string",
+                    name: null,
                     chatType: "direct",
-                    users: [dialog.id]
+                    // @ts-ignore
+                    users: [me.id,dialog.id]
                 })
             });
             const newDialog = await res.json();
