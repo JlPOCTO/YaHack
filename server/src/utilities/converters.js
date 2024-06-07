@@ -24,6 +24,12 @@ function renameMessageFields(message) {
     return message
 }
 
+function renameReactionFields(reaction) {
+    rename(reaction, "message_id", "messageId")
+    rename(reaction, "user_id", "userId")
+    return reaction
+}
+
 function prepareUser(user) {
     delete user.avatarPath
     return user
@@ -46,4 +52,12 @@ function prepareMessage(message) {
     return message
 }
 
-module.exports = {renameUserFields, renameChatFields, renameMessageFields, prepareChat, prepareUser, prepareMessage}
+module.exports = {
+    renameUserFields,
+    renameChatFields,
+    renameMessageFields,
+    prepareChat,
+    prepareUser,
+    prepareMessage,
+    renameReactionFields
+}
