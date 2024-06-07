@@ -3,22 +3,20 @@ import '../../css/Dialog.css';
 import HeaderOfBodyMain from "../HeaderOfBodyMain/HeaderOfBodyMain";
 import AddMessage from "../AddMessage/AddMessage";
 import DialogWithMessages from "../DialogWithMessages/DialogWithMessages";
-import { useUserStore } from "../../stores/UserStore";
+import {useUserStore} from "../../stores/UserStore";
 import {observer} from "mobx-react-lite";
 
 
 function Dialog() {
-    const { dialogID, flag, apiVersion, chatName } = useUserStore()
-    const { changedDialog } = useUserStore()
+    const { dialogID, flag, apiVersion, changedDialog } = useUserStore()
     const [messages, setMessages] = useState([])
     useEffect(() => {
-
         const getMessages = async () => {
             const res = await fetch(apiVersion + `/chats/${dialogID}/messages`)
             const messages = await res.json()
             setMessages(messages)
         }
-        getMessages()
+        getMessages() 
     }, [dialogID, flag, changedDialog])
 
     function isDefault() {

@@ -59,16 +59,6 @@ function AddMessage() {
         sessionStorage.setItem('currentMessage', e.target.value)
     }
 
-    useEffect(() => {
-        const changeHeight = () => {
-            if (ref.current) {
-                ref.current.style.height = 'auto';
-                ref.current.style.height = ref.current.scrollHeight + 'px';
-            }
-        };
-        changeHeight();
-    }, [currentMessage]);
-
 
     function isPhotoBoxOpen() {
         setOpen(!isOpen)
@@ -85,11 +75,6 @@ function AddMessage() {
         }
 
     };
-    useEffect(() => {
-        if(isOpen === true){
-            setOpen(!isOpen)
-        }
-    }, [dialogID]);
 
     return (
         <div className="box">
@@ -104,7 +89,6 @@ function AddMessage() {
                 <form>
                 <textarea
                     value={currentMessage}
-                    ref={ref}
                     maxLength={1000}
                     onChange={handleSetCurrentMessage}
                     onKeyDown={handleKeyDown}

@@ -15,9 +15,6 @@ type Message = {
 function Message(props: Message) {
     const { message } = props;
     let { apiVersion, currentUserID, idNames } = useUserStore()
-    const { changedUserAvatar } = useUserStore()
-    const [scrollPos, setScrollPos] = useState(0)
-    const [userName, setName] = useState([])
     function isMine() {
         return message.senderId === currentUserID;
     }
