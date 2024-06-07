@@ -723,7 +723,7 @@ paths:
           schema:
             type: integer
         - name: chatId
-          in: body
+          in: query
           required: true
           schema:
             type: integer
@@ -752,12 +752,12 @@ paths:
       operationId: deleteReaction
       parameters: 
         - name: id
-          in: query
+          in: path
           required: true
           schema: 
             type: integer
         - name: chatId
-          in: body
+          in: query
           required: true
           schema:
             type: integer
@@ -806,7 +806,7 @@ paths:
         '500':
           description: Ошибка на сервере
 
-  /messages/{id}/reactions:
+  /messages/{messageId}/reactions:
       get:
         tags:
           - messages
@@ -849,7 +849,7 @@ paths:
             schema: 
               type: integer
           - name: chatId
-            in: body
+            in: query
             required: true
             schema:
               type: integer
@@ -870,7 +870,7 @@ paths:
         tags:
           - reaction
         summary: Удалить реакцию пользователя с сообщения
-        operationId: deleteReaction
+        operationId: deleteReactionFromMessage
         parameters: 
           - name: messageId
             in: path
@@ -878,7 +878,7 @@ paths:
             schema: 
               type: integer
           - name: chatId
-            in: body
+            in: query
             required: true
             schema:
               type: integer
