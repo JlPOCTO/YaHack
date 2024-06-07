@@ -98,8 +98,8 @@ function AddChatComponents(props: Contacts) {
     return (
         <div className="ll">
             <div>
-                <div>
-                    <label>{t('label')}</label>
+                <div style={{paddingLeft: "10px"}}>
+                    <label style={{fontSize: "2em"}}>{t('label')}</label>
                 </div>
                 <div className="add-place">
                     <div className="searchPlace">
