@@ -26,6 +26,8 @@
   "label": "Add members",
   "chat": "Add chat name",
   "chatError": "Choose members",
+  "members": "subscribers",
+  "subscribers": "Subscribers",
    "addChat": {
      "chat" : "Chats",
      "back" : "Back to your dialogs"

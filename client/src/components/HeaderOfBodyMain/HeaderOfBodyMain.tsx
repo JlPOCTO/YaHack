@@ -7,7 +7,6 @@ import {observer} from "mobx-react-lite";
 import {Icon, Modal} from "@gravity-ui/uikit";
 import {EllipsisVertical} from "@gravity-ui/icons";
 import Contacts from "../Contacts/Contacts";
-import {useEffect, useState} from "react";
 import ModalGroupSettings from "../ModalGroupSettings/ModalGroupSetting";
 
 type DialogProps = {
@@ -19,6 +18,9 @@ function HeaderOfBodyMain(props:  any) {
     const { apiVersion, chatName, dialogID, currentUserID } = useUserStore()
     const { t } = useTranslation();
     const [nameOfTheDialog, setName] = useState([])
+    const [open, setOpen] = useState(false)
+    const [isGroup, setIsGroup] = useState(false)
+    const [counterMembers, setCount] = useState(1)
     useEffect(() => {
         const getDialog = async () => {
             const res = await fetch(apiVersion + `/chats/${dialogID}`)
@@ -34,12 +36,16 @@ function HeaderOfBodyMain(props:  any) {
                         }
                     }
                 })
+                setIsGroup(false)
                 setName(partner)
             } else {
+                setIsGroup(true)
                 setName(dialog.name)
+                setCount(dialog.users.length)
             }
         }
-        getDialog() 
+        getDialog()
+        setOpen(false)
     }, [dialogID])
 
       return (
@@ -54,7 +60,8 @@ function HeaderOfBodyMain(props:  any) {
                         {nameOfTheDialog}
                     </div>
                     <div className="status">
-                        {t('status')}
+                        {!isGroup && <div>{t('status')}</div>}
+                        {isGroup && <div> {counterMembers} {t("members")}  </div>}
                     </div>
                 </div>
             </div>
@@ -62,10 +69,7 @@ function HeaderOfBodyMain(props:  any) {
                 <button className="chat-button" onClick={() => setOpen(!open)}>
                     <Icon className="dots" data={EllipsisVertical}/>
                 </button>
-                {/*<Modal open={open} onClose={() => setOpen(false)}>*/}
-                    {/*<Contacts contacts={contacts} />*/}
                 {open &&  <ModalGroupSettings chatId={dialogID} />}
-                {/*</Modal>*/}
             </div>
         </div>
 
