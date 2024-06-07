@@ -20,6 +20,7 @@ function ModalGroupSettings(props: DialogId) {
     const {chatId} = props;
     const {t, i18n} = useTranslation();
     const [open, setOpen] = useState(false);
+    const [isDirect, setIsDirect] = useState(false);
     const [contacts, setMyContacts] = useState([])
     const [me, setMyInfo] = useState([])
     useEffect(() => {
@@ -37,31 +38,43 @@ function ModalGroupSettings(props: DialogId) {
     }, [])
 
     const HandleDeleteChat = async () => {
-        const res = await fetch(apiVersion + `/chats/${chatId}/user`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                // @ts-ignore
-                userId: me.id,
+        if (isDirect) {
+            const res = await fetch(apiVersion + `/chats/${dialogID}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
 
-            })
-        });
-        await res.json();
+                })
+            });
+        } else {
+            console.log(me)
+            // @ts-ignore
+            const res = await fetch(apiVersion + `/chats/${dialogID}/user?userId=${me.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            await res.json();
+        }
     }
 
     useEffect(() => {
         const getDialog = async () => {
             const res = await fetch(apiVersion + `/chats/${dialogID}`)
             const dialog = await res.json()
+            if (dialog.type === "direct") {
+                setIsDirect(true)
+            }
             let arr = []
-                for (let i = 0; i < dialog.users.length; i++) {
-                    const n = dialog.users[i]
-                    arr.push(n)
-                }
-                //@ts-ignore
-                setMyContacts(arr)
+            for (let i = 0; i < dialog.users.length; i++) {
+                const n = dialog.users[i]
+                arr.push(n)
+            }
+            //@ts-ignore
+            setMyContacts(arr)
         }
         getDialog()
         setOpen(false)

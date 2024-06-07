@@ -105,7 +105,7 @@ function AddChatComponents(props: Contacts) {
 
     return (
         <div className="ll">
-            <header>
+            <div>
                 <div>
                     <label>{t('label')}</label>
                 </div>
@@ -134,7 +134,7 @@ function AddChatComponents(props: Contacts) {
                         </button>
                     </div>
                 </div>
-            </header>
+            </div>
             {flag && <div style={{color:"red"}}> {t("chatError")}</div>
             }
             <div className="chat-bar">
