@@ -41,7 +41,7 @@ chatsRouter.post(
             res.sendStatus(500)
             return
         }
-        chats.addChat(req.body.users, req.body.chatType, req.body.name, key + ".png").then(
+        chats.addChat(req.body.users, req.body.chatType, req.body.name, key).then(
             chat => {
                 if (chat) {
                     websockets.sendByUserArray(
