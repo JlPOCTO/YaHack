@@ -29,7 +29,7 @@ routers.get(
     }
 )
 
-routers.get(
+routers.post(
     '/logout',
     isAuthenticated,
     (req, res, next) => {
