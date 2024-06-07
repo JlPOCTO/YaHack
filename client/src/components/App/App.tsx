@@ -15,7 +15,7 @@ function App() {
   let { getChangedMessages, setChangedMessages, getChangedMessage, setChangedMessage } = useUserStore();
 
   if (!socket) {
-    setSocket(new WebSocket("ws://127.0.0.1:3000/api/v2/subscribe"));
+    setSocket(new WebSocket("ws://team5.ya-itmo.ru/api/v2/subscribe"));
 
     let { socket } = useUserStore();
 
@@ -29,7 +29,6 @@ function App() {
     socket.onmessage = function (event: any) {
       var json = JSON.parse(event.data);
       //alert("Got message: " + json);
-      console.log(json);
       switch (json.source) {
         case apiVersion + "/users/myAvatar": {
           setChangedUserAvatar(!getChangedUserAvatar());
