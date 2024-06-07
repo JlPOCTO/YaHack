@@ -23,7 +23,10 @@ function App() {
   };
 
   socket.onmessage = function (event: any) {
-    switch (event.data.source) {
+    alert("Got message: ");
+    
+    var json = JSON.parse(event.data);
+    switch (json.source) {
       case apiVersion + "/users/myAvatar": {
         changedUserAvatar = (changedUserAvatar ^ 1);
         break;

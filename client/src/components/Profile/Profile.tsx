@@ -32,7 +32,7 @@ function Profile(props: Profile) {
       setMyContacts(contacts)
     }
     getMyInfo()
-  }, [])
+  }, [changedUserAvatar])
   useEffect(() => {
 
     const getMyAvatar = async () => {
@@ -42,7 +42,7 @@ function Profile(props: Profile) {
     }
     getMyAvatar()
   }, [])
-  }, [changedUserAvatar])
+
 
   return (
     <div className='profile'>
