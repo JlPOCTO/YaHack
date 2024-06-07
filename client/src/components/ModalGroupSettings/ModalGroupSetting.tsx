@@ -9,7 +9,7 @@ import {useEffect, useState} from "react";
 import Contacts from "../Contacts/Contacts";
 import Subscribers from "../Subscribers/Subscribers";
 import {observer} from "mobx-react-lite";
-import Link from '../Link/Link';
+import InviteLink from '../InviteLink/InviteLink';
 import {Link} from '@gravity-ui/icons';
 type DialogId = {
     chatId: any;
@@ -17,13 +17,12 @@ type DialogId = {
 
 
 function ModalGroupSettings(props: DialogId) {
-    let {setSearchInput, setDialogID, apiVersion, userID, currentUserID, dialogID, deleteContact} = useUserStore();
+    let {setSearchInput, setDialogID, apiVersion, userID, currentUserID, dialogID, deleteContact, setDialogType, dialogType} = useUserStore();
     let {changedDialog} = useUserStore()
     const {chatId} = props;
     const {t, i18n} = useTranslation();
     const [open, setOpen] = useState(false);
     const [open1, setOpen1] = useState(false);
-    const [isDirect, setIsDirect] = useState(false);
     const [contacts, setMyContacts] = useState([])
     const [link, setLink] = useState("")
     const [me, setMyInfo] = useState([])
@@ -41,7 +40,7 @@ function ModalGroupSettings(props: DialogId) {
     }, [])
 
     const HandleDeleteChat = async () => {
-        if (isDirect) {
+        if (dialogType == "direct") {
             const dialogInfo = await fetch(apiVersion + `/chats/${dialogID}`)
             const parsed = await dialogInfo.json()
             for (let user of parsed.users) {
@@ -51,6 +50,7 @@ function ModalGroupSettings(props: DialogId) {
                 }
             }
             setDialogID(0)
+            setDialogID(null)
             const res = await fetch(apiVersion + `/chats/${dialogID}`, {
                 method: 'DELETE',
                 headers: {
@@ -60,6 +60,7 @@ function ModalGroupSettings(props: DialogId) {
             });
         } else {
             setDialogID(0)
+            setDialogID(null)
             // @ts-ignore
             const res = await fetch(apiVersion + `/chats/${dialogID}/user?userId=${me.id}`, {
                 method: 'DELETE',
@@ -70,15 +71,14 @@ function ModalGroupSettings(props: DialogId) {
             await res.json();
         }
         setDialogID(0)
+        setDialogID(null)
     }
 
     useEffect(() => {
         const getDialog = async () => {
             const res = await fetch(apiVersion + `/chats/${dialogID}`)
             const dialog = await res.json()
-            if (dialog.type === "direct") {
-                setIsDirect(true)
-            }
+            setDialogType(dialog.type)
             let arr = []
             for (let i = 0; i < dialog.users.length; i++) {
                 const n = dialog.users[i]
@@ -96,7 +96,7 @@ function ModalGroupSettings(props: DialogId) {
     useEffect(() => {
         const getDialog = async () => {
             const res = await fetch(apiVersion + `/chats/${dialogID}`)
-            const link = await res.json()
+            const link = "yandex.ru"
             setLink(link)
 
         }
@@ -114,12 +114,12 @@ function ModalGroupSettings(props: DialogId) {
             <Modal open={open} onClose={() => setOpen(false)}>
                 <Subscribers contacts={contacts}/>
             </Modal>
-            {!isDirect && <button className="see1" onClick={() => setOpen1(true)}>
+            {dialogType == "group" && <button className="see1" onClick={() => setOpen1(true)}>
                 <Icon className="chat-picture" data={Link}/>
                 <p>Invite link </p>
             </button>}
             <Modal open={open1} onClose={() => setOpen1(false)}>
-                <Link link={link}/>
+                <InviteLink link={link}/>
             </Modal>
             <button className="delete" onClick={HandleDeleteChat}>
                 <Icon className="chat-picture" data={TrashBin}/>

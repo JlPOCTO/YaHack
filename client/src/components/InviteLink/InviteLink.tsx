@@ -17,11 +17,11 @@ import {Moon} from '@gravity-ui/icons';
 import {Sun} from '@gravity-ui/icons';
 
 
-type Link = {
+type InviteLink = {
     link: any;
 }
 
-function Link(props) {
+function InviteLink(props) {
     const { t } = useTranslation();
     const { link } = props;
     return (
@@ -38,4 +38,4 @@ function Link(props) {
     );
 }
 
-export default observer(Link);
+export default observer(InviteLink);
