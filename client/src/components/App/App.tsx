@@ -53,6 +53,7 @@ function App() {
           break;
         }
         case apiVersion + "/messages": {
+          setChangedDialogs(!getChangedDialogs());
           setChangedMessages(!getChangedMessages());
           break;
         }
