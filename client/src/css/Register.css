@@ -25,10 +25,11 @@
     left: 0;
     margin: auto;
     width: 30%;
+
     /*max-width:100px;*/
-    min-width: 200px;
+    min-width: 400px;
     height: 70%;
-    min-height: 200px;
+    min-height: 700px;
 }
 
 /*.register-button {*/
