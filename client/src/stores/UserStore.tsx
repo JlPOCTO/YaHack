@@ -55,14 +55,8 @@ export default class UserStore {
     visible : boolean|any = false
     setVisible = (input: boolean | any) => {
         this.visible = input
-    }
-}
-
-export class FlagsStore {
-  constructor() {
-    makeAutoObservable(this)
   }
-  
+
   changedMessages: boolean | any = false
   setChangedMessages = (input: boolean | any) => {
     this.changedMessages = input
@@ -92,11 +86,7 @@ export class FlagsStore {
 const UserStoreContext = React.createContext<UserStore>(
   null as unknown as UserStore
 );
-const FlagsStoreContext = React.createContext<FlagsStore>(
-  null as unknown as FlagsStore
-)
 export const useUserStore = () => useContext(UserStoreContext)
-export const useFlagsStore = () => useContext(FlagsStoreContext)
 type Props = {
     children: React.ReactNode,
     dialogID: number

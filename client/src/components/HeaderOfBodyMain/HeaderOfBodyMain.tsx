@@ -2,7 +2,7 @@ import '../../css/HeaderOfBodyMain.css';
 import { useEffect, useState } from 'react';
 import '../../i18n/config';
 import {useTranslation} from 'react-i18next';
-import {useUserStore, useFlagsStore} from "../../stores/UserStore";
+import {useUserStore } from "../../stores/UserStore";
 import {observer} from "mobx-react-lite";
 import {Icon, Modal} from "@gravity-ui/uikit";
 import {EllipsisVertical} from "@gravity-ui/icons";
@@ -16,7 +16,7 @@ type DialogProps = {
 
 function HeaderOfBodyMain(props:  any) {
     const { apiVersion, chatName, dialogID, currentUserID } = useUserStore()
-    const { changedDialog } = useFlagsStore()
+    const { changedDialog } = useUserStore()
     const { t } = useTranslation();
     const [nameOfTheDialog, setName] = useState([])
     const [open, setOpen] = useState(false)

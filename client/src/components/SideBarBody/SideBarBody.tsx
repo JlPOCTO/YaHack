@@ -3,7 +3,7 @@ import '../../css/SideBarBody.css';
 // import '../../css/ChatBar.css';
 import ChatBar from "../ChatBar/ChatBar";
 import { Button, Icon } from "@gravity-ui/uikit";
-import { useUserStore, useFlagsStore } from "../../stores/UserStore";
+import { useUserStore } from "../../stores/UserStore";
 import {observer} from "mobx-react-lite";
 import {action} from "mobx";
 import SearchPersonBar from "../SearchPersonBar/SearchPersonBar";
@@ -26,7 +26,7 @@ function SideBarBody() {
     const [contacts, setMyContacts] = useState([])
     const [visible, setVisible] = useState(false);
     const { searchInput, setSearchInput, apiVersion } = useUserStore();
-    let { changedUserAvatar, changedDialogs } = useFlagsStore()
+    let { changedUserAvatar, changedDialogs } = useUserStore()
     const {t, i18n} = useTranslation();
     const [dialogs, setDialogs] = useState([])
     const [user, setUser] = useState({})

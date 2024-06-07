@@ -1,6 +1,6 @@
 
 import { useEffect, useRef, useState, useLayoutEffect } from 'react';
-import { useUserStore, useFlagsStore } from "../../stores/UserStore";
+import { useUserStore } from "../../stores/UserStore";
 
 
 import '../../css/DialogWithMessages.css';
@@ -19,7 +19,7 @@ function DialogWithMessages(props: DialogWithMessages) {
     const [len, setLen] = useState(0)
     const [dialogType, setType] = useState('')
     const { apiVersion } = useUserStore()
-    const { changedDialog } = useFlagsStore()
+    const { changedDialog } = useUserStore()
 
     useEffect(() => {
         setLen(messages.length);

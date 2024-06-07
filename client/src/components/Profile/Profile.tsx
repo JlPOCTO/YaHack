@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Contacts from "../Contacts/Contacts";
 import '../../i18n/config';
 import { useTranslation } from 'react-i18next';
-import { useUserStore, useFlagsStore } from "../../stores/UserStore";
+import { useUserStore } from "../../stores/UserStore";
 
 type Profile = {
   me: any;
@@ -13,7 +13,7 @@ type Profile = {
 function Profile(props: Profile) {
 
   let { apiVersion } = useUserStore();
-  let { changedUserAvatar } = useFlagsStore()
+  let { changedUserAvatar } = useUserStore()
   const { me } = props;
   const {t, i18n} = useTranslation();
   const [open, setOpen] = useState(false);

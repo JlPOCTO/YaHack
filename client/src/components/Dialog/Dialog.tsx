@@ -3,13 +3,13 @@ import '../../css/Dialog.css';
 import HeaderOfBodyMain from "../HeaderOfBodyMain/HeaderOfBodyMain";
 import AddMessage from "../AddMessage/AddMessage";
 import DialogWithMessages from "../DialogWithMessages/DialogWithMessages";
-import { useUserStore, useFlagsStore} from "../../stores/UserStore";
+import { useUserStore } from "../../stores/UserStore";
 import {observer} from "mobx-react-lite";
 
 
 function Dialog() {
     const { dialogID, flag, apiVersion, chatName } = useUserStore()
-    const { changedDialog } = useFlagsStore()
+    const { changedDialog } = useUserStore()
     const [messages, setMessages] = useState([])
     useEffect(() => {
 
