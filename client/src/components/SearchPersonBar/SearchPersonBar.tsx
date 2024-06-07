@@ -25,8 +25,25 @@ function SearchPersonBar (props: SearchPersonBarProps) {
             const res1 = await fetch(apiVersion + `/users/${searchInput}`)
             const user1 = await res1.json()
             dialog = user1
+            // const res = await fetch(apiVersion + `/users/${dialog.id}/avatar`)
+            // let imageNod = document.getElementById(dialog.id + "www")
+            // console.log("khbkhb", imageNod)
+            // // @ts-ignore
+            // let imgUrl = res.url
+            // // @ts-ignore
+            // imageNod.src = imgUrl
+
+        }
+        getMyAvatar()
+    }, [])
+    useEffect(() => {
+        const getMyAvatar = async () => {
+            // const res1 = await fetch(apiVersion + `/users/${searchInput}`)
+            // const user1 = await res1.json()
+            // dialog = user1
             const res = await fetch(apiVersion + `/users/${dialog.id}/avatar`)
             let imageNod = document.getElementById(dialog.id + "www")
+            console.log("khbkhb", imageNod)
             // @ts-ignore
             let imgUrl = res.url
             // @ts-ignore
@@ -34,8 +51,7 @@ function SearchPersonBar (props: SearchPersonBarProps) {
 
         }
         getMyAvatar()
-    }, [])
-
+    }, [dialog])
     return (
         <div className="chat-bar">
             <Button onClick={action((e) => {
@@ -46,13 +62,13 @@ function SearchPersonBar (props: SearchPersonBarProps) {
                         borderRadius:"10px"
                     }}>
                 <div className="chat-bar-pro">
-                    <div className="space-for-avata">
+                    {/*<div className="space-for-avata">*/}
                         <img id = {dialog.id + "www"} style = {{width: "60px",
                             height: "60px",
                             backgroundRepeat: "no-repeat",
                             backgroundPosition: "50%",
                             borderRadius: "50%"}} />
-                    </div>
+                    {/*</div>*/}
                     <div id="chat-information">
                         <div id="chatName-time">
                             <div id="chatName">

@@ -28,6 +28,10 @@ export default class UserStore {
   setDialogID = (dialogID: number | any) => {
     this.dialogID = dialogID
   }
+    dialogType: string | any = null
+    setDialogType = (dialogType: string | any) => {
+        this.dialogType = dialogType
+    }
   chatName: string | any = ""
   setChatName = (chatName: string | any) => {
     this.chatName = chatName
