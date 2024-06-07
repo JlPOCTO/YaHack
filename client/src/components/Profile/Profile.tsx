@@ -32,12 +32,17 @@ function Profile(props: Profile) {
     }
     getMyInfo()
   }, [])
+
   useEffect(() => {
 
     const getMyAvatar = async () => {
       const res = await fetch(apiVersion + '/users/myAvatar')
-      const contacts = await res.json();
-      setAvatar(contacts)
+      console.log(res)
+      let imageNod = document.getElementById('image')
+      // @ts-ignore
+      let imgUrl = res.url
+      // @ts-ignore
+      imageNod.src = imgUrl
     }
     getMyAvatar()
   }, [])
@@ -47,7 +52,11 @@ function Profile(props: Profile) {
       <header>
         <div className='userProfile'>
           <div className='userPhoto'>
-            {avatar}
+            <img id = "image" style = {{width: "100px",
+            height: "100px",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "50%",
+              borderRadius: "50%"}} />
           </div>
           <div className='userData'>
             {find(me.name)}

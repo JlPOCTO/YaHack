@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import '../../css/ChatBar.css';
-import { Button, Modal } from "@gravity-ui/uikit";
+import {Button, Modal} from "@gravity-ui/uikit";
 // import settings from "../../settings-svgrepo-com.svg";
 import Profile from "../Profile/Profile";
 import Dialog from "../Dialog/Dialog";
-import { useUserStore } from "../../stores/UserStore";
-import { action } from "mobx";
-import { observer } from "mobx-react-lite";
-import { NavLink } from "react-router-dom";
+import {useUserStore} from "../../stores/UserStore";
+import {action} from "mobx";
+import {observer} from "mobx-react-lite";
+import {NavLink} from "react-router-dom";
 
 type ChatBarProps = {
     dialog: any;
 }
 
 function ChatBar(props: ChatBarProps) {
-    const { dialog } = props;
-    const { dialogID, setDialogID, currentUserID, setChatName } = useUserStore()
+    const {dialog} = props;
+    const {dialogID, setDialogID, currentUserID, setChatName, apiVersion} = useUserStore()
 
     // const [isShown, setIsShown] = useState(false);
     const [isActual, setIsActual] = useState(false);
@@ -43,11 +43,13 @@ function ChatBar(props: ChatBarProps) {
             return dialog.name
         }
     }
+
     function getLastMessage() {
         if (dialog.lastMessage) {
             return dialog.lastMessage.content
         }
     }
+
     function getLastMessageTime() {
         if (dialog.lastMessage) {
             const time = dialog.lastMessage.sendingTime
@@ -63,18 +65,58 @@ function ChatBar(props: ChatBarProps) {
         }
     }
 
+    useEffect(() => {
+        const getMyAvatar = async () => {
+            if (dialog.type === "group") {
+                console.log("chatId", dialog.id)
+                const res = await fetch(apiVersion + `/chats/${dialog.id}/avatar`)
+                console.log(res)
+                let imageNod = document.getElementById(dialog.id + "jjj")
+                // @ts-ignore
+                let imgUrl = res.url
+                // @ts-ignore
+                imageNod.src = imgUrl
+            } else {
+                console.log("dialogId", dialog.id)
+                let partner ={}
+                dialog.users.forEach((u: any) => {
+                    if (u.id !== currentUserID) {
+                        partner = u
+                    }
+                })
+                // @ts-ignore
+                const res = await fetch(apiVersion + `/users/${partner.id}/avatar`)
+                console.log(res)
+                let imageNod = document.getElementById(dialog.id + "jjj")
+                // @ts-ignore
+                let imgUrl = res.url
+                // @ts-ignore
+                imageNod.src = imgUrl
+            }
+        }
+        getMyAvatar()
+    }, [])
+
+
     return (
         <div className="chat-bar">
             <Button onClick={action((e) => {
                 setDialogID(dialog.id)
                 setChatName(getchatName())
             })} className={className}
-                style={{
-                    borderRadius: "10px"
-                }}>
+                    style={{
+                        borderRadius: "10px"
+                    }}>
                 <div className="chat-bar-pro">
                     <div className="space-for-avatar">
-
+                        {/*{getImageOfChat}*/}
+                        <img id={dialog.id + "jjj"} style={{
+                            width: "60px",
+                            height: "60px",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "50%",
+                            borderRadius: "50%"
+                        }}/>
                     </div>
                     <div id="chat-information">
                         <div id="chatName-time">

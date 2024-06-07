@@ -4,7 +4,7 @@ import '../../i18n/config';
 import {useTranslation} from 'react-i18next';
 import {Button, Icon} from "@gravity-ui/uikit";
 import {action} from "mobx";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Square} from '@gravity-ui/icons';
 import {SquareCheck} from '@gravity-ui/icons';
 import {useUserStore} from "../../stores/UserStore";
@@ -17,18 +17,44 @@ type Contacts = {
 function ContactBar(props: Contacts) {
     const {contact} = props;
     // let usersTic: Number[] = []
-    let {language, setSearchInput, searchInput, apiVersion, setChatUsers, chatUsers} = useUserStore();
+    let {language, setSearchInput, searchInput, apiVersion, setChatUsers, chatUsers, currentUserID} = useUserStore();
     const [isTic, setTic] = useState(false)
     const dialog = contact
     const className = ["button", dialog.id === 0 ? "notactual" : ""].join("");
     const {t} = useTranslation();
 
-    function find(name: any) {
-        // console.log(name)
-        if (name !== 'null') {
-            return <p className='myContactsNames'>{name}</p>
+    useEffect(() => {
+        const getMyAvatar = async () => {
+            if (dialog.type === "group") {
+                console.log("chatId", dialog.id)
+                const res = await fetch(apiVersion + `/chats/${dialog.id}/avatar`)
+                console.log(res)
+                let imageNod = document.getElementById(dialog.id + "kkk")
+                // @ts-ignore
+                let imgUrl = res.url
+                // @ts-ignore
+                imageNod.src = imgUrl
+            } else {
+                console.log("dialogId", dialog.id)
+                let partner ={}
+                dialog.users.forEach((u: any) => {
+                    if (u.id !== currentUserID) {
+                        partner = u
+                    }
+                })
+                // @ts-ignore
+                const res = await fetch(apiVersion + `/users/${partner.id}/avatar`)
+                console.log(res)
+                let imageNod = document.getElementById(dialog.id + "kkk")
+                // @ts-ignore
+                let imgUrl = res.url
+                // @ts-ignore
+                imageNod.src = imgUrl
+            }
         }
-    }
+        getMyAvatar()
+    }, [])
+
 
     function addUser() {
         let set = new Set;
