@@ -25,7 +25,7 @@ function SideBarBody() {
     const { searchInput, setSearchInput, apiVersion, setIdNames } = useUserStore();
     const {t, i18n} = useTranslation();
     const [dialogs, setDialogs] = useState([])
-    const [user, setUser] = useState({})
+    const [user, setUser] = useState([])
 
     function isSearchInputEmpty() {
         return searchInput === "";
@@ -83,8 +83,10 @@ function SideBarBody() {
     useEffect(() => {
         const getUser = async () => {
             // console.log( "User@@@" , searchInput)
-            const res = await fetch(apiVersion + `/users/${searchInput}`)
+            const res = await fetch(apiVersion + `/users/find/${searchInput}`)
+
             const user1 = await res.json()
+            console.log("uvyugfuygfuygfvyu",user1 )
             // console.log( "User" ,user1)
             setUser(user1)
         }
@@ -120,7 +122,9 @@ function SideBarBody() {
                 <p>
                     {t('addChat.chat')}
                 </p>
-                <SearchPersonBar dialog={user}/>
+                {user.map((di: any) =>
+                    <SearchPersonBar dialog={di}/>
+                )}
             </div>}
         </>
     );
