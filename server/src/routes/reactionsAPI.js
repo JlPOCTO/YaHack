@@ -29,11 +29,43 @@ routers.delete(
         maybeId = req.body.reaction
         if (maybeId && Number.isInteger(maybeId) && Number(maybeId) > 0) {
             reactions.deleteReactionById(req.body.reaction).then(
-                res.send(200)
+                result => {
+                    if (result) {
+                        websockets.sendByUserArray(
+                            req.chat.users,
+                            websockets.createResponse(
+                                "/api/v2/reactions/:id",
+                                "DELETE",
+                                "/api/v2/reactions",
+                                {reactionId: req.params.id}
+                            ),
+                            req.user.id
+                        )
+                        res.status(200).send()
+                    } else {
+                        res.status(500).send()
+                    }
+                }
             )
         } else {
             reactions.deleteReactionById(req.params.id).then(
-                res.send(200)
+                result => {
+                    if (result) {
+                        websockets.sendByUserArray(
+                            req.chat.users,
+                            websockets.createResponse(
+                                "/api/v2/reactions/:id",
+                                "DELETE",
+                                "/api/v2/reactions",
+                                {reactionId: req.params.id}
+                            ),
+                            req.user.id
+                        )
+                        res.status(200).send()
+                    } else {
+                        res.status(500).send()
+                    }
+                }
             )
         }
     }
@@ -46,7 +78,23 @@ routers.post(
     validate.isCorrectId(x => x.params.id),
     (req, res) => {
         reactions.addReaction(req.params.id, req.user.id, req.body.reaction).then(
-            res.send(200)
+            result => {
+                if (result) {
+                    websockets.sendByUserArray(
+                        req.chat.users,
+                        websockets.createResponse(
+                            "/api/v2/reactions",
+                            "POST",
+                            "/api/v2/reactions/:id",
+                            {reactionId: result.id}
+                        ),
+                        req.user.id
+                    )
+                    res.status(200).send()
+                } else {
+                    res.status(500).send()
+                }
+            }
         )
     }
 )
