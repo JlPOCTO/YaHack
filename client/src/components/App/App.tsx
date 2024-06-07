@@ -2,66 +2,72 @@ import '../../css/App.css';
 import SideBar from '../SideBar/SideBar';
 import Body from '../BodyMain/BodyMain';
 import { useUserStore } from "../../stores/UserStore";
+import {observer } from "mobx-react-lite"
 
 function App() {
-  const socket = new WebSocket("ws://127.0.0.1:3000/api/v2/subscribe");
 
   let { apiVersion, dialogID } = useUserStore();
-  let { changedMessages, changedChatAvatar, changedUserAvatar, changedDialogs, changedDialog, changedMessage } = useUserStore();
+  let { socket, setSocket } = useUserStore();
 
-  socket.onopen = function () {
-    alert("Connected");
-  };
+  let { getChangedUserAvatar, setChangedUserAvatar } = useUserStore();
+  let { getChangedDialogs, setChangedDialogs, getChangedDialog, setChangedDialog } = useUserStore();
+  let { getChangedChatAvatar, setChangedChatAvatar } = useUserStore();
+  let { getChangedMessages, setChangedMessages, getChangedMessage, setChangedMessage } = useUserStore();
 
-  socket.onclose = function (event: any) {
-    if (event.wasClean) {
-      alert('Соединение закрыто чисто');
-    } else {
-      alert('Обрыв соединения'); // например, "убит" процесс сервера
-    }
-    alert('Код: ' + event.code + ' причина: ' + event.reason);
-  };
+  if (!socket) {
+    setSocket(new WebSocket("ws://127.0.0.1:3000/api/v2/subscribe"));
 
-  socket.onmessage = function (event: any) {
-    alert("Got message: ");
-    
-    var json = JSON.parse(event.data);
-    switch (json.source) {
-      case apiVersion + "/users/myAvatar": {
-        changedUserAvatar = (changedUserAvatar ^ 1);
-        break;
-      }
-      case apiVersion + "/chats":
-      case apiVersion + "/chats/{id}": {
-        changedDialogs = (changedDialogs ^ 1);
-        if (dialogID == event.content.chatId) {
-          changedDialog = (changedDialog ^ 1);
+    let { socket } = useUserStore();
+
+    socket.onopen = function () {
+      //alert("Connected");
+    };
+
+    socket.onclose = function (event: any) {
+      //
+    };
+    socket.onmessage = function (event: any) {
+      var json = JSON.parse(event.data);
+      //alert("Got message: " + json);
+      console.log(json);
+      switch (json.source) {
+        case apiVersion + "/users/myAvatar": {
+          setChangedUserAvatar(!getChangedUserAvatar());
+          break;
         }
-        break;
+        case apiVersion + "/chats":
+        case apiVersion + "/chats/:id": {
+          setChangedDialogs(!getChangedDialogs());
+          if (dialogID == event.content.chatId) {
+            setChangedDialog(!getChangedDialog());
+          }
+          break;
+        }
+        case apiVersion + "/chats/:chatId/user": {
+          setChangedDialogs(!getChangedDialogs());
+          setChangedDialog(!getChangedDialog());
+          break;
+        }
+        case apiVersion + "/chats/:chatId/avatar": {
+          setChangedChatAvatar(!getChangedChatAvatar());
+          break;
+        }
+        case apiVersion + "/messages": {
+          setChangedMessages(!getChangedMessages());
+          break;
+        }
+        case apiVersion + "/reaction": {
+          setChangedMessage(!getChangedMessage());
+          break;
+        }
+        default:
       }
-      case apiVersion + "/chats/{chatId}/user": {
-        changedDialog = (changedDialog ^ 1);
-        break;
-      }
-      case apiVersion + "/chats/{chatId}/avatar": {
-        changedChatAvatar = (changedChatAvatar ^ 1);
-        break;
-      }
-      case apiVersion + "/messages": {
-        changedMessages = (changedMessages ^ 1);
-        break;
-      }
-      case apiVersion + "/reaction": {
-        changedMessage = (changedMessage ^ 1);
-        break;
-      }
-      default:
-    }
-  };
+    };
 
-  socket.onerror = function (error: any) {
-    alert("Ошибка " + error);
-  };
+    socket.onerror = function (error: any) {
+      alert("Ошибка " + error);
+    };
+  }
 
     return (
         <div className="App">
@@ -71,4 +77,4 @@ function App() {
     );
 }
 
-export default App;
+export default observer(App);

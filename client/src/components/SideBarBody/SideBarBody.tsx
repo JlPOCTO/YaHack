@@ -54,8 +54,8 @@ function SideBarBody() {
             const res = await fetch(apiVersion + `/chats`)
             const dialogs1 = await res.json()
             setDialogs(dialogs1)
-        }
-
+      }
+      console.log("From sidebar: " + changedDialogs);
         getDialogs()
     }, [changedDialogs])
 
