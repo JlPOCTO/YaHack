@@ -18,10 +18,13 @@ const {chatsRouter} = require('./routes/chatsAPI');
 const {usersRouter} = require('./routes/usersAPI');
 const {messagesRouter} = require('./routes/messagesAPI');
 const {deprecatedRouter} = require('./routes/deprecated');
+const websockets = require('./routes/websockets');
 
 (async () => {
     await launchDB(process.env.DATABASE)
     const app = express()
+    const expressWs = require('express-ws')(app);
+    websockets.init(expressWs.getWss())
     app.use(cookieParser(process.env.EXPRESS_SESSION_SECRET))
     app.use(bodyParser.json());
     app.use(cors());
@@ -40,6 +43,7 @@ const {deprecatedRouter} = require('./routes/deprecated');
     }));
     app.use(myPassport.initialize());
     app.use(myPassport.session({}));
+    app.ws('/api/v2/subscribe', websockets.subscription);
     app.use(authRouter);
     app.use(chatsRouter);
     app.use(usersRouter);

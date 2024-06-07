@@ -44,6 +44,26 @@ async function getChat(id) {
     }
 }
 
+async function getChatByMessageId(messageId) {
+    const TAG = "getChatByMessageId"
+    try {
+        const message = await db.database.get(`SELECT chat_id FROM messages WHERE id = ?`, messageId)
+        if (message === undefined) {
+            logError(TAG, arguments, "Не получилось достать сообщение")
+            return
+        }
+        const chat = await getChat(message.chat_id)
+        if (chat === undefined) {
+            logError(TAG, arguments, "Не получилось достать чат")
+            return
+        }
+        return chat
+    } catch (e) {
+        logError(TAG, arguments, e)
+    }
+}
+
+
 async function addChat(users, type, name, avatarPath) {
     await db.database.run("BEGIN TRANSACTION")
     try {
@@ -59,7 +79,13 @@ async function addChat(users, type, name, avatarPath) {
                 await db.database.run(`INSERT INTO users_in_chats(user_id, chat_id) VALUES(?, ?)`, userId, newChat.id)
             }
             await db.database.run("COMMIT")
-            newChat.users = users
+            newChat.users = await Promise.all(users.map(async id => await getUserById(id)))
+            for (const user of newChat.users) {
+                if (user === undefined) {
+                    logError("addChat", arguments, "Не получилось достать информацию о пользователе")
+                    return
+                }
+            }
             return renameChatFields(newChat)
         }
     } catch (e) {
@@ -155,6 +181,7 @@ async function getChatsByUser(userId) {
 
 module.exports = {
     getChat,
+    getChatByMessageId,
     deleteChat,
     addUserInChat,
     deleteUserFromChat,

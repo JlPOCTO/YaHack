@@ -80,8 +80,8 @@ span {
 }
 
 .space-for-avatar{
+    width: 60px;
     height: 60px;
-    width: 13%;
     background-color: midnightblue;
     border-radius: 50px;
 }

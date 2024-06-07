@@ -11,12 +11,13 @@ function Dialog() {
     const { dialogID, flag, apiVersion } = useUserStore()
     const [messages, setMessages] = useState([])
     useEffect(() => {
+
         const getMessages = async () => {
             const res = await fetch(apiVersion + `/chats/${dialogID}/messages`)
             const messages = await res.json()
             setMessages(messages)
         }
-        getMessages() 
+        getMessages()
     }, [dialogID, flag])
 
     function isDefault() {

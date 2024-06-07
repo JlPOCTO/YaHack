@@ -1,10 +1,9 @@
 import '../../css/Contacts.css';
 import '../../css/ContactBar.css';
 import '../../i18n/config';
-import {useTranslation} from 'react-i18next';
 import {Button, Icon} from "@gravity-ui/uikit";
 import {action} from "mobx";
-import React, {useState} from "react";
+import {useEffect, useState} from "react";
 import {Square} from '@gravity-ui/icons';
 import {SquareCheck} from '@gravity-ui/icons';
 import {useUserStore} from "../../stores/UserStore";
@@ -16,53 +15,62 @@ type Contacts = {
 
 function ContactBar(props: Contacts) {
     const {contact} = props;
-    // let usersTic: Number[] = []
-    let {language, setSearchInput, searchInput, apiVersion, setChatUsers, chatUsers} = useUserStore();
+    let { apiVersion, setChatUsers, chatUsers, currentUserID } = useUserStore();
     const [isTic, setTic] = useState(false)
-    const dialog = contact
-    const className = ["button", dialog.id === 0 ? "notactual" : ""].join("");
-    const {t} = useTranslation();
+    const className = ["button", contact.id === 0 ? "notactual" : ""].join("");
 
-    function find(name: any) {
-        // console.log(name)
-        if (name !== 'null') {
-            return <p className='myContactsNames'>{name}</p>
+    useEffect(() => {
+        const getMyAvatar = async () => {
+            if (contact.type === "group") {
+                console.log("chatId", contact.id)
+                const res = await fetch(apiVersion + `/chats/${contact.id}/avatar`)
+                console.log(res)
+                let imageNod = document.getElementById(contact.id + "kkk")
+                // @ts-ignore
+                let imgUrl = res.url
+                // @ts-ignore
+                imageNod.src = imgUrl
+            } else {
+                console.log("dialogId", contact.id)
+                let partner ={}
+                contact.users.forEach((u: any) => {
+                    if (u.id !== currentUserID) {
+                        partner = u
+                    }
+                })
+                // @ts-ignore
+                const res = await fetch(apiVersion + `/users/${partner.id}/avatar`)
+                console.log(res)
+                let imageNod = document.getElementById(contact.id + "kkk")
+                // @ts-ignore
+                let imgUrl = res.url
+                // @ts-ignore
+                imageNod.src = imgUrl
+            }
         }
-    }
+        getMyAvatar()
+    }, [])
+
 
     function addUser() {
-        let set = new Set;
-        for (let n of chatUsers) {
-            set.add(n)
-            // console.log("n",n)
+        let set = new Set();
+        for (let u of chatUsers) {
+            set.add(u)
         }
         if (!isTic) {
-            console.log(" я зашел сюда")
-            set.add(dialog.id)
-            setChatUsers(set)
+            set.add(contact.id)
         } else {
-            set.delete(dialog.id)
-            setChatUsers(set)
+            set.delete(contact.id)
         }
-        // setChatUsers(usersTic)
-
-        // for (let n of chatUsers) {
-        //     set.add(n)
-        // }
-        // console.log("localusers ",.length )
+        setChatUsers(set)
     }
 
     return (
         <div className='contacts'>
             <div className="chat-bar">
                 <Button onClick={action((e) => {
-                    // setDialogID(dialog.id)
-                    console.log("first tic", isTic)
                     setTic(!isTic)
-                    console.log("first tic2", isTic)
                     addUser()
-                    console.log("charUsers ", chatUsers.size)
-                    // console.log({isTic})
                 })} className={className}
                         style={{
                             borderRadius: "10px"

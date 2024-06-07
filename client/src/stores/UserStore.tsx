@@ -57,6 +57,10 @@ export default class UserStore {
     setChatUsers = (input: Set<number> | any) => {
         this.chatUsers = input
     }
+    visible : boolean|any = false
+    setVisible = (input: boolean | any) => {
+        this.visible = input
+    }
 }
 const UserStoreContext = React.createContext<UserStore>(
     null as unknown as UserStore

@@ -18,9 +18,10 @@
   white-space-collapse: break-spaces;
 }
 
-.userPhoto {
-  width: 120px;
-  height: 80px;
+.userProfile .userPhoto {
+  border-width: 0;
+  width: 100px;
+  height: 100px;
 }
 
 .userProfile {

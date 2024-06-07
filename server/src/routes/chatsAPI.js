@@ -4,10 +4,12 @@ const messages = require('../database/dbMessages');
 const images = require('../database/images');
 const {isAuthenticatedAPI} = require("../middlewares/isAuthenticatedAPI");
 const validate = require('../middlewares/validationMiddleware');
+const {accessChat} = require('../middlewares/accessMiddleware')
 const uuid = require('uuid');
 const {createAvatar} = require("../utilities/avatars");
 const {prepareChat, prepareMessage} = require("../utilities/converters");
 const {wrapWithNext} = require("../middlewares/wrapWithNext");
+const websockets = require("./websockets");
 
 const chatsRouter = express.Router();
 
@@ -39,9 +41,19 @@ chatsRouter.post(
             res.sendStatus(500)
             return
         }
-        chats.addChat(req.body.users, req.body.chatType, req.body.name, key + ".png").then(
+        chats.addChat(req.body.users, req.body.chatType, req.body.name, key).then(
             chat => {
                 if (chat) {
+                    websockets.sendByUserArray(
+                        chat.users,
+                        websockets.createResponse(
+                            "/api/v2/chats",
+                            "POST",
+                            "/api/v2/chats/:id",
+                            {id: chat.id}
+                        ),
+                        req.user.id
+                    )
                     res.send(prepareChat(chat))
                 } else {
                     res.sendStatus(500)
@@ -78,10 +90,21 @@ chatsRouter.delete(
     validate.isCorrectId(x => x.params.id),
     validate.isChatExists(x => x.params.id),
     validate.isChatAccessible(x => x.params.id, x => x.user.id),
+    accessChat(x => x.params.id),
     (req, res) => {
         chats.deleteChat(req.params.id).then(
             bool => {
                 if (bool) {
+                    websockets.sendByUserArray(
+                        req.chat.users,
+                        websockets.createResponse(
+                            "/api/v2/chats/:id",
+                            "DELETE",
+                            undefined,
+                            {id: req.chat.id}
+                        ),
+                        req.user.id
+                    )
                     res.send()
                 } else {
                     res.sendStatus(500)
@@ -103,10 +126,21 @@ chatsRouter.post(
     validate.isChatChangeable(x => x.params.chatId),
     validate.isChatNotAccessible(x => x.params.chatId, x => x.query.userId),
     validate.isChatAccessible(x => x.params.chatId, x => x.user.id),
+    accessChat(x => x.params.chatId),
     (req, res) => {
         chats.addUserInChat(req.params.chatId, req.query.userId).then(
             bool => {
                 if (bool) {
+                    websockets.sendByUserArray(
+                        req.chat.users,
+                        websockets.createResponse(
+                            "/api/v2/chats/:chatId/user",
+                            "POST",
+                            "/api/v2/users/{idOrLogin}",
+                            {userId: req.query.userId, chatId: req.params.chatId}
+                        ),
+                        req.user.id
+                    )
                     res.send()
                 } else {
                     res.sendStatus(500)
@@ -128,10 +162,21 @@ chatsRouter.delete(
     validate.isChatChangeable(x => x.params.chatId),
     validate.isChatAccessible(x => x.params.chatId, x => x.query.userId),
     validate.isChatAccessible(x => x.params.chatId, x => x.user.id),
+    accessChat(x => x.params.chatId),
     (req, res) => {
         chats.deleteUserFromChat(req.params.chatId, req.query.userId).then(
             bool => {
                 if (bool) {
+                    websockets.sendByUserArray(
+                        req.chat.users,
+                        websockets.createResponse(
+                            "/api/v2/chats/:chatId/user",
+                            "DELETE",
+                            undefined,
+                            {userId: req.query.userId, chatId: req.params.chatId}
+                        ),
+                        req.user.id
+                    )
                     res.send()
                 } else {
                     res.sendStatus(500)
@@ -170,7 +215,6 @@ chatsRouter.get(
     }
 )
 
-// TODO Добавить удаление старого аватара
 chatsRouter.post(
     '/api/v2/chats/:chatId/avatar',
     isAuthenticatedAPI,
@@ -179,11 +223,22 @@ chatsRouter.post(
     validate.isCorrectId(x => x.params.chatId),
     validate.isChatExists(x => x.params.chatId),
     validate.isChatAccessible(x => x.params.chatId, x => x.user.id),
+    accessChat(x => x.params.chatId),
     (req, res) => {
         const key = "chat_" + req.params.chatId;
         images.uploadImage(key, req.files.avatar.data, req.files.avatar.name, req.files.avatar.mimetype).then(
             async result => {
                 if (result && await chats.updateChatAvatarPath(req.params.chatId, key)) {
+                    websockets.sendByUserArray(
+                        req.chat.users,
+                        websockets.createResponse(
+                            "/api/v2/chats/:chatId/avatar",
+                            "POST",
+                            "/api/v2/chats/:chatId/avatar",
+                            {chatId: req.params.chatId}
+                        ),
+                        req.user.id
+                    )
                     res.send();
                 } else {
                     res.status(500).send()

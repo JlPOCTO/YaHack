@@ -1,26 +1,26 @@
 import '../../css/AddMessage.css';
-import { Pencil} from '@gravity-ui/icons';
+import {Pencil} from '@gravity-ui/icons';
 import {Icon} from '@gravity-ui/uikit';
 import React, {useState, useEffect} from 'react';
 import {useUserStore} from "../../stores/UserStore";
 import '../../i18n/config';
 import {Sidebar} from 'primereact/sidebar';
 import AddChatComponents from "../AddChatComponents/AddChatComponents";
-
-
-
+import {observer} from "mobx-react-lite";
 
 
 function AddChat() {
-    let { apiVersion } = useUserStore()
+    let {apiVersion, visible, setVisible} = useUserStore()
     const [contacts, setMyContacts] = useState([])
-    const [visible, setVisible] = useState(false);
+    // const [visible, setVisible] = useState(false);
     useEffect(() => {
 
-      const getMyInfo = async () => {
-        const res = await fetch(apiVersion + '/users')
+        const getMyInfo = async () => {
+
+            const res = await fetch(apiVersion + '/users/contacts')
             const contacts = await res.json();
             setMyContacts(contacts)
+            console.log("contacts", contacts)
             // console.log(contacts)
         }
         getMyInfo()
@@ -47,4 +47,4 @@ function AddChat() {
     );
 }
 
-export default AddChat;
+export default observer(AddChat);

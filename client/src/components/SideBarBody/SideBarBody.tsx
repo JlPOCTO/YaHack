@@ -75,8 +75,8 @@ function SideBarBody() {
         <>
             {isSearchInputEmpty() && <div style={{
                 overflowY: "auto",
-                maxHeight: "92%",
-                height: "92%"
+                maxHeight: "90%",
+                height: "90%"
             }}>
                 {dialogs.map((dialog: any) =>
                     <ChatBar dialog={dialog}/>
@@ -85,8 +85,8 @@ function SideBarBody() {
             </div>}
             {!isSearchInputEmpty() && <div style={{
                 overflowY: "auto",
-                maxHeight: "92%",
-                height: "92%"
+                maxHeight: "90%",
+                height: "90%"
             }}>
                 {/*{dialogs.map((dialog: any) =>*/}
                 {/*    <ChatBar dialog={dialog}/>*/}
@@ -101,8 +101,6 @@ function SideBarBody() {
                     {t('addChat.chat')}
                 </p>
                 <SearchPersonBar dialog={user}/>
-
-
             </div>}
         </>
     );

@@ -7,6 +7,7 @@ import App from "../components/App/App";
 function HomePage() {
     return (
         <div className="home-page">
+
             <App/>
         </div>
     );
