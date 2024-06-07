@@ -109,21 +109,21 @@ function ModalGroupSettings(props: DialogId) {
         <div className='chat-buttons'>
             <button className="see" onClick={() => setOpen(true)}>
                 <Icon className="chat-picture" data={Persons}/>
-                <p> See subscribers</p>
+                <p> {t("seeSubscribers")}</p>
             </button>
             <Modal open={open} onClose={() => setOpen(false)}>
                 <Subscribers contacts={contacts}/>
             </Modal>
             {dialogType == "group" && <button className="see1" onClick={() => setOpen1(true)}>
                 <Icon className="chat-picture" data={Link}/>
-                <p>Invite link </p>
+                <p>{t("Invitelink")} </p>
             </button>}
             <Modal open={open1} onClose={() => setOpen1(false)}>
                 <InviteLink link={link}/>
             </Modal>
             <button className="delete" onClick={HandleDeleteChat}>
                 <Icon className="chat-picture" data={TrashBin}/>
-                <p> Leave chat</p>
+                <p> {t("Leavechat")}</p>
             </button>
         </div>
     );
