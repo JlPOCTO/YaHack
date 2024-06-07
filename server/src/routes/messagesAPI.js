@@ -66,6 +66,10 @@ routers.delete(
 routers.post(
     '/api/v2/messages',
     isAuthenticatedAPI,
+    (req, res, next) => {
+        console.log(req.files)
+        next()
+    },
     wrapWithNext(x => x.body.chatId = Number.parseInt(x.body.chatId)),
     validate.isCorrectMessageRequest(x => x.body),
     validate.isCorrectFile(x => x.files ? x.files.imageContent : undefined),
