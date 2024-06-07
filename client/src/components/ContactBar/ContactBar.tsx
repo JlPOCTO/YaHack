@@ -23,7 +23,6 @@ function ContactBar(props: Contacts) {
         const getMyAvatar = async () => {
 
                 const res = await fetch(apiVersion + `/users/${contact.id}/avatar`)
-                console.log(res)
                 let imageNod = document.getElementById(contact.id + "aaa")
                 // @ts-ignore
                 let imgUrl = res.url

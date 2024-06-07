@@ -28,7 +28,6 @@ function SideBarHeader() {
     const [currrentInput, setCurrentInput] = useState(getInitialInput())
     const {t, i18n} = useTranslation();
     const changeLanguage = (lng: string) => () => {
-        console.log(lng)
         i18n.changeLanguage(lng);
         setLanguage(lng)
     }
@@ -49,7 +48,6 @@ function SideBarHeader() {
 
     const getCurrentInput = () => {
         const currentInput = sessionStorage.getItem('currentInput')
-        console.log("cuur: " + currentInput)
         setSearchInput(currentInput)
         setCurrentInput('')
         sessionStorage.setItem('currentInput', '')

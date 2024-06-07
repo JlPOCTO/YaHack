@@ -76,7 +76,6 @@ function ProfileOfEnotherUser(props: Profile) {
         const getMyAvatar = async () => {
 
             const res = await fetch(apiVersion + `/users/${user.id}/avatar`)
-            console.log(res)
             let imageNod = document.getElementById(user.id + "bbb")
             // @ts-ignore
             let imgUrl = res.url

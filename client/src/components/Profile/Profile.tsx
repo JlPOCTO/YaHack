@@ -37,7 +37,6 @@ function Profile(props: Profile) {
 
     const getMyAvatar = async () => {
       const res = await fetch(apiVersion + '/users/myAvatar')
-      console.log(res)
       let imageNod = document.getElementById('image')
       // @ts-ignore
       let imgUrl = res.url

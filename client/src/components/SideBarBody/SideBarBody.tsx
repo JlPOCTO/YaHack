@@ -55,9 +55,6 @@ function SideBarBody() {
             const res = await fetch(apiVersion + `/chats`)
             const dialogs1 = await res.json()
             setDialogs(dialogs1)
-            console.log("All dialogs: " )
-            console.log(dialogs1)
-            console.log(currentUserID)
             dialogs1.map((dialog: any) => {
                 if (dialog.type == "direct") {
                     for (let user of dialog.users) {
@@ -82,10 +79,8 @@ function SideBarBody() {
 
     useEffect(() => {
         const getUser = async () => {
-            // console.log( "User@@@" , searchInput)
             const res = await fetch(apiVersion + `/users/${searchInput}`)
             const user1 = await res.json()
-            // console.log( "User" ,user1)
             setUser(user1)
         }
 

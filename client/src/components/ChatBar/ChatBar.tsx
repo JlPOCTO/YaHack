@@ -68,16 +68,13 @@ function ChatBar(props: ChatBarProps) {
     useEffect(() => {
         const getMyAvatar = async () => {
             if (dialog.type === "group") {
-                console.log("chatId", dialog.id)
                 const res = await fetch(apiVersion + `/chats/${dialog.id}/avatar`)
-                console.log(res)
                 let imageNod = document.getElementById(dialog.id + "jjj")
                 // @ts-ignore
                 let imgUrl = res.url
                 // @ts-ignore
                 imageNod.src = imgUrl
             } else {
-                console.log("dialogId", dialog.id)
                 let partner ={}
                 dialog.users.forEach((u: any) => {
                     if (u.id !== currentUserID) {
@@ -86,7 +83,6 @@ function ChatBar(props: ChatBarProps) {
                 })
                 // @ts-ignore
                 const res = await fetch(apiVersion + `/users/${partner.id}/avatar`)
-                console.log(res)
                 let imageNod = document.getElementById(dialog.id + "jjj")
                 // @ts-ignore
                 let imgUrl = res.url

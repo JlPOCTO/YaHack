@@ -62,7 +62,6 @@ function AddChatComponents(props: Contacts) {
             for (let n of chatUsers) {
                 users.push(n)
             }
-            console.log(users, "users")
             if (users.length > 1) {
                 setFlag(false)
                 const res = await fetch(apiVersion + `/chats`, {
@@ -116,9 +115,6 @@ function AddChatComponents(props: Contacts) {
                         <button onClick={action((e) => {
                             HandleChatAdd()
                             const currentInput = sessionStorage.getItem('currentName')
-                            // console.log("cuur: " + currentInput)
-                            // searchInput = currentInput
-                            // console.log("search: " + searchInput)
                             setcurrentName('')
 
 

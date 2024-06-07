@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import '../../css/Message.css';
 import { useUserStore } from "../../stores/UserStore";
 import { Icon } from "@gravity-ui/uikit";
@@ -18,6 +18,20 @@ function Message(props: Message) {
     function isMine() {
         return message.senderId === currentUserID;
     }
+    const [currentReactions, setReactions] = useState([]);
+
+    useEffect(() => {
+        const getReactions = async () => {
+            const res = await fetch(apiVersion + `/messages/${message.id}/reactions`)
+            const reactions = await res.json()
+            const rs: any = []
+            reactions.forEach((r: any) => {
+                rs.push(r.reaction)
+            })
+            setReactions(rs)
+        }
+        getReactions()
+    }, [])
 
     const onEmojiClick = async (curEmoji: EmojiClickData) => {
         if (curEmoji.emoji !== "") {
@@ -35,20 +49,28 @@ function Message(props: Message) {
         }
     }
 
-    function getReactions(r: any) {
-        return r.reaction
-    }
-
     const deleteReaction = async (r: any) => {
-        const res = await fetch(apiVersion + `/messages/${message.id}/reactions`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                reaction: r.reaction
-            })
-        })
+        // const res = await fetch(apiVersion + `/messages/${message.id}/reactions`, {
+        //     method: 'DELETE',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //         reaction: r.reaction
+        //     })
+        // })
+        // console.log(r, "r")
+        // const getReactions = async () => {
+        //     const res = await fetch(apiVersion + `/messages/${message.id}/reactions`)
+        //     const reactions = await res.json()
+        //     const rs: any = []
+        //     reactions.forEach((r: any) => {
+        //         rs.push(r.reaction)
+        //     })
+        //     setReactions(rs)
+        //     console.log(rs, "rs")
+        // }
+        // getReactions()
     }
 
 
@@ -83,8 +105,8 @@ function Message(props: Message) {
                             </div>
                             {message.reactions.length !== 0 && <div className="block-of-reaction">
                                 <div className='reactionsAndTime'>
-                                    {message.reactions.map((r: any) =>
-                                        <button className='reactionsBlock' onClick={() => deleteReaction(r)}>{getReactions(r)}</button>
+                                    {currentReactions.map((r: any) =>
+                                        <button className='reactionsBlock' onClick={() => deleteReaction(r)}>{r}</button>
                                     )}
                                 </div>
                                 <div className="data_reaction">
@@ -131,8 +153,8 @@ function Message(props: Message) {
                             </div>
                             {message.reactions.length !== 0 && <div className="block-of-reaction">
                                 <div className='reactionsAndTime'>
-                                    {message.reactions.map((r: any) =>
-                                        <button className='reactionsBlock' onClick={() => deleteReaction(r)}>{getReactions(r)}</button>
+                                    {currentReactions.map((r: any) =>
+                                        <button className='reactionsBlock' onClick={() => deleteReaction(r)}>{r}</button>
                                     )}
                                 </div>
                                 <div className="data_reaction">

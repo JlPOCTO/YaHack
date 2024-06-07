@@ -21,8 +21,6 @@ function AddChat() {
             const res = await fetch(apiVersion + '/users/contacts')
             const contacts = await res.json();
             setMyContacts(contacts)
-            console.log("contacts", contacts)
-            // console.log(contacts)
         }
         getMyInfo()
     }, [changedUserAvatar])
