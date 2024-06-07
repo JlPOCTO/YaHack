@@ -21,11 +21,9 @@ function App() {
     let { socket } = useUserStore();
 
     socket.onopen = function () {
-      //alert("Connected");
     };
 
     socket.onclose = function (event: any) {
-      //
     };
     socket.onmessage = function (event: any) {
       var json = JSON.parse(event.data);
@@ -65,7 +63,6 @@ function App() {
     };
 
     socket.onerror = function (error: any) {
-      alert("������ " + error);
     };
   }
 

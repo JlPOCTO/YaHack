@@ -1,21 +1,14 @@
 import '../../css/AddMessage.css';
 import '../../css/AddChatComponents.css';
-import {FaceSmile, File, ArrowShapeRight, Pencil, ArrowRotateRight} from '@gravity-ui/icons';
+import {ArrowShapeRight} from '@gravity-ui/icons';
 import {Icon} from '@gravity-ui/uikit';
-import Popup from 'reactjs-popup';
-import Picker, {EmojiClickData} from 'emoji-picker-react';
-import React, {useState, useRef, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import {useUserStore} from "../../stores/UserStore";
 import '../../i18n/config';
 import {useTranslation} from 'react-i18next';
-import {ChevronDown} from '@gravity-ui/icons';
-// import {Sidebar} from "lucide-react";
 
-import {Sidebar} from 'primereact/sidebar';
 import ContactBar from "../ContactBar/ContactBar";
-import ChatBar from "../ChatBar/ChatBar";
 import {action} from "mobx";
-// import {ArrowShapeRight} from '@gravity-ui/icons';
 
 
 type Contacts = {
@@ -25,12 +18,11 @@ const getInitialcurrentName = () => {
     return sessionStorage.getItem('currentName') || "";
 }
 
-
 function AddChatComponents(props: Contacts) {
     const {contacts} = props;
-    let {language, setSearchInput, searchInput, apiVersion, chatUsers, visible, setVisible} = useUserStore();
+    let {setSearchInput, apiVersion, chatUsers, setVisible} = useUserStore();
     const [flag, setFlag] = useState(false)
-    const {t, i18n} = useTranslation();
+    const {t} = useTranslation();
 
     const [currentName, setcurrentName] = useState(getInitialcurrentName())
 
@@ -41,7 +33,6 @@ function AddChatComponents(props: Contacts) {
 
     const [meId, setMyInfo] = useState(0)
     useEffect(() => {
-
         const getMyInfo = async () => {
             const res = await fetch(apiVersion + '/users/me')
             const me = await res.json();
@@ -52,7 +43,6 @@ function AddChatComponents(props: Contacts) {
         }
         getMyInfo()
     }, [])
-
 
     const HandleChatAdd =
         async () => {
@@ -75,7 +65,6 @@ function AddChatComponents(props: Contacts) {
                         users: users
                     })
                 });
-                const newDialog = await res.json();
                 setSearchInput("")
                 sessionStorage.setItem('currentInput', '')
                 setVisible(false)
@@ -114,10 +103,7 @@ function AddChatComponents(props: Contacts) {
                         </form>
                         <button onClick={action((e) => {
                             HandleChatAdd()
-                            const currentInput = sessionStorage.getItem('currentName')
                             setcurrentName('')
-
-
                         })} className='currentSettings' id="ro-button">
                             <Icon className='Settings-rotate-right' data={ArrowShapeRight}/>
                         </button>

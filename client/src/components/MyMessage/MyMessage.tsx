@@ -8,7 +8,6 @@ type MyMessage = {
 function MyMessage(props:MyMessage) {
     const { message } = props;
   return (
-
       <div className="container">
           <div className="arrow">
               <div className="outer"></div>
@@ -26,7 +25,6 @@ function MyMessage(props:MyMessage) {
               </div>
           </div>
       </div>
-
   );
 }
 export default MyMessage;
