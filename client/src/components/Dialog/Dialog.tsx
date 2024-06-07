@@ -8,13 +8,16 @@ import {observer} from "mobx-react-lite";
 
 
 function Dialog() {
-    const { dialogID, flag, apiVersion, changedDialog, changedMessages } = useUserStore()
+    const { dialogID, flag, apiVersion, changedDialog, changedMessages, setDialogType } = useUserStore()
     const [messages, setMessages] = useState([])
     useEffect(() => {
         const getMessages = async () => {
             const res = await fetch(apiVersion + `/chats/${dialogID}/messages`)
             const messages = await res.json()
             setMessages(messages)
+            const res1 = await fetch(apiVersion + `/chats/${dialogID}`)
+            const dialogInfo = await res1.json()
+            setDialogType(dialogInfo.type)
         }
         getMessages() 
     }, [dialogID, flag, changedDialog, changedMessages])

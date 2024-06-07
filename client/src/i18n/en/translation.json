@@ -28,6 +28,10 @@
   "chatError": "Choose members",
   "members": "subscribers",
   "subscribers": "Subscribers",
+  "link": "Link",
+  "seeSubscribers": "See subscribers",
+  "Invitelink": "Invite link",
+  "Leavechat": "Leave chat",
    "addChat": {
      "chat" : "Chats",
      "back" : "Back to your dialogs"
