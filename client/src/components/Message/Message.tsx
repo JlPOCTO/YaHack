@@ -1,5 +1,4 @@
 import {useEffect, useState} from 'react';
-import { useState, useEffect } from 'react';
 import '../../css/Message.css';
 import {useUserStore} from "../../stores/UserStore";
 import {Icon} from "@gravity-ui/uikit";
