@@ -7,7 +7,6 @@ import Popup from "reactjs-popup";
 import {Heart} from "@gravity-ui/icons";
 import {observer} from "mobx-react-lite";
 
-
 type Message = {
     message: any;
 }
@@ -15,7 +14,7 @@ type Message = {
 function Message(props: Message) {
     const {message} = props;
     let {apiVersion, currentUserID, idNames} = useUserStore()
-    const [isContent, setCOntent] = useState(false)
+    const [isContent, setContent] = useState(false)
 
     function isMine() {
         return message.senderId === currentUserID;
@@ -23,53 +22,37 @@ function Message(props: Message) {
     const [currentReactions, setReactions] = useState([]);
 
     useEffect(() => {
-        // const getReactions = async () => {
-        //     const res = await fetch(apiVersion + `/reactions`)
-        //     const reactions = await res.json()
-        //     const rs: any = []
-        //     reactions.forEach((r: any) => {
-        //         rs.push(r.reaction)
-        //     })
-        //     setReactions(rs)
-        // }
-        // getReactions()
-            const reactions = message.reactions
-            const rs: any = []
-            reactions.forEach((r: any) => {
-                rs.push(r.reaction)
-            })
-            setReactions(rs)
+        const reactions = message.reactions
+        const rs: any = []
+        reactions.forEach((r: any) => {
+            rs.push(r.reaction)
+        })
+        setReactions(rs)
     }, [])
 
     useEffect(() => {
-
         const getMyInfo = async () => {
             const res = await fetch(apiVersion + `/messages/${message.id}`)
             const isExist = await res.json();
-            console.log(message.id, isExist.imageContent, "ты должен выводиться каждый раз")
-            setCOntent(isExist.imageContent)
+            setContent(isExist.imageContent)
         }
         getMyInfo()
     }, [])
 
     useEffect(() => {
         const getMyAvatar = async () => {
-
             const res = await fetch(apiVersion + `/messages/${message.id}/image`)
-            console.log(res)
             let imageNod = document.getElementById(message.id + "z")
-            console.log("Я нашел", imageNod)
             // @ts-ignore
             let imgUrl = res.url
             // @ts-ignore
             imageNod.src = imgUrl
-
         }
         getMyAvatar()
     }, [isContent])
     const onEmojiClick = async (curEmoji: EmojiClickData) => {
         if (curEmoji.emoji !== "") {
-            const res = await fetch(apiVersion + `/reactions`, {
+            await fetch(apiVersion + `/reactions`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -84,7 +67,7 @@ function Message(props: Message) {
     }
 
     const deleteReaction = async (r: any) => {
-        const res = await fetch(apiVersion + `/reactions/${r}`, {
+        await fetch(apiVersion + `/reactions/${r}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
@@ -93,20 +76,7 @@ function Message(props: Message) {
                 reaction: r.reaction
             })
         })
-        // console.log(r, "r")
-        // const getReactions = async () => {
-        //     const res = await fetch(apiVersion + `/messages/${message.id}/reactions`)
-        //     const reactions = await res.json()
-        //     const rs: any = []
-        //     reactions.forEach((r: any) => {
-        //         rs.push(r.reaction)
-        //     })
-        //     setReactions(rs)
-        //     console.log(rs, "rs")
-        // }
-        // getReactions()
     }
-
 
     function getMessageTime(time: number) {
         const date = new Date(time);
@@ -235,10 +205,8 @@ function Message(props: Message) {
                 </div>
             </div>
             }
-
         </>
     )
-
 }
 
 export default observer(Message);

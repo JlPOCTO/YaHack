@@ -1,5 +1,4 @@
 import '../../css/ProfileModalWindow.css';
-import {Modal} from '@gravity-ui/uikit';
 import Profile from "../Profile/Profile";
 import { useEffect, useState } from 'react'
 import { observer } from "mobx-react-lite";
@@ -14,8 +13,8 @@ function ProfileModalWindow() {
   let { apiVersion, setCurrentUserID } = useUserStore()
   const [visible, setVisible] = useState(false);
   const [me, setMyInfo] = useState([])
-  useEffect(() => {
 
+  useEffect(() => {
     const getMyInfo = async () => {
       const res = await fetch(apiVersion + '/users/me')
       const me = await res.json();

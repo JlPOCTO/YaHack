@@ -1,5 +1,4 @@
 // @ts-nocheck
-import React from 'react';
 import '../../css/SideBarHeader.css';
 import ProfileModalWindow from "../ProfileModalWindow/ProfileModalWindow";
 import {useState, useEffect} from 'react';
@@ -9,7 +8,6 @@ import '../../i18n/config';
 import {useTranslation} from 'react-i18next';
 import {useUserStore} from "../../stores/UserStore";
 import {Icon} from "@gravity-ui/uikit";
-import {ArrowShapeRight} from "@gravity-ui/icons";
 import {ArrowRotateRight} from '@gravity-ui/icons';
 import {action} from "mobx";
 import {observer} from "mobx-react-lite";
@@ -24,7 +22,7 @@ const getInitialTheme = () => {
 }
 
 function SideBarHeader() {
-    let {setLanguage, setSearchInput, searchInput} = useUserStore();
+    let {setLanguage, setSearchInput} = useUserStore();
     const [currrentInput, setCurrentInput] = useState(getInitialInput())
     const {t, i18n} = useTranslation();
     const changeLanguage = (lng: string) => () => {
@@ -46,17 +44,10 @@ function SideBarHeader() {
         localStorage.setItem('theme', nextTheme)
     }
 
-    const getCurrentInput = () => {
-        const currentInput = sessionStorage.getItem('currentInput')
-        setSearchInput(currentInput)
-        setCurrentInput('')
-        sessionStorage.setItem('currentInput', '')
-    }
     const handleSetCurrentInput = (e: any) => {
         setCurrentInput(e.target.value)
         sessionStorage.setItem('currentInput', e.target.value)
     }
-
 
     useEffect(() => {
         const savedTheme = localStorage.getItem('theme');
@@ -103,15 +94,8 @@ function SideBarHeader() {
                                 </button>
                             </div>
                             <button className="switchButton" onClick={handleSetTheme}>
-                                {/*<svg className='Settings' fill="#000000" width="800px" height="800px"*/}
-                                {/*     viewBox="0 0 64 64"*/}
-                                {/*     data-name="Layer 1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"><title/>*/}
-                                {/*    <path*/}
-                                {/*        d="M34.82,56.11a23.86,23.86,0,0,1-9.38-1.9A2,2,0,0,1,27,50.53a19.87,19.87,0,0,0,7.82,1.58A20.16,20.16,0,0,0,46.59,48.3a24.12,24.12,0,0,1-16.2-35.91A20.16,20.16,0,0,0,14.71,32a19.91,19.91,0,0,0,3.88,11.87,2,2,0,0,1-3.23,2.37A24.12,24.12,0,0,1,34.66,7.89h0A2,2,0,0,1,36.5,9.07a2,2,0,0,1-.33,2.16,20.11,20.11,0,0,0,15,33.5h.13a2,2,0,0,1,1.83,1.19,2,2,0,0,1-.34,2.15A24.1,24.1,0,0,1,34.82,56.11Z"/>*/}
-                                {/*</svg>*/}
                                 {themeLight && <Icon className='Settings-moon' data={Moon}/>}
                                 {!themeLight && <Icon className='Settings-moon' data={Sun}/>}
-
                             </button>
                             <div className="changeLanguages">
                                 <button
@@ -131,7 +115,6 @@ function SideBarHeader() {
                                 </button>
                             </div>
                         </div>
-
                     </nav>
                 </menu>
             </header>

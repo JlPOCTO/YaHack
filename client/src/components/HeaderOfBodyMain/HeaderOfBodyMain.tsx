@@ -1,22 +1,15 @@
 import '../../css/HeaderOfBodyMain.css';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../../i18n/config';
 import {useTranslation} from 'react-i18next';
 import {useUserStore } from "../../stores/UserStore";
 import {observer} from "mobx-react-lite";
-import {Icon, Modal} from "@gravity-ui/uikit";
+import {Icon} from "@gravity-ui/uikit";
 import {EllipsisVertical} from "@gravity-ui/icons";
-import Contacts from "../Contacts/Contacts";
 import ModalGroupSettings from "../ModalGroupSettings/ModalGroupSetting";
 
-type DialogProps = {
-    dialogId: any;
-}
-
-
 function HeaderOfBodyMain(props:  any) {
-    const {dialogId} = props;
-    const { apiVersion, chatName, dialogID, currentUserID } = useUserStore()
+    const { apiVersion, dialogID, currentUserID } = useUserStore()
     const { changedDialog } = useUserStore()
     const { t } = useTranslation();
     const [nameOfTheDialog, setName] = useState([])
@@ -82,7 +75,6 @@ function HeaderOfBodyMain(props:  any) {
         getMyAvatar()
     }, [dialogID, changedDialog])
       return (
-
         <div className="header-of-body-main-pro">
             <div className="someSpace">
                 <img id={dialogID+ "ooo"} style={{
@@ -111,7 +103,6 @@ function HeaderOfBodyMain(props:  any) {
                 {open &&  <ModalGroupSettings chatId={dialogID} />}
             </div>
         </div>
-
     );
 }
 

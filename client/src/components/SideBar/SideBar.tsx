@@ -2,8 +2,6 @@ import React from 'react';
 import '../../css/SideBar.css';
 import SideBarBody from "../SideBarBody/SideBarBody";
 import SideBarHeader from "../SideBarHeader/SideBarHeader";
-import {observer} from 'mobx-react-lite';
-
 
 function SideBar() {
     return (
@@ -14,8 +12,6 @@ function SideBar() {
         </div>
         </React.StrictMode>
     );
-
 }
-
 
 export default SideBar;

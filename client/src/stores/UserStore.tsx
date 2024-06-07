@@ -76,60 +76,62 @@ export default class UserStore {
     visible : boolean|any = false
     setVisible = (input: boolean | any) => {
         this.visible = input
-  }
+    }
 
-  changedMessages: boolean | any = false
-  setChangedMessages = (input: boolean | any) => {
-    this.changedMessages = input
-  }
-  getChangedMessages = () => {
-    return this.changedMessages;
-  }
-  changedUserAvatar: boolean | any = false
-  setChangedUserAvatar = (input: boolean | any) => {
-    this.changedUserAvatar = input
-  }
-  getChangedUserAvatar = () => {
-    return this.changedUserAvatar;
-  }
-  changedChatAvatar: boolean | any = false
-  setChangedChatAvatar = (input: boolean | any) => {
-    this.changedChatAvatar = input
-  }
-  getChangedChatAvatar = () => {
-    return this.changedChatAvatar;
-  }
-  changedDialogs: boolean | any = false
-  setChangedDialogs = (input: boolean | any) => {
-    this.changedDialogs = input
-  }
-  getChangedDialogs = () => {
-    return this.changedDialogs;
-  }
-  changedDialog: boolean | any = false
-  setChangedDialog = (input: boolean | any) => {
-    this.changedDialog = input
-  }
-  getChangedDialog = () => {
-    return this.changedDialog;
-  }
-  changedMessage: boolean | any = false
-  setChangedMessage = (input: boolean | any) => {
-    this.changedMessage = input
-  }
-  getChangedMessage = () => {
-    return this.changedMessage;
-  }
-  socket: WebSocket | any = null
-  setSocket = (input: boolean | any) => {
-    this.socket = input
-  }
+    changedMessages: boolean | any = false
+    setChangedMessages = (input: boolean | any) => {
+        this.changedMessages = input
+    }
+    getChangedMessages = () => {
+        return this.changedMessages;
+    }
+    changedUserAvatar: boolean | any = false
+    setChangedUserAvatar = (input: boolean | any) => {
+        this.changedUserAvatar = input
+    }
+    getChangedUserAvatar = () => {
+        return this.changedUserAvatar;
+    }
+    changedChatAvatar: boolean | any = false
+    setChangedChatAvatar = (input: boolean | any) => {
+        this.changedChatAvatar = input
+    }
+    getChangedChatAvatar = () => {
+        return this.changedChatAvatar;
+    }
+    changedDialogs: boolean | any = false
+    setChangedDialogs = (input: boolean | any) => {
+        this.changedDialogs = input
+    }
+    getChangedDialogs = () => {
+        return this.changedDialogs;
+    }
+    changedDialog: boolean | any = false
+    setChangedDialog = (input: boolean | any) => {
+        this.changedDialog = input
+    }
+    getChangedDialog = () => {
+        return this.changedDialog;
+    }
+    changedMessage: boolean | any = false
+    setChangedMessage = (input: boolean | any) => {
+        this.changedMessage = input
+    }
+    getChangedMessage = () => {
+        return this.changedMessage;
+    }
+    socket: WebSocket | any = null
+    setSocket = (input: boolean | any) => {
+        this.socket = input
+    }
 }
 
 const UserStoreContext = React.createContext<UserStore>(
   null as unknown as UserStore
 );
+
 export const useUserStore = () => useContext(UserStoreContext)
+
 type Props = {
     children: React.ReactNode,
     dialogID: number

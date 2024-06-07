@@ -1,13 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import '../../css/ChatBar.css';
-import {Button, Modal} from "@gravity-ui/uikit";
-// import settings from "../../settings-svgrepo-com.svg";
-import Profile from "../Profile/Profile";
-import Dialog from "../Dialog/Dialog";
+import {Button} from "@gravity-ui/uikit";
 import {useUserStore} from "../../stores/UserStore";
 import {action} from "mobx";
 import {observer} from "mobx-react-lite";
-import {NavLink} from "react-router-dom";
 
 type ChatBarProps = {
     dialog: any;
@@ -16,12 +12,6 @@ type ChatBarProps = {
 function ChatBar(props: ChatBarProps) {
     const {dialog} = props;
     const {dialogID, setDialogID, currentUserID, setChatName, apiVersion, changedDialogs} = useUserStore()
-
-    // const [isShown, setIsShown] = useState(false);
-    const [isActual, setIsActual] = useState(false);
-    const handleClick = (event: any) => {
-        setIsActual(current => dialog.id === dialogID);
-    };
     const className = ["button", dialog.id === dialogID ? "notactual" : ""].join("");
 
     function getchatName() {
@@ -54,10 +44,6 @@ function ChatBar(props: ChatBarProps) {
         if (dialog.lastMessage) {
             const time = dialog.lastMessage.sendingTime
             const date = new Date(time);
-            // return date.toLocaleTimeString('ru-RU', {
-            //     hour: '2-digit',
-            //     minute: '2-digit',
-            // });
             const hours = date.getHours().toString().padStart(2, '0');
             const minutes = date.getMinutes().toString().padStart(2, '0');
 
@@ -93,7 +79,6 @@ function ChatBar(props: ChatBarProps) {
         getMyAvatar()
     }, [changedDialogs])
 
-
     return (
         <div className="chat-bar">
             <Button onClick={action((e) => {
@@ -105,7 +90,6 @@ function ChatBar(props: ChatBarProps) {
                     }}>
                 <div className="chat-bar-pro">
                     <div className="space-for-avatar">
-                        {/*{getImageOfChat}*/}
                         <img id={dialog.id + "jjj"} style={{
                             width: "60px",
                             height: "60px",
@@ -131,10 +115,7 @@ function ChatBar(props: ChatBarProps) {
                     </div>
                 </div>
             </Button>
-
         </div>
-
-
     );
 }
 
