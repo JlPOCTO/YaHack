@@ -6,7 +6,7 @@ const images = require('../database/images');
 const githubStrategy = new passportGithub.Strategy({
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        callbackURL: `${process.env.LINK}:${process.env.PORT}/auth/github/callback`
+        callbackURL: `http://${process.env.LINK}:${process.env.PORT}/auth/github/callback`
     },
     async (accessToken, refreshToken, profile, done) => {
         const avatar = createAvatar();
