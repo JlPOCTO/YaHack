@@ -3,23 +3,26 @@ import {FaceSmile, File, ArrowShapeRight} from '@gravity-ui/icons';
 import {Icon} from '@gravity-ui/uikit';
 import Popup from 'reactjs-popup';
 import Picker, {EmojiClickData} from 'emoji-picker-react';
-import {useState, useRef, useEffect} from 'react';
+import {useState, useRef} from 'react';
 import {useUserStore} from "../../stores/UserStore";
 import '../../i18n/config';
 import {useTranslation} from 'react-i18next';
 import {ChevronDown} from '@gravity-ui/icons';
+import message from "../Message/Message";
+import {blob} from "stream/consumers";
 
 const getInitialCurrentMessage = () => {
     return sessionStorage.getItem('currentMessage') || '';
 }
 
 function AddMessage() {
-    let { dialogID, userID, setFlag, flag, apiVersion } = useUserStore()
-    const ref = useRef<HTMLTextAreaElement>(null)
+    let {dialogID, setFlag, flag, apiVersion} = useUserStore()
+    // const ref = useRef<HTMLTextAreaElement>(null)
     const {t, i18n} = useTranslation();
     const [messages, setMessage] = useState([])
     const [isOpen, setOpen] = useState(false)
-    const [currrentMessage, setCurrentMessage] = useState(getInitialCurrentMessage())
+    const [picture, setPicture] = useState({})
+    const [currentMessage, setCurrentMessage] = useState(getInitialCurrentMessage())
     const onEmojiClick = (curEmoji: EmojiClickData) => {
         const currentMessage = sessionStorage.getItem('currentMessage')
         const newMessage = currentMessage ? currentMessage + curEmoji.emoji : curEmoji.emoji
@@ -31,26 +34,40 @@ function AddMessage() {
         const g = !flag
         setFlag(g)
 
-        const date = Date.now() + 10800000;
+        const date = Date.now();
         const showTime = date
-        if (currrentMessage !== "") {
+        let formData = new FormData();
+        formData.append(
+            "content", currentMessage
+        );
+        formData.append(
+            "chatId", dialogID
+        );
+        // @ts-ignore
+
+        console.log("picture", picture)
+        formData.append(
+            // @ts-ignore
+            "imageContent", picture
+            // "imageContent", picture.blob, picture.name
+        );
+        if (currentMessage !== "") {
             const res = await fetch(apiVersion + `/messages`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    content: currrentMessage,
-                    chatId: dialogID,
-                    imageContent: ""
-                })
+                // headers: {
+                //     'Content-Type': 'application/json'
+                // },
+                body: formData
+
             });
+            // let h = res.json()
+            // console.log("все хорошо")
             const messages = await res.json();
             setMessage(messages)
-            console.log("jjj"+typeof messages)
-            
+            console.log( "ну пожалуйста", messages.imageContent)
+
             setCurrentMessage('')
-            
+
             sessionStorage.setItem('currentMessage', '')
         }
     }
@@ -59,16 +76,6 @@ function AddMessage() {
         setCurrentMessage(e.target.value)
         sessionStorage.setItem('currentMessage', e.target.value)
     }
-
-    useEffect(() => {
-        const changeHeight = () => {
-            if (ref.current) {
-                ref.current.style.height = 'auto';
-                ref.current.style.height = ref.current.scrollHeight + 'px';
-            }
-        };
-        changeHeight();
-    }, [currrentMessage]);
 
 
     function isPhotoBoxOpen() {
@@ -87,10 +94,52 @@ function AddMessage() {
 
     };
 
+    function getBinaryData(file: any, callback: any) {
+        const reader = new FileReader();
+
+        // Это событие срабатывает, когда чтение завершено успешно
+        reader.onload = function (evt) {
+            // Получаем и возвращаем бинарные данные
+            // @ts-ignore
+            const binaryData = evt.target.result;
+
+            // Вызываем callback с бинарными данными
+            callback(binaryData);
+        };
+
+        // Чтение файла как ArrayBuffer для получения бинарных данных
+        reader.readAsArrayBuffer(file);
+    }
+
+    const handleOnChange = (event: any) => {
+        event.preventDefault();
+        console.log("mmmm", event.target.files[0])
+        const file = event.target.files[0];
+        // if (file) {
+        //     getBinaryData(file, function (binaryData: any) {
+        //         console.log( "bbb",binaryData);
+        //         let bomb = new Blob([binaryData]);
+        //         console.log("bomb", bomb)
+        //         bomb.type = file.type
+        //         setPicture(bomb)
+        //     });
+        // }
+        setPicture(file)
+
+
+
+    }
+
     return (
         <div className="box">
             {isOpen &&
                 <div className="photo-box">
+                    <form>
+                        <input
+                            type="file"
+                            onChange={handleOnChange}
+                        />
+                    </form>
                 </div>}
             <div className='messageContainer'>
                 <button type="submit" className='firstCurrentSettings' onClick={isPhotoBoxOpen}>
@@ -99,8 +148,7 @@ function AddMessage() {
                 </button>
                 <form>
                 <textarea
-                    value={currrentMessage}
-                    ref={ref}
+                    value={currentMessage}
                     maxLength={1000}
                     onChange={handleSetCurrentMessage}
                     onKeyDown={handleKeyDown}

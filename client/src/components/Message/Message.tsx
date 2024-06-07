@@ -1,60 +1,91 @@
-import {useState, useRef} from 'react';
+import {useEffect, useState} from 'react';
 import '../../css/Message.css';
 import {useUserStore} from "../../stores/UserStore";
 import {Icon} from "@gravity-ui/uikit";
-import {FaceSmile} from "@gravity-ui/icons";
 import Picker, {EmojiClickData} from "emoji-picker-react";
 import Popup from "reactjs-popup";
 import {Heart} from "@gravity-ui/icons";
+import {observer} from "mobx-react-lite";
 
 
 type Message = {
     message: any;
 }
-const getInitialCurrentMessage = () => {
-    return sessionStorage.getItem('currentMessage')  || '';
-}
 
 function Message(props: Message) {
     const {message} = props;
-    const {userID} = useUserStore()
-    const [scrollPos, setScrollPos] = useState(0)
+    let {apiVersion, currentUserID, idNames} = useUserStore()
+    const [isContent, setCOntent] = useState(false)
 
     function isMine() {
-        return message.senderId === userID
+        return message.senderId === currentUserID;
     }
 
-    function deleteReaction() {
-        setIsReaction(false)
+    useEffect(() => {
+
+        const getMyInfo = async () => {
+            const res = await fetch(apiVersion + `/messages/${message.id}`)
+            const isExist = await res.json();
+            console.log(message.id, isExist.imageContent, "ты должен выводиться каждый раз")
+            setCOntent(isExist.imageContent)
+        }
+        getMyInfo()
+    }, [])
+
+    useEffect(() => {
+        const getMyAvatar = async () => {
+
+            const res = await fetch(apiVersion + `/messages/${message.id}/image`)
+            console.log(res)
+            let imageNod = document.getElementById(message.id + "z")
+            console.log("Я нашел", imageNod)
+            // @ts-ignore
+            let imgUrl = res.url
+            // @ts-ignore
+            imageNod.src = imgUrl
+
+        }
+        getMyAvatar()
+    }, [isContent])
+    const onEmojiClick = async (curEmoji: EmojiClickData) => {
+        if (curEmoji.emoji !== "") {
+            const res = await fetch(apiVersion + `/messages/${message.id}/reactions`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    reaction: curEmoji.emoji,
+                    messageId: message.id,
+                    userId: message.senderId
+                })
+            });
+        }
     }
 
-    const [isReaction, setIsReaction] = useState(false);
-    // const ref = useRef<null | HTMLDivElement>(null)
-    const [currentReaction, setCurrentReaction] = useState('😄');
-    const onEmojiClick = (curEmoji: EmojiClickData) => {
-        setIsReaction(true)
-        setCurrentReaction(curEmoji.emoji)
-        // if (ref.current) {
-        //     ref.current.style.height = `${ref.current.scrollHeight}px`
-        // }
-        // setScrollPos(ref.current?.scrollTop  0)
-        // if (ref.current) {
-        // ref.current.scrollTop = scrollPos
-        // }
-        // const currentMessage = sessionStorage.getItem('currentMessage')
-        // const newMessage = currentMessage ? currentMessage + curEmoji.emoji : curEmoji.emoji
-        // setCurrentMessage(newMessage)
-        // sessionStorage.setItem('currentMessage', newMessage)
+    function getReactions(r: any) {
+        return r.reaction
     }
 
-    function msToTime(duration: number) {
-        let minutes = Math.floor((duration / (1000 * 60)) % 60)
-        let hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+    const deleteReaction = async (r: any) => {
+        const res = await fetch(apiVersion + `/messages/${message.id}/reactions`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                reaction: r.reaction
+            })
+        })
+    }
 
-        let hourslength = (hours < 10) ? "0" + hours : hours;
-        let minuteslength = (minutes < 10) ? "0" + minutes : minutes;
 
-        return hourslength + ":" + minuteslength;
+    function getMessageTime(time: number) {
+        const date = new Date(time);
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+
+        return `${hours}:${minutes}`;
     }
 
     return (
@@ -69,17 +100,36 @@ function Message(props: Message) {
                         <div className="message-body">
                             <div className="block-of-message">
                                 <div className="author">
-                                    <p>{message.senderId}</p>
+                                    <p>{idNames.get(message.senderId)}</p>
                                 </div>
                                 <div className="text">
                                     <p>{message.content}</p>
                                 </div>
-                                <div className="data">
-                                    <p>{msToTime(message.sendingTime)}</p>
-                                </div>
+                                {message.reactions.length === 0 && <div className="data">
+                                    <p>{getMessageTime(message.sendingTime)}</p>
+                                </div>}
                             </div>
-                            {isReaction && <div className="block-of-reaction" onClick={deleteReaction}>
-                                <div>{currentReaction}</div>
+                            {isContent &&
+                            <div className="test">
+                                <img id={message.id + "z"} style={{
+                                    width: "100px",
+                                    height: "100px",
+                                    backgroundRepeat: "no-repeat",
+                                    backgroundPosition: "50%",
+
+                                }}/>
+                            </div>
+                            }
+                            {message.reactions.length !== 0 && <div className="block-of-reaction">
+                                <div className='reactionsAndTime'>
+                                    {message.reactions.map((r: any) =>
+                                        <button className='reactionsBlock'
+                                                onClick={() => deleteReaction(r)}>{getReactions(r)}</button>
+                                    )}
+                                </div>
+                                <div className="data_reaction">
+                                    <p>{getMessageTime(message.sendingTime)}</p>
+                                </div>
                             </div>
                             }
                         </div>
@@ -110,17 +160,35 @@ function Message(props: Message) {
                         <div className="message-body">
                             <div className="block-of-message">
                                 <div className="author">
-                                    <p>{message.senderId}</p>
+                                    <p>{idNames.get(message.senderId)}</p>
                                 </div>
                                 <div className="text">
                                     <p>{message.content}</p>
                                 </div>
-                                <div className="data">
-                                    <p>{msToTime(message.sendingTime)}</p>
-                                </div>
+                                {message.reactions.length === 0 && <div className="data">
+                                    <p>{getMessageTime(message.sendingTime)}</p>
+                                </div>}
                             </div>
-                            {isReaction && <div className="block-of-reaction" onClick={deleteReaction}>
-                                <div>{currentReaction}</div>
+                            {isContent &&
+                            <div className="test">
+                                <img id={message.id + "z"} style={{
+                                    width: "100px",
+                                    height: "100px",
+                                    backgroundRepeat: "no-repeat",
+                                    backgroundPosition: "50%",
+
+                                }}/>
+                            </div>}
+                            {message.reactions.length !== 0 && <div className="block-of-reaction">
+                                <div className='reactionsAndTime'>
+                                    {message.reactions.map((r: any) =>
+                                        <button className='reactionsBlock'
+                                                onClick={() => deleteReaction(r)}>{getReactions(r)}</button>
+                                    )}
+                                </div>
+                                <div className="data_reaction">
+                                    <p>{getMessageTime(message.sendingTime)}</p>
+                                </div>
                             </div>
                             }
                         </div>
@@ -147,4 +215,4 @@ function Message(props: Message) {
 
 }
 
-export default Message;
+export default observer(Message);

@@ -1,30 +1,23 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import '../../css/Dialog.css';
-import {Button, Modal} from "@gravity-ui/uikit";
-// import settings from "../../settings-svgrepo-com.svg";
-import Profile from "../Profile/Profile";
 import HeaderOfBodyMain from "../HeaderOfBodyMain/HeaderOfBodyMain";
 import AddMessage from "../AddMessage/AddMessage";
 import DialogWithMessages from "../DialogWithMessages/DialogWithMessages";
-import ChatBar from "../ChatBar/ChatBar";
-import message from "../Message/Message";
 import {useUserStore} from "../../stores/UserStore";
 import {observer} from "mobx-react-lite";
 
 
 function Dialog() {
-    const { dialogID, flag, apiVersion } = useUserStore()
+    const { dialogID, flag, apiVersion, changedDialog, changedMessages } = useUserStore()
     const [messages, setMessages] = useState([])
     useEffect(() => {
-        console.log("dialog")
         const getMessages = async () => {
             const res = await fetch(apiVersion + `/chats/${dialogID}/messages`)
             const messages = await res.json()
-            console.log(messages);
             setMessages(messages)
         }
         getMessages() 
-    }, [dialogID, flag])
+    }, [dialogID, flag, changedDialog, changedMessages])
 
     function isDefault() {
         return dialogID === 0
@@ -34,7 +27,7 @@ function Dialog() {
         <>
             {!isDefault() && <div className="dialog">
                 <HeaderOfBodyMain dialogId={dialogID}/>
-                <DialogWithMessages messages={messages}/>
+                <DialogWithMessages messages={messages} dialogId={dialogID}/>
                 <AddMessage/>
             </div>}
 

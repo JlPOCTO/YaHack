@@ -715,13 +715,13 @@ paths:
       summary: Удалить реакцию
       description: Удаляет реакцию по ее id
       operationId: deleteReaction
-      parameters: 
+      parameters:
         - name: id
           in: path
           required: true
-          schema: 
+          schema:
             type: integer
-      responses: 
+      responses:
         '200':
           description: Успешно
         '400':
@@ -747,7 +747,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReactionRequest'
+                $ref: '#/components/schemas/ReactionRequest'
       responses:
         '200':
           description: Успешно, возвращает новую реакцию

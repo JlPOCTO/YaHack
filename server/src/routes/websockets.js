@@ -7,9 +7,9 @@ function init(ws) {
 
 function sendByUserArray(userArray, response, currentUser) {
     for (let user of userArray) {
-        if (process.env.MODE !== "TEST" && user.id === currentUser) {
-            continue
-        }
+        //if (process.env.MODE !== "TEST" && user.id === currentUser) {
+        //    continue
+        //}
         let ws = module.exports.currentUsers[user.id]
         if (ws === undefined) {
             continue

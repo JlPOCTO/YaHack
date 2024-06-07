@@ -11,3 +11,8 @@ ll {
 .components{
 
 }
+.p-sidebar-left .p-sidebar {
+    background-color: dimgrey;
+    width: 20rem;
+    height: 100%;
+}

@@ -6,7 +6,7 @@ type Contacts = {
   contacts: any;
 }
 
-function Contacts(props: Contacts) {
+function Subscribers(props: Contacts) {
   const { t } = useTranslation();
   const { contacts } = props;
   function find(name : any) {
@@ -17,14 +17,14 @@ function Contacts(props: Contacts) {
   return (
     <div className='contacts'>
       <header>
-        <p className='header'>{t('contactsTitle')}:</p>
+        <p className='header'>{t('subscribers')}:</p>
       </header>
       <main>
         {contacts.map((contact: any) =>
-          find(contact.name)
+          <div>{contact.login}</div>
         )}
       </main>
     </div>
   );
 }
-export default Contacts;
+export default Subscribers;
