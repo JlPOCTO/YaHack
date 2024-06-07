@@ -1,5 +1,6 @@
 const usualChecks = require('../utilities/validationFunctions')
 const databaseChecks = require("../database/dbChecks");
+const {getContacts} = require("../database/dbUsers");
 
 function usualCheckTemplate(checker, extractor) {
     return (req, res, next) => {
@@ -112,6 +113,19 @@ const chatRequestMiddleware = async (req, res, next) => {
     if (!usualChecks.checkChatRequest(req.body)) {
         res.sendStatus(400)
         return
+    }
+    let contacts = await getContacts(req.user.id)
+    if (contacts === undefined) {
+        res.sendStatus(500)
+    }
+    contacts = contacts.map(x => x.id)
+    if (req.body.chatType === "direct") {
+        for (let userId of req.body.users) {
+            if (contacts.includes(userId)) {
+                res.sendStatus(403)
+                return
+            }
+        }
     }
     if (!req.body.users.includes(req.user.id)) {
         res.sendStatus(403)

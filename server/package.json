@@ -19,6 +19,7 @@
     "express-fileupload": "^1.5.0",
     "express-session": "1.18.0",
     "express-session-sqlite": "^2.1.1",
+    "express-ws": "^5.0.2",
     "identicon": "^3.1.1",
     "nodemon": "^3.1.0",
     "passport": "0.7.0",

@@ -54,6 +54,25 @@ async function updateUserAvatar(id, avatarPath) {
     }
 }
 
+async function getContacts(id) {
+    try {
+        const contacts = await db.database.all(`
+                SELECT user_id
+                FROM users_in_chats
+                INNER JOIN (SELECT id FROM chats WHERE type = "direct") AS directs
+                ON users_in_chats.chat_id = directs.id
+                WHERE user_id <> ?`, id)
+        if (contacts === undefined) {
+            logError("getContacts", arguments, "Не получилось достать контакты")
+            return
+        }
+        return Promise.all(contacts.map(async entry => await getUserById(entry.user_id)))
+    } catch (e) {
+        logError("getContacts", arguments, e)
+    }
+}
+
+
 module.exports = {
-    addUser, getUserById, getUserByLogin, getAllUsers, updateUserAvatar
+    addUser, getUserById, getUserByLogin, getAllUsers, updateUserAvatar, getContacts
 }
