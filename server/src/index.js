@@ -17,6 +17,7 @@ const {authRouter} = require('./routes/authenticationAPI');
 const {chatsRouter} = require('./routes/chatsAPI');
 const {usersRouter} = require('./routes/usersAPI');
 const {messagesRouter} = require('./routes/messagesAPI');
+const {reactionsRouter} = require('./routes/reactionsAPI');
 const {deprecatedRouter} = require('./routes/deprecated');
 const websockets = require('./routes/websockets');
 
@@ -48,6 +49,7 @@ const websockets = require('./routes/websockets');
     app.use(chatsRouter);
     app.use(usersRouter);
     app.use(messagesRouter);
+    app.use(reactionsRouter);
     app.use(deprecatedRouter);
     app.listen(process.env.PORT);
 })();

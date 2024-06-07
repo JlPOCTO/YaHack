@@ -486,36 +486,6 @@ paths:
         '500':
           description: Ошибка на сервере
 
-  /chats/{chatId}/lastMessage:
-    get:
-      tags:
-        - chat
-      summary: TODO Получить последнее сообщение в чате
-      operationId: getLastMessage
-      parameters:
-        - name: chatId
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Успешно
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Message'
-        '400':
-          description: Некорректный запрос
-        '401':
-          description: Клиент не авторизован
-        '403':
-          description: Клиент не имеет доступа к чату
-        '404':
-          description: Чат или сообщение не существуют
-        '500':
-          description: Ошибка на сервере
-
   /chats/{chatId}/invite-link:
     get:
       tags:
@@ -722,11 +692,6 @@ paths:
           required: true
           schema:
             type: integer
-        - name: chatId
-          in: query
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: Успешно
@@ -739,9 +704,9 @@ paths:
         '401':
           description: Клиент не авторизован
         '403':
-          description: Клиент не имеет доступа к сообщению
+          description: Клиент не имеет доступа к реакции
         '404':
-          description: Сообщения не существует
+          description: Реакции не существует
         '500':
           description: Ошибка на сервере
     delete:
@@ -755,11 +720,6 @@ paths:
           in: path
           required: true
           schema: 
-            type: integer
-        - name: chatId
-          in: query
-          required: true
-          schema:
             type: integer
       responses: 
         '200':
@@ -805,96 +765,6 @@ paths:
           description: Сообщения не существует
         '500':
           description: Ошибка на сервере
-
-  /messages/{messageId}/reactions:
-      get:
-        tags:
-          - messages
-        summary: Получить все реакции с сообщения
-        operationId: getReactions
-        parameters: 
-          - name: messageId
-            in: path
-            required: true
-            schema: 
-              type: integer
-        responses: 
-          '200':
-            description: Успешно
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Reaction'
-          '400':
-            description: Некорректный запрос
-          '401':
-            description: Клиент не авторизован
-          '403':
-            description: Клиент не имеет доступа к сообщению
-          '404':
-            description: Сообщения не существует
-          '500':
-            description: Ошибка на сервере
-      post:
-        tags:
-          - reaction
-        summary: Добавить реакцию на сообщение
-        operationId: addReaction
-        parameters: 
-          - name: messageId
-            in: path
-            required: true
-            schema: 
-              type: integer
-          - name: chatId
-            in: query
-            required: true
-            schema:
-              type: integer
-        responses: 
-          '200':
-            description: Успешно
-          '400':
-            description: Некорректный запрос
-          '401':
-            description: Клиент не авторизован
-          '403':
-            description: Клиент не имеет доступа к сообщению
-          '404':
-            description: Сообщения не существует
-          '500':
-            description: Ошибка на сервере
-      delete:
-        tags:
-          - reaction
-        summary: Удалить реакцию пользователя с сообщения
-        operationId: deleteReactionFromMessage
-        parameters: 
-          - name: messageId
-            in: path
-            required: true
-            schema: 
-              type: integer
-          - name: chatId
-            in: query
-            required: true
-            schema:
-              type: integer
-        responses: 
-          '200':
-            description: Успешно
-          '400':
-            description: Некорректный запрос
-          '401':
-            description: Клиент не авторизован
-          '403':
-            description: Клиент не имеет доступа к сообщению
-          '404':
-            description: Сообщения не существует
-          '500':
-            description: Ошибка на сервере
 
 components:
   schemas:
