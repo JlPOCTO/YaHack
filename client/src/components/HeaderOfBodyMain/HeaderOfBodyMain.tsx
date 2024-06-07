@@ -57,16 +57,13 @@ function HeaderOfBodyMain(props:  any) {
             const dialog = await res.json()
             setId(dialog.id)
             if (dialog.type === "group") {
-                console.log("chatId", dialog.id)
                 const res = await fetch(apiVersion + `/chats/${dialogID}/avatar`)
-                console.log(res)
                 let imageNod = document.getElementById(dialogID + "ooo")
                 // @ts-ignore
                 let imgUrl = res.url
                 // @ts-ignore
                 imageNod.src = imgUrl
             } else {
-                console.log("dialogId", dialog.id)
                 let partner ={}
                 dialog.users.forEach((u: any) => {
                     if (u.id !== currentUserID) {
@@ -75,7 +72,6 @@ function HeaderOfBodyMain(props:  any) {
                 })
                 // @ts-ignore
                 const res = await fetch(apiVersion + `/users/${partner.id}/avatar`)
-                console.log(res)
                 let imageNod = document.getElementById(dialogID+ "ooo")
                 // @ts-ignore
                 let imgUrl = res.url

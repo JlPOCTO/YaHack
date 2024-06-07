@@ -27,7 +27,6 @@ function ModalGroupSettings(props: DialogId) {
     useEffect(() => {
 
         const getMyInfo = async () => {
-            console.log(apiVersion + '/users/me');
             const res = await fetch(apiVersion + '/users/me')
             const me = await res.json();
             if (!me.name) {
@@ -60,7 +59,6 @@ function ModalGroupSettings(props: DialogId) {
             });
         } else {
             setDialogID(0)
-            console.log(me)
             // @ts-ignore
             const res = await fetch(apiVersion + `/chats/${dialogID}/user?userId=${me.id}`, {
                 method: 'DELETE',

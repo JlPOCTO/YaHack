@@ -8,11 +8,9 @@ import picture from '../../../static/picture.jpg';
 
 function BodyMain() {
 
-    // const { idOfShownDialog} = props;
-    const [isShown, setIsShown] = useState(false);
+  const [isShown, setIsShown] = useState(false);
   return (
     <div className="body-main">
-        {/* <img src={picture} className="Settings" alt="settings" /> */}
         {<Dialog/>}
     </div>
   );

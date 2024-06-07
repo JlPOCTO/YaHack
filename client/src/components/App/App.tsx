@@ -28,7 +28,6 @@ function App() {
     };
     socket.onmessage = function (event: any) {
       var json = JSON.parse(event.data);
-      //alert("Got message: " + json);
       switch (json.source) {
         case apiVersion + "/users/myAvatar": {
           setChangedUserAvatar(!getChangedUserAvatar());
@@ -65,7 +64,7 @@ function App() {
     };
 
     socket.onerror = function (error: any) {
-      alert("Ошибка " + error);
+      alert("пїЅпїЅпїЅпїЅпїЅпїЅ " + error);
     };
   }
 
