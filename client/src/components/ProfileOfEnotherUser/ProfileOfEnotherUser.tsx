@@ -21,7 +21,6 @@ function ProfileOfEnotherUser(props: Profile) {
     useEffect(() => {
 
         const getMyInfo = async () => {
-            console.log(apiVersion + '/users/me');
             const res = await fetch(apiVersion + '/users/me')
             const me = await res.json();
             if (!me.name) {

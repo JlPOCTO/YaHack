@@ -3,7 +3,7 @@ import {FaceSmile, File, ArrowShapeRight} from '@gravity-ui/icons';
 import {Icon} from '@gravity-ui/uikit';
 import Popup from 'reactjs-popup';
 import Picker, {EmojiClickData} from 'emoji-picker-react';
-import {useState, useRef, useEffect} from 'react';
+import {useState, useRef } from 'react';
 import {useUserStore} from "../../stores/UserStore";
 import '../../i18n/config';
 import {useTranslation} from 'react-i18next';
@@ -15,7 +15,7 @@ const getInitialCurrentMessage = () => {
 
 function AddMessage() {
     let {dialogID, setFlag, flag, apiVersion} = useUserStore()
-    const ref = useRef<HTMLTextAreaElement>(null)
+    // const ref = useRef<HTMLTextAreaElement>(null)
     const {t, i18n} = useTranslation();
     const [messages, setMessage] = useState([])
     const [isOpen, setOpen] = useState(false)

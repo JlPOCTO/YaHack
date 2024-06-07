@@ -42,13 +42,13 @@ function DialogWithMessages(props: DialogWithMessages) {
 
     useLayoutEffect(() => {
         // setTimeout(() => {
-            // console.log("text", lastMessage.current, lastMessage.current?.scrollHeight)
-            if ((lastMessage.current)) {
-                setLen(messages.length)
-                lastMessage.current.scrollTop = lastMessage.current.scrollHeight
-            }
+        // console.log("text", lastMessage.current, lastMessage.current?.scrollHeight)
+        if ((lastMessage.current)) {
+            setLen(messages.length)
+            lastMessage.current.scrollTop = lastMessage.current.scrollHeight
+        }
         // }, 0)
-        
+
     }, [messages]);
 
 
@@ -56,7 +56,7 @@ function DialogWithMessages(props: DialogWithMessages) {
         <div className='dialog-container'>
             <div className='dialog-with-messages' ref={lastMessage}>
                 {messages.map((message: any) =>
-                    <Message message={message} dialogType={dialogType}/>
+                    <Message message={message} />
                 )}
             </div>
         </div>

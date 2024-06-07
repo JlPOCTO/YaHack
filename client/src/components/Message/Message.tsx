@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import '../../css/Message.css';
 import { useUserStore } from "../../stores/UserStore";
 import { Icon } from "@gravity-ui/uikit";
@@ -10,45 +10,48 @@ import { observer } from "mobx-react-lite";
 
 type Message = {
     message: any;
-    dialogType: any;
-}
-const getInitialCurrentMessage = () => {
-    return sessionStorage.getItem('currentMessage') || '';
 }
 
 function Message(props: Message) {
-    const { message, dialogType } = props;
-    let { apiVersion, currentUserID } = useUserStore()
+    const { message } = props;
+    let { apiVersion, currentUserID, idNames } = useUserStore()
     const { changedUserAvatar } = useUserStore()
     const [scrollPos, setScrollPos] = useState(0)
     const [userName, setName] = useState([])
     function isMine() {
         return message.senderId === currentUserID;
     }
-    useEffect(() => {
-        const getUserName = async () => {
-            const res = await fetch(apiVersion + `/users/${message.senderId}`)
-            const curMessage = await res.json()
-            let user = currentUserID
-            if (!curMessage.name) {
-                user = curMessage.login
-            } else {
-                user = curMessage.name
-            }
-            setName(user)
-        }
-        getUserName()
-    }, [changedUserAvatar])
 
-    const [isReaction, setIsReaction] = useState(false);
-    // const ref = useRef<null | HTMLDivElement>(null)
-    const [currentReaction, setCurrentReaction] = useState('😄');
-    const onEmojiClick = (curEmoji: EmojiClickData) => {
-        setIsReaction(true)
-        setCurrentReaction(curEmoji.emoji)
+    const onEmojiClick = async (curEmoji: EmojiClickData) => {
+        if (curEmoji.emoji !== "") {
+            const res = await fetch(apiVersion + `/messages/${message.id}/reactions`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    reaction: curEmoji.emoji,
+                    messageId: message.id,
+                    userId: message.senderId
+                })
+            });
+        }
     }
-    function deleteReaction() {
-        setIsReaction(false)
+
+    function getReactions(r: any) {
+        return r.reaction
+    }
+
+    const deleteReaction = async (r: any) => {
+        const res = await fetch(apiVersion + `/messages/${message.id}/reactions`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                reaction: r.reaction
+            })
+        })
     }
 
 
@@ -71,18 +74,25 @@ function Message(props: Message) {
                         </div>
                         <div className="message-body">
                             <div className="block-of-message">
-                                {dialogType === "group" && <div className="author">
-                                    <p>{userName}</p>
-                                </div>}
+                                <div className="author">
+                                    <p>{idNames.get(message.senderId)}</p>
+                                </div>
                                 <div className="text">
                                     <p>{message.content}</p>
                                 </div>
-                                <div className="data">
+                                {message.reactions.length === 0 && <div className="data">
+                                    <p>{getMessageTime(message.sendingTime)}</p>
+                                </div>}
+                            </div>
+                            {message.reactions.length !== 0 && <div className="block-of-reaction">
+                                <div className='reactionsAndTime'>
+                                    {message.reactions.map((r: any) =>
+                                        <button className='reactionsBlock' onClick={() => deleteReaction(r)}>{getReactions(r)}</button>
+                                    )}
+                                </div>
+                                <div className="data_reaction">
                                     <p>{getMessageTime(message.sendingTime)}</p>
                                 </div>
-                            </div>
-                            {isReaction && <div className="block-of-reaction" onClick={deleteReaction}>
-                                <div>{currentReaction}</div>
                             </div>
                             }
                         </div>
@@ -112,18 +122,25 @@ function Message(props: Message) {
                         </div>
                         <div className="message-body">
                             <div className="block-of-message">
-                                {dialogType === "group" && <div className="author">
-                                    <p>{userName}</p>
-                                </div>}
+                                <div className="author">
+                                    <p>{idNames.get(message.senderId)}</p>
+                                </div>
                                 <div className="text">
                                     <p>{message.content}</p>
                                 </div>
-                                <div className="data">
+                                {message.reactions.length === 0 && <div className="data">
+                                    <p>{getMessageTime(message.sendingTime)}</p>
+                                </div>}
+                            </div>
+                            {message.reactions.length !== 0 && <div className="block-of-reaction">
+                                <div className='reactionsAndTime'>
+                                    {message.reactions.map((r: any) =>
+                                        <button className='reactionsBlock' onClick={() => deleteReaction(r)}>{getReactions(r)}</button>
+                                    )}
+                                </div>
+                                <div className="data_reaction">
                                     <p>{getMessageTime(message.sendingTime)}</p>
                                 </div>
-                            </div>
-                            {isReaction && <div className="block-of-reaction" onClick={deleteReaction}>
-                                <div>{currentReaction}</div>
                             </div>
                             }
                         </div>
