@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../../css/ChatBar.css';
 import {Button, Modal} from "@gravity-ui/uikit";
 // import settings from "../../settings-svgrepo-com.svg";
@@ -15,7 +15,7 @@ type ChatBarProps = {
 
 function ChatBar(props: ChatBarProps) {
     const {dialog} = props;
-    const {dialogID, setDialogID, userID, setChatName} = useUserStore()
+    const {dialogID, setDialogID, currentUserID, setChatName, apiVersion} = useUserStore()
 
     // const [isShown, setIsShown] = useState(false);
     const [isActual, setIsActual] = useState(false);
@@ -26,27 +26,97 @@ function ChatBar(props: ChatBarProps) {
 
     function getchatName() {
         if (dialog.type === "direct") {
-            let partner = 0
-            // dialog.users.forEach((u) => {if (u !== userID) partner = u})
-            setChatName("Dialog" + dialog.id)
-            return "Dialog" + dialog.id
+            let partner = currentUserID
+            dialog.users.forEach((u: any) => {
+                if (u.id !== currentUserID) {
+                    if (!u.name) {
+                        partner = u.login
+                    } else {
+                        partner = u.name
+                    }
+                }
+            })
+            setChatName(partner)
+            return partner
         } else {
             setChatName(dialog.name)
             return dialog.name
         }
     }
 
+    function getLastMessage() {
+        if (dialog.lastMessage) {
+            return dialog.lastMessage.content
+        }
+    }
+
+    function getLastMessageTime() {
+        if (dialog.lastMessage) {
+            const time = dialog.lastMessage.sendingTime
+            const date = new Date(time);
+            // return date.toLocaleTimeString('ru-RU', {
+            //     hour: '2-digit',
+            //     minute: '2-digit',
+            // });
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+
+            return `${hours}:${minutes}`;
+        }
+    }
+
+    useEffect(() => {
+        const getMyAvatar = async () => {
+            if (dialog.type === "group") {
+                console.log("chatId", dialog.id)
+                const res = await fetch(apiVersion + `/chats/${dialog.id}/avatar`)
+                console.log(res)
+                let imageNod = document.getElementById(dialog.id + "jjj")
+                // @ts-ignore
+                let imgUrl = res.url
+                // @ts-ignore
+                imageNod.src = imgUrl
+            } else {
+                console.log("dialogId", dialog.id)
+                let partner ={}
+                dialog.users.forEach((u: any) => {
+                    if (u.id !== currentUserID) {
+                        partner = u
+                    }
+                })
+                // @ts-ignore
+                const res = await fetch(apiVersion + `/users/${partner.id}/avatar`)
+                console.log(res)
+                let imageNod = document.getElementById(dialog.id + "jjj")
+                // @ts-ignore
+                let imgUrl = res.url
+                // @ts-ignore
+                imageNod.src = imgUrl
+            }
+        }
+        getMyAvatar()
+    }, [])
+
+
     return (
         <div className="chat-bar">
             <Button onClick={action((e) => {
                 setDialogID(dialog.id)
+                setChatName(getchatName())
             })} className={className}
                     style={{
                         borderRadius: "10px"
                     }}>
                 <div className="chat-bar-pro">
                     <div className="space-for-avatar">
-
+                        {/*{getImageOfChat}*/}
+                        <img id={dialog.id + "jjj"} style={{
+                            width: "60px",
+                            height: "60px",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "50%",
+                            borderRadius: "50%"
+                        }}/>
                     </div>
                     <div id="chat-information">
                         <div id="chatName-time">
@@ -54,12 +124,12 @@ function ChatBar(props: ChatBarProps) {
                                 {getchatName()}
                             </div>
                             <div id="time">
-                                Time: {dialog.id}
+                                {getLastMessageTime()}
                             </div>
                         </div>
                         <div id="last-message">
                             <div id="to-left">
-                                LastMessage: {dialog.id}
+                                {getLastMessage()}
                             </div>
                         </div>
                     </div>

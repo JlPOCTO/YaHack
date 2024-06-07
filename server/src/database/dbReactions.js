@@ -46,11 +46,22 @@ async function addReaction(messageId, userId, reaction) {
     }
 }
 
-async function deleteReaction(id) {
-    const TAG = "deleteReaction"
+async function deleteReactionById(id) {
+    const TAG = "deleteReactionById"
 
     try {
         await db.database.run(`DELETE FROM reactions WHERE id = ?`, id)
+        return true
+    } catch (e) {
+        logError(TAG, arguments, e)
+    }
+}
+
+async function deleteReaction(messageId, userId, reaction) {
+    const TAG = "deleteReaction"
+
+    try {
+        await db.database.run(`DELETE FROM reactions WHERE message_id = ? AND user_id = ? AND reaction = ?`, messageId, userId, reaction)
         return true
     } catch (e) {
         logError(TAG, arguments, e)
@@ -71,6 +82,7 @@ async function deleteReactionsFromMessage(messageId) {
 module.exports = {
     getReaction,
     addReaction,
+    deleteReactionById,
     deleteReaction,
     deleteReactionsFromMessage,
     getReactionsByMessage

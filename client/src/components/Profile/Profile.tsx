@@ -13,10 +13,17 @@ type Profile = {
 function Profile(props: Profile) {
 
   let { apiVersion } = useUserStore();
+  let { changedUserAvatar } = useUserStore()
   const { me } = props;
   const {t, i18n} = useTranslation();
   const [open, setOpen] = useState(false);
+  const [avatar, setAvatar] = useState("");
   const [contacts, setMyContacts] = useState([])
+  function find(name : any) {
+    if (name !== 'null') {
+      return <div className='profileName'>{name}</div>
+    } 
+  }
   useEffect(() => {
 
     const getMyInfo = async () => {
@@ -25,15 +32,35 @@ function Profile(props: Profile) {
       setMyContacts(contacts)
     }
     getMyInfo()
+  }, [changedUserAvatar])
+  useEffect(() => {
+
+    const getMyAvatar = async () => {
+      const res = await fetch(apiVersion + '/users/myAvatar')
+      console.log(res)
+      let imageNod = document.getElementById('image')
+      // @ts-ignore
+      let imgUrl = res.url
+      // @ts-ignore
+      imageNod.src = imgUrl
+    }
+    getMyAvatar()
   }, [])
+
 
   return (
     <div className='profile'>
       <header>
         <div className='userProfile'>
-          <div className='userPhoto'></div>
+          <div className='userPhoto'>
+            <img id = "image" style = {{width: "100px",
+            height: "100px",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "50%",
+              borderRadius: "50%"}} />
+          </div>
           <div className='userData'>
-            <div className='profileName'>{me.name}</div>
+            {find(me.name)}
             <div className='profileLogin'>{me.login}</div>
           </div>
         </div>

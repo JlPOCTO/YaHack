@@ -3,7 +3,7 @@ import {FaceSmile, File, ArrowShapeRight} from '@gravity-ui/icons';
 import {Icon} from '@gravity-ui/uikit';
 import Popup from 'reactjs-popup';
 import Picker, {EmojiClickData} from 'emoji-picker-react';
-import {useState, useRef, useEffect} from 'react';
+import {useState, useRef } from 'react';
 import {useUserStore} from "../../stores/UserStore";
 import '../../i18n/config';
 import {useTranslation} from 'react-i18next';
@@ -14,12 +14,12 @@ const getInitialCurrentMessage = () => {
 }
 
 function AddMessage() {
-    let { dialogID, userID, setFlag, flag, apiVersion } = useUserStore()
-    const ref = useRef<HTMLTextAreaElement>(null)
+    let {dialogID, setFlag, flag, apiVersion} = useUserStore()
+    // const ref = useRef<HTMLTextAreaElement>(null)
     const {t, i18n} = useTranslation();
     const [messages, setMessage] = useState([])
     const [isOpen, setOpen] = useState(false)
-    const [currrentMessage, setCurrentMessage] = useState(getInitialCurrentMessage())
+    const [currentMessage, setCurrentMessage] = useState(getInitialCurrentMessage())
     const onEmojiClick = (curEmoji: EmojiClickData) => {
         const currentMessage = sessionStorage.getItem('currentMessage')
         const newMessage = currentMessage ? currentMessage + curEmoji.emoji : curEmoji.emoji
@@ -31,26 +31,25 @@ function AddMessage() {
         const g = !flag
         setFlag(g)
 
-        const date = Date.now() + 10800000;
+        const date = Date.now();
         const showTime = date
-        if (currrentMessage !== "") {
+        if (currentMessage !== "") {
             const res = await fetch(apiVersion + `/messages`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    content: currrentMessage,
+                    content: currentMessage,
                     chatId: dialogID,
                     imageContent: ""
                 })
             });
             const messages = await res.json();
             setMessage(messages)
-            console.log("jjj"+typeof messages)
-            
+
             setCurrentMessage('')
-            
+
             sessionStorage.setItem('currentMessage', '')
         }
     }
@@ -59,16 +58,6 @@ function AddMessage() {
         setCurrentMessage(e.target.value)
         sessionStorage.setItem('currentMessage', e.target.value)
     }
-
-    useEffect(() => {
-        const changeHeight = () => {
-            if (ref.current) {
-                ref.current.style.height = 'auto';
-                ref.current.style.height = ref.current.scrollHeight + 'px';
-            }
-        };
-        changeHeight();
-    }, [currrentMessage]);
 
 
     function isPhotoBoxOpen() {
@@ -99,8 +88,7 @@ function AddMessage() {
                 </button>
                 <form>
                 <textarea
-                    value={currrentMessage}
-                    ref={ref}
+                    value={currentMessage}
                     maxLength={1000}
                     onChange={handleSetCurrentMessage}
                     onKeyDown={handleKeyDown}

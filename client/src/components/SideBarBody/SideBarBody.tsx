@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 import '../../css/SideBarBody.css';
 // import '../../css/ChatBar.css';
 import ChatBar from "../ChatBar/ChatBar";
-import {Button, Icon} from "@gravity-ui/uikit";
-import {useUserStore} from "../../stores/UserStore";
+import { Button, Icon } from "@gravity-ui/uikit";
+import { useUserStore } from "../../stores/UserStore";
 import {observer} from "mobx-react-lite";
 import {action} from "mobx";
 import SearchPersonBar from "../SearchPersonBar/SearchPersonBar";
@@ -12,29 +12,22 @@ import SearchPersonBar from "../SearchPersonBar/SearchPersonBar";
 // import load = Simulate.load;
 import '../../i18n/config';
 import {useTranslation} from 'react-i18next';
-import {ArrowRotateRight, Pencil} from '@gravity-ui/icons';
-import Profile from "../Profile/Profile";
-import {Sidebar} from 'primereact/sidebar';
-import Contacts from "../Contacts/Contacts";
 import AddChat from "../AddChat/AddChat";
 
 const API_HOST = 'http://localhost:3000';
 
 
 function SideBarBody() {
-    let dialog = {
-        id: 2,
-        time: 1
-    }
+
     const [contacts, setMyContacts] = useState([])
     const [visible, setVisible] = useState(false);
-    const { searchInput, setSearchInput, apiVersion } = useUserStore();
+    let { changedUserAvatar, changedDialogs, addContact, currentUserID, setCurrentUserID } = useUserStore()
+    const { searchInput, setSearchInput, apiVersion, setIdNames } = useUserStore();
     const {t, i18n} = useTranslation();
     const [dialogs, setDialogs] = useState([])
-    const [open, setOpen] = useState(false);
+    const [user, setUser] = useState({})
 
     function isSearchInputEmpty() {
-        console.log(searchInput)
         return searchInput === "";
 
     }
@@ -42,31 +35,68 @@ function SideBarBody() {
     useEffect(() => {
 
         const getMyInfo = async () => {
-            const res = await fetch('\contacts')
+            const res = await fetch(apiVersion + '/users/contacts')
             const contacts = await res.json();
             setMyContacts(contacts)
         }
         getMyInfo()
-    }, [])
+    }, [changedUserAvatar])
+
 
     useEffect(() => {
-
+        const idNames = new Map()
         const getDialogs = async () => {
+            if (!currentUserID) {
+                const resMe = await fetch(apiVersion + `/users/me`)
+                const meJson = await resMe.json()
+                setCurrentUserID(meJson.id)
+                currentUserID = meJson.id
+            }
             const res = await fetch(apiVersion + `/chats`)
             const dialogs1 = await res.json()
             setDialogs(dialogs1)
+            console.log("All dialogs: " )
+            console.log(dialogs1)
+            console.log(currentUserID)
+            dialogs1.map((dialog: any) => {
+                if (dialog.type == "direct") {
+                    for (let user of dialog.users) {
+                        if (user.id != currentUserID) {
+                            addContact(user.id, dialog.id);
+                            break;
+                        }
+                    }
+                }
+            })
+            dialogs1.forEach((d: any) => {
+                if (d.users) {
+                    d.users.forEach((u: any) => {
+                        idNames.set(u.id, u.login);
+                    })
+                }
+            })
+        }
+        setIdNames(idNames)
+        getDialogs()
+    }, [changedDialogs])
+
+    useEffect(() => {
+        const getUser = async () => {
+            // console.log( "User@@@" , searchInput)
+            const res = await fetch(apiVersion + `/users/${searchInput}`)
+            const user1 = await res.json()
+            // console.log( "User" ,user1)
+            setUser(user1)
         }
 
-        getDialogs()
-    }, [])
-
-
+        getUser()
+    }, [searchInput, changedUserAvatar])
     return (
         <>
             {isSearchInputEmpty() && <div style={{
                 overflowY: "auto",
-                maxHeight: "92%",
-                height: "92%"
+                maxHeight: "90%",
+                height: "90%"
             }}>
                 {dialogs.map((dialog: any) =>
                     <ChatBar dialog={dialog}/>
@@ -75,8 +105,8 @@ function SideBarBody() {
             </div>}
             {!isSearchInputEmpty() && <div style={{
                 overflowY: "auto",
-                maxHeight: "92%",
-                height: "92%"
+                maxHeight: "90%",
+                height: "90%"
             }}>
                 {/*{dialogs.map((dialog: any) =>*/}
                 {/*    <ChatBar dialog={dialog}/>*/}
@@ -87,13 +117,10 @@ function SideBarBody() {
                 })} className="come-back">
                     {t('addChat.back')}
                 </button>
-                //Здесь нужен запрос, который будет возвращать пользователей по имени searchInput
                 <p>
                     {t('addChat.chat')}
                 </p>
-                <SearchPersonBar/>
-
-
+                <SearchPersonBar dialog={user}/>
             </div>}
         </>
     );

@@ -51,12 +51,10 @@ function SideBarHeader() {
         const currentInput = sessionStorage.getItem('currentInput')
         console.log("cuur: " + currentInput)
         setSearchInput(currentInput)
-        console.log("search: " + searchInput)
         setCurrentInput('')
         sessionStorage.setItem('currentInput', '')
     }
     const handleSetCurrentInput = (e: any) => {
-        // console.log("handleSetCurrentInput"+ e.target.value)
         setCurrentInput(e.target.value)
         sessionStorage.setItem('currentInput', e.target.value)
     }
@@ -99,10 +97,7 @@ function SideBarHeader() {
                                 </form>
                                 <button onClick={action((e) => {
                                     const currentInput = sessionStorage.getItem('currentInput')
-                                    console.log("cuur: " + currentInput)
                                     setSearchInput(currentInput)
-                                    // searchInput = currentInput
-                                    console.log("search: " + searchInput)
                                     setCurrentInput('')
 
                                 })} className='currentSettings' id="road-button">
