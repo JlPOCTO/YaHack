@@ -1,11 +1,11 @@
-@media (min-width: 481px) {
+@media screen and (min-width: 481px)  {
     .side-bar {
         width: 38%;
         text-align: center;
         overflow: hidden;
     }
 }
-@media (max-width: 480px) {
+@media screen and (max-width: 480px) {
     .side-bar {
         width: 100%;
         text-align: center;

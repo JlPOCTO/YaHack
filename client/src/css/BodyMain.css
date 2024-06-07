@@ -1,4 +1,4 @@
-@media (min-width: 481px) {
+@media screen and (min-width: 481px) {
     .body-main, .body-empty {
         width: 80%;
         height: 100%;
@@ -27,7 +27,7 @@
     }
 }
 
-@media (max-width: 480px) {
+@media screen and (max-width: 480px) {
     .body-main {
         width: 80%;
         height: 100%;
