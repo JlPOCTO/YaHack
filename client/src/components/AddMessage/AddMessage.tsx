@@ -85,6 +85,11 @@ function AddMessage() {
         }
 
     };
+    useEffect(() => {
+        if(isOpen === true){
+            setOpen(!isOpen)
+        }
+    }, [dialogID]);
 
     return (
         <div className="box">

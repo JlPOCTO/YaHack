@@ -54,24 +54,43 @@ function ProfileOfEnotherUser(props: Profile) {
             sessionStorage.setItem('currentInput', '')
             setDialogID(newDialog.id)
             let partner = currentUserID
-            dialog.users.forEach((u: any) => {
-                if (u.id !== currentUserID) {
-                    if (!u.name) {
-                        partner = u.login
-                    } else {
-                        partner = u.name
-                    }
-                }
-            })
+            // dialog.users.forEach((u: any) => {
+            //     if (u.id !== currentUserID) {
+            //         if (!u.name) {
+            //             partner = u.login
+            //         } else {
+            //             partner = u.name
+            //         }
+            //     }
+            // })
             setChatName(partner)
         }
+    useEffect(() => {
+        const getMyAvatar = async () => {
 
+            const res = await fetch(apiVersion + `/users/${dialog.id}/avatar`)
+            console.log(res)
+            let imageNod = document.getElementById(dialog.id + "bbb")
+            // @ts-ignore
+            let imgUrl = res.url
+            // @ts-ignore
+            imageNod.src = imgUrl
+
+        }
+        getMyAvatar()
+    }, [])
 
     return (
         <div className='profile'>
             <header>
                 <div className='userProfile'>
-                    <div className='userPhoto'></div>
+                    <div className='userPhoto'>
+                        <img id = {dialog.id + "bbb"} style = {{width: "100px",
+                            height: "100px",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "50%",
+                            borderRadius: "50%"}} />
+                    </div>
                     <div className='profileName'>{dialog.login}</div>
                 </div>
             </header>
