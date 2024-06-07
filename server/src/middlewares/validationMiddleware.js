@@ -56,12 +56,24 @@ function isCorrectLogin(extractor) {
     return usualCheckTemplate(usualChecks.checkLogin, extractor)
 }
 
+function isCorrectImage(extractor) {
+    return usualCheckTemplate(usualChecks.checkImage, extractor)
+}
+
+function isCorrectFile(extractor) {
+    return usualCheckTemplate(usualChecks.checkFile, extractor)
+}
+
 function isCorrectMessageRequest(extractor) {
     return usualCheckTemplate(usualChecks.checkMessageRequest, extractor)
 }
 
 function isMessageExists(extractor) {
     return databaseUnaryCheckTemplate(databaseChecks.isMessageExists, extractor, 404)
+}
+
+function doesMessageHaveFile(extractor) {
+    return databaseUnaryCheckTemplate(databaseChecks.doesMessageHaveFile, extractor, 404)
 }
 
 function isChatExists(extractor) {
@@ -102,7 +114,7 @@ function isChatNotAccessible(chatExtractor, userExtractor) {
 
 const chatRequestMiddleware = async (req, res, next) => {
     if (!usualChecks.checkChatRequest(req.body)) {
-        res.status(400).send()
+        res.sendStatus(400)
         return
     }
     if (!req.body.users.includes(req.user.id)) {
@@ -128,11 +140,14 @@ const chatRequestMiddleware = async (req, res, next) => {
 module.exports = {
     isCorrectId,
     isCorrectLogin,
+    isCorrectImage,
+    isCorrectFile,
     chatRequestMiddleware,
     isCorrectMessageRequest,
     isUserExists,
     isUserExistsByLogin,
     isMessageExists,
+    doesMessageHaveFile,
     isChatExists,
     isReactionExists,
     isChatChangeable,

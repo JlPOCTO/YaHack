@@ -15,50 +15,59 @@ function initClient() {
     }
 }
 
-async function uploadImage(name, imageData) {
+async function uploadImage(key, imageData, name, mimetype) {
     const params = {
         Bucket: process.env.BUCKET,
-        Key: name,
+        Key: key,
         Body: imageData,
+        ContentType: mimetype,
+        Metadata: {
+            name: name,
+            mimetype: mimetype,
+        }
     };
     try {
         const command = new st.PutObjectCommand(params);
         await storage.send(command);
-        console.log(`Файл ${name} успешно загружен`);
+        console.log(`Файл ${key} успешно загружен`);
         return true;
     } catch (error) {
-        console.error(`Ошибка при загрузке файла ${name}`, error);
+        console.error(`Ошибка при загрузке файла ${key}`, error);
         return false;
     }
 }
 
-async function getImage(name) {
+async function getImage(key) {
     const params = {
         Bucket: process.env.BUCKET,
-        Key: name
+        Key: key,
     };
     try {
         const command = new st.GetObjectCommand(params);
         const result = await storage.send(command);
-        console.log(`Файл ${name} успешно получен`);
-        return Buffer.from(await result.Body.transformToByteArray());
+        console.log(`Файл ${key} успешно получен`);
+        return {
+            buffer: Buffer.from(await result.Body.transformToByteArray()),
+            name: result.Metadata.name,
+            mimetype: result.Metadata.mimetype,
+        };
     } catch (error) {
-        console.error(`Ошибка при получении файла ${name}`, error);
+        console.error(`Ошибка при получении файла ${key}`, error);
     }
 }
 
-async function deleteImage(name) {
+async function deleteImage(key) {
     const params = {
         Bucket: process.env.BUCKET,
-        Key: name
+        Key: key
     };
     try {
         const command = new st.DeleteObjectCommand(params);
         await storage.send(command);
-        console.log(`Файл ${name} успешно удален`);
+        console.log(`Файл ${key} успешно удален`);
         return true;
     } catch (error) {
-        console.error(`Ошибка при удалении файла ${name}`, error);
+        console.error(`Ошибка при удалении файла ${key}`, error);
         return false;
     }
 }

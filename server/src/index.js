@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3')
 const sqliteStoreFactory = require('express-session-sqlite');
 const sqliteStore = sqliteStoreFactory.default(expressSession);
+const fileUpload = require('express-fileupload');
 const {myPassport} = require('./myPassport');
 const {launchDB} = require("./database/launchDB");
 const {initClient} = require('./database/images');
@@ -24,6 +25,7 @@ const {deprecatedRouter} = require('./routes/deprecated');
     app.use(cookieParser(process.env.EXPRESS_SESSION_SECRET))
     app.use(bodyParser.json());
     app.use(cors());
+    app.use(fileUpload());
     app.use(express.static('../client/build/assets'));
     app.use(express.static('../client/static'))
     app.use(expressSession({

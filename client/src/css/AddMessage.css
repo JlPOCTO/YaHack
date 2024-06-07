@@ -60,17 +60,20 @@
 }
 
 .currentSettings {
+    background: none;
     border: none;
     bottom: 4%;
 }
 
 .firstCurrentSettings {
+    background: none;
     border: none;
     bottom: 14px;
     position: absolute;
 }
 
 .photo-box {
+    background-color: #CCCCCC;
     height: 100px;
     width: 65%;
     border-radius: 10px;
