@@ -1,11 +1,13 @@
 const express = require('express');
 const messages = require('../database/dbMessages');
 const images = require('../database/images');
+const websockets = require('../routes/websockets')
 const {isAuthenticatedAPI} = require("../middlewares/isAuthenticatedAPI");
 const validate = require("../middlewares/validationMiddleware")
 const {wrapWithNext} = require("../middlewares/wrapWithNext");
 const uuid = require('uuid');
 const {prepareMessage} = require("../utilities/converters");
+const {accessChatByMessage, accessChat} = require("../middlewares/accessMiddleware");
 
 const routers = express.Router();
 
@@ -36,10 +38,21 @@ routers.delete(
     validate.isCorrectId(x => x.params.id),
     validate.isMessageExists(x => x.params.id),
     validate.isMessageOwned(x => x.params.id, x => x.user.id),
-    async (req, res) => {
+    accessChatByMessage(x => x.params.id),
+    (req, res) => {
         messages.deleteMessage(req.params.id).then(
             result => {
                 if (result) {
+                    websockets.sendByUserArray(
+                        req.chat.users,
+                        websockets.createResponse(
+                            "/api/v2/messages/:id",
+                            "DELETE",
+                            undefined,
+                            {messageId: req.params.id}
+                        ),
+                        req.user.id
+                    )
                     res.send()
                 } else {
                     res.status(500).send()
@@ -57,6 +70,7 @@ routers.post(
     validate.isCorrectFile(x => x.files ? x.files.imageContent : undefined),
     validate.isChatExists(x => x.body.chatId),
     validate.isChatAccessible(x => x.body.chatId, x => x.user.id),
+    accessChat(x => x.body.chatId),
     async (req, res) => {
         let key = ""
         if (req.files && req.files.imageContent) {
@@ -70,6 +84,16 @@ routers.post(
         messages.addMessage(req.user.id, req.body.chatId, req.body.content, key, Date.now()).then(
             result => {
                 if (result) {
+                    websockets.sendByUserArray(
+                        req.chat.users,
+                        websockets.createResponse(
+                            "/api/v2/messages",
+                            "POST",
+                            "/api/v2/messages/:id",
+                            {messageId: result.id}
+                        ),
+                        req.user.id
+                    )
                     res.send(prepareMessage(result))
                 } else {
                     res.status(500).send()

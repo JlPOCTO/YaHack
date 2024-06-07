@@ -1,11 +1,12 @@
 const express = require('express');
 const images = require('../database/images');
 const users = require('../database/dbUsers');
-const chats = require('../database/dbChats');
 const {isAuthenticatedAPI} = require("../middlewares/isAuthenticatedAPI");
 const {wrapWithNext} = require("../middlewares/wrapWithNext");
 const validate = require("../middlewares/validationMiddleware");
 const {prepareUser} = require("../utilities/converters");
+const websockets = require("./websockets");
+const {accessContacts} = require("../middlewares/accessMiddleware");
 
 const usersRouter = express.Router();
 
@@ -105,11 +106,21 @@ usersRouter.post(
     '/api/v2/users/myAvatar',
     isAuthenticatedAPI,
     validate.isCorrectImage(x => x.files ? x.files.avatar : undefined),
+    accessContacts(x => x.user.id),
     (req, res) => {
         const key = "user_" + req.user.id;
         images.uploadImage(key, req.files.avatar.data, req.files.avatar.name, req.files.avatar.mimetype).then(
             async result => {
                 if (result && await users.updateUserAvatar(req.user.id, key)) {
+                    websockets.sendByUserArray(
+                        req.contacts,
+                        websockets.createResponse(
+                            "/api/v2/users/myAvatar",
+                            "POST",
+                            "/api/v2/users/:id/avatar",
+                            {id: req.user.id}
+                        )
+                    )
                     res.send();
                 } else {
                     res.status(500).send()
@@ -139,16 +150,13 @@ usersRouter.get(
     '/api/v2/users/contacts',
     isAuthenticatedAPI,
     (req, res) => {
-        chats.getChatsByUser(req.user.id).then(
-            userChats => {
-                if (userChats === undefined) {
+        users.getContacts(req.user.id).then(
+            contacts => {
+                if (contacts === undefined) {
                     res.sendStatus(500)
                     return
                 }
-                const contacts = userChats.filter(x => x.type === "direct")
-                    .map(x => x.users.filter(user => user.id !== req.user.id)[0])
-                    .map(prepareUser)
-                res.send(contacts)
+                res.send(contacts.map(prepareUser))
             }
         )
     }
