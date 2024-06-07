@@ -23,16 +23,22 @@ function Message(props: Message) {
     const [currentReactions, setReactions] = useState([]);
 
     useEffect(() => {
-        const getReactions = async () => {
-            const res = await fetch(apiVersion + `/messages/${message.id}/reactions`)
-            const reactions = await res.json()
+        // const getReactions = async () => {
+        //     const res = await fetch(apiVersion + `/reactions`)
+        //     const reactions = await res.json()
+        //     const rs: any = []
+        //     reactions.forEach((r: any) => {
+        //         rs.push(r.reaction)
+        //     })
+        //     setReactions(rs)
+        // }
+        // getReactions()
+            const reactions = message.reactions
             const rs: any = []
             reactions.forEach((r: any) => {
                 rs.push(r.reaction)
             })
             setReactions(rs)
-        }
-        getReactions()
     }, [])
 
     useEffect(() => {
@@ -63,7 +69,7 @@ function Message(props: Message) {
     }, [isContent])
     const onEmojiClick = async (curEmoji: EmojiClickData) => {
         if (curEmoji.emoji !== "") {
-            const res = await fetch(apiVersion + `/messages/${message.id}/reactions`, {
+            const res = await fetch(apiVersion + `/reactions`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -78,15 +84,15 @@ function Message(props: Message) {
     }
 
     const deleteReaction = async (r: any) => {
-        // const res = await fetch(apiVersion + `/messages/${message.id}/reactions`, {
-        //     method: 'DELETE',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({
-        //         reaction: r.reaction
-        //     })
-        // })
+        const res = await fetch(apiVersion + `/reactions/${r}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                reaction: r.reaction
+            })
+        })
         // console.log(r, "r")
         // const getReactions = async () => {
         //     const res = await fetch(apiVersion + `/messages/${message.id}/reactions`)
@@ -144,8 +150,8 @@ function Message(props: Message) {
                             }
                             {message.reactions.length !== 0 && <div className="block-of-reaction">
                                 <div className='reactionsAndTime'>
-                                    {currentReactions.map((r: any) =>
-                                        <button className='reactionsBlock' onClick={() => deleteReaction(r)}>{r}</button>
+                                    {message.reactions.map((r: any) =>
+                                        <button className='reactionsBlock' onClick={() => deleteReaction(r.id)}>{r.reaction}</button>
                                     )}
                                 </div>
                                 <div className="data_reaction">
@@ -202,8 +208,8 @@ function Message(props: Message) {
                             </div>}
                             {message.reactions.length !== 0 && <div className="block-of-reaction">
                                 <div className='reactionsAndTime'>
-                                    {currentReactions.map((r: any) =>
-                                        <button className='reactionsBlock' onClick={() => deleteReaction(r)}>{r}</button>
+                                {message.reactions.map((r: any) =>
+                                        <button className='reactionsBlock' onClick={() => deleteReaction(r.id)}>{r.reaction}</button>
                                     )}
                                 </div>
                                 <div className="data_reaction">
