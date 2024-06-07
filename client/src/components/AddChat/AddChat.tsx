@@ -1,5 +1,5 @@
 import '../../css/AddMessage.css';
-import { Pencil} from '@gravity-ui/icons';
+import {Pencil} from '@gravity-ui/icons';
 import {Icon} from '@gravity-ui/uikit';
 import React, {useState, useEffect} from 'react';
 import {useUserStore} from "../../stores/UserStore";
@@ -9,9 +9,6 @@ import AddChatComponents from "../AddChatComponents/AddChatComponents";
 import {observer} from "mobx-react-lite";
 
 
-
-
-
 function AddChat() {
     let { apiVersion, visible, setVisible } = useUserStore()
   let { changedUserAvatar } = useUserStore()
@@ -19,10 +16,12 @@ function AddChat() {
     // const [visible, setVisible] = useState(false);
     useEffect(() => {
 
-      const getMyInfo = async () => {
-        const res = await fetch(apiVersion + '/users')
+        const getMyInfo = async () => {
+
+            const res = await fetch(apiVersion + '/users/contacts')
             const contacts = await res.json();
             setMyContacts(contacts)
+            console.log("contacts", contacts)
             // console.log(contacts)
         }
         getMyInfo()
