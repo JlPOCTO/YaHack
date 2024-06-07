@@ -15,20 +15,18 @@ type Contacts = {
 
 function ContactBar(props: Contacts) {
     const {contact} = props;
-    let { apiVersion, setChatUsers, chatUsers, currentUserID } = useUserStore();
+    let { apiVersion, setChatUsers, chatUsers } = useUserStore();
     const [isTic, setTic] = useState(false)
     const className = ["button", contact.id === 0 ? "notactual" : ""].join("");
 
     useEffect(() => {
         const getMyAvatar = async () => {
-
-                const res = await fetch(apiVersion + `/users/${contact.id}/avatar`)
-                let imageNod = document.getElementById(contact.id + "aaa")
-                // @ts-ignore
-                let imgUrl = res.url
-                // @ts-ignore
-                imageNod.src = imgUrl
-
+            const res = await fetch(apiVersion + `/users/${contact.id}/avatar`)
+            let imageNod = document.getElementById(contact.id + "aaa")
+            // @ts-ignore
+            let imgUrl = res.url
+            // @ts-ignore
+            imageNod.src = imgUrl
         }
         getMyAvatar()
     }, [])
@@ -80,7 +78,6 @@ function ContactBar(props: Contacts) {
                             </div>
                             <div id="last-message">
                                 <div id="to-left">
-                                    {/*LastMessage: {dialog.id}*/}
                                 </div>
                             </div>
                         </div>

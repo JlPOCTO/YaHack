@@ -37,7 +37,7 @@ body {
 .myContainer.data, .data {
     color: ${(props) => props.theme.bodyColor};
 } 
-.box, .just-picture, .dialog-container {
+.box, .just-picture, .dialog-container, .p-sidebar-left .p-sidebar {
     background-color: ${(props) => props.theme.bodyColor};
 }
 

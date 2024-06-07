@@ -2,7 +2,7 @@
   "title": "Welcome {{name}}",
   "description": {
     "part1": "Search",
-    "part2": "Type your message"
+    "part2": "Type your message:"
   },
   "profile": {
     "contacts": "Contacts",
@@ -23,7 +23,7 @@
   },
   "nesting": "Title of this page is \"$t(title, {\"count\": \"{{name}}\"})\"",
   "read_message": "{{name}} read message",
-  "label": "Add members",
+  "label": "Add members:",
   "chat": "Add chat name",
   "chatError": "Choose members",
   "members": "subscribers",

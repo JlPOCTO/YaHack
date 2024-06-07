@@ -1,8 +1,5 @@
-
 import { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import { useUserStore } from "../../stores/UserStore";
-
-
 import '../../css/DialogWithMessages.css';
 import Message from "../Message/Message";
 
@@ -10,8 +7,6 @@ type DialogWithMessages = {
     messages: any;
     dialogId: any;
 }
-
-
 
 function DialogWithMessages(props: DialogWithMessages) {
     const { messages, dialogId } = props;
@@ -25,7 +20,6 @@ function DialogWithMessages(props: DialogWithMessages) {
         setLen(messages.length);
     }, [messages]);
 
-    const [nameOfTheDialog, setName] = useState([])
     useEffect(() => {
         const getDialogType = async () => {
             const res = await fetch(apiVersion + `/chats/${dialogId}`)
@@ -39,18 +33,12 @@ function DialogWithMessages(props: DialogWithMessages) {
         getDialogType() 
     }, [dialogId, changedDialog])
 
-
     useLayoutEffect(() => {
-        // setTimeout(() => {
-        // console.log("text", lastMessage.current, lastMessage.current?.scrollHeight)
         if ((lastMessage.current)) {
             setLen(messages.length)
             lastMessage.current.scrollTop = lastMessage.current.scrollHeight
         }
-        // }, 0)
-
     }, [messages]);
-
 
     return (
         <div className='dialog-container'>
