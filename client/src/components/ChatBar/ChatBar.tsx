@@ -15,7 +15,7 @@ type ChatBarProps = {
 
 function ChatBar(props: ChatBarProps) {
     const {dialog} = props;
-    const {dialogID, setDialogID, currentUserID, setChatName, apiVersion} = useUserStore()
+    const {dialogID, setDialogID, currentUserID, setChatName, apiVersion, changedDialogs} = useUserStore()
 
     // const [isShown, setIsShown] = useState(false);
     const [isActual, setIsActual] = useState(false);
@@ -91,7 +91,7 @@ function ChatBar(props: ChatBarProps) {
             }
         }
         getMyAvatar()
-    }, [])
+    }, [changedDialogs])
 
 
     return (

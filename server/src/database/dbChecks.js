@@ -64,9 +64,9 @@ async function isMessageExists(id) {
     }
 }
 
-async function isMessageFromUser(massageId, userId) {
+async function isMessageFromUser(messageId, userId) {
     try {
-        const message = await db.database.get(`SELECT id FROM messages WHERE id = ? AND sender_id = ?`, massageId, userId)
+        const message = await db.database.get(`SELECT id FROM messages WHERE id = ? AND sender_id = ?`, messageId, userId)
         return message !== undefined
     } catch (e) {
         logError("isMessageFromUser", arguments, e)
@@ -117,6 +117,15 @@ async function isReactionExists(id) {
     }
 }
 
+async function isReactionFromUser(reactionId, userId) {
+    try {
+        const message = await db.database.get(`SELECT id FROM reactions WHERE id = ? AND user_id = ?`, reactionId, userId)
+        return message !== undefined
+    } catch (e) {
+        logError("isReactionFromUser", arguments, e)
+    }
+}
+
 module.exports = {
     isUserExists,
     isUserExistsByLogin,
@@ -130,4 +139,5 @@ module.exports = {
     isMessageAccessible,
     doesMessageHaveFile,
     isReactionExists,
+    isReactionFromUser,
 }

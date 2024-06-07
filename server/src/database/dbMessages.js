@@ -1,6 +1,6 @@
 const db = require("./launchDB")
 const {logError} = require("../utilities/logging")
-const {renameMessageFields} = require("../utilities/converters")
+const {renameMessageFields, renameReactionFields} = require("../utilities/converters")
 
 
 async function getMessage(id) {
@@ -11,9 +11,30 @@ async function getMessage(id) {
             return
         }
         message.reactions = await db.database.all(`SELECT * FROM reactions WHERE message_id = ?`, id)
+        message.reactions = message.reactions.map(renameReactionFields)
         return renameMessageFields(message)
     } catch (e) {
         logError("getMessage", arguments, e)
+    }
+}
+
+async function getMessageByReactionId(reactionId) {
+    const TAG = "getMessageByReactionId"
+    try {
+        const reaction = await db.database.get(`SELECT message_id FROM reactions WHERE id = ?`, reactionId)
+        if (reaction === undefined) {
+            logError(TAG, arguments, "Не получилось достать реакцию")
+            return
+        }
+
+        const message = await getMessage(reaction.message_id)
+        if (message === undefined) {
+            logError(TAG, arguments, "Не получилось достать сообщение")
+            return
+        }
+        return message
+    } catch (e) {
+        logError(TAG, arguments, e)
     }
 }
 
@@ -59,6 +80,7 @@ async function getLastMessage(chatId) {
             return
         }
         last.reactions = await db.database.all(`SELECT * FROM reactions WHERE message_id = ?`, last.id)
+        last.reactions = last.reactions.map(renameReactionFields)
         return renameMessageFields(last)
     } catch (e) {
         logError("getLastMessage", arguments, e)
@@ -74,6 +96,7 @@ async function getMessagesFromChat(chatId, lastId) {
             WHERE chat_id = ? AND id > ? ORDER BY time`, chatId, lastId)
         for (let message of messages) {
             message.reactions = await db.database.all(`SELECT * FROM reactions WHERE message_id = ?`, message.id)
+            message.reactions = message.reactions.map(renameReactionFields)
         }
         return messages.map(renameMessageFields)
     } catch (e) {
@@ -81,12 +104,11 @@ async function getMessagesFromChat(chatId, lastId) {
     }
 }
 
-
 module.exports = {
+    getMessage,
+    getMessageByReactionId,
     getMessagesFromChat,
     addMessage,
-    getMessage,
     deleteMessage,
     getLastMessage,
-
 }
