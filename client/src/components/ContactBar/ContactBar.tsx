@@ -1,10 +1,9 @@
 import '../../css/Contacts.css';
 import '../../css/ContactBar.css';
 import '../../i18n/config';
-import {useTranslation} from 'react-i18next';
 import {Button, Icon} from "@gravity-ui/uikit";
 import {action} from "mobx";
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {Square} from '@gravity-ui/icons';
 import {SquareCheck} from '@gravity-ui/icons';
 import {useUserStore} from "../../stores/UserStore";
@@ -16,18 +15,14 @@ type Contacts = {
 
 function ContactBar(props: Contacts) {
     const {contact} = props;
-    // let usersTic: Number[] = []
-    let {language, setSearchInput, searchInput, apiVersion, setChatUsers, chatUsers, currentUserID} = useUserStore();
+    let { apiVersion, setChatUsers, chatUsers, currentUserID } = useUserStore();
     const [isTic, setTic] = useState(false)
-    const dialog = contact
-    const className = ["button", dialog.id === 0 ? "notactual" : ""].join("");
-    const {t} = useTranslation();
+    const className = ["button", contact.id === 0 ? "notactual" : ""].join("");
 
     useEffect(() => {
         const getMyAvatar = async () => {
 
                 const res = await fetch(apiVersion + `/users/${contact.id}/avatar`)
-                console.log(res)
                 let imageNod = document.getElementById(contact.id + "aaa")
                 // @ts-ignore
                 let imgUrl = res.url
@@ -40,38 +35,24 @@ function ContactBar(props: Contacts) {
 
 
     function addUser() {
-        let set = new Set;
-        for (let n of chatUsers) {
-            set.add(n)
-            // console.log("n",n)
+        let set = new Set();
+        for (let u of chatUsers) {
+            set.add(u)
         }
         if (!isTic) {
-            console.log(" я зашел сюда")
-            set.add(dialog.id)
-            setChatUsers(set)
+            set.add(contact.id)
         } else {
-            set.delete(dialog.id)
-            setChatUsers(set)
+            set.delete(contact.id)
         }
-        // setChatUsers(usersTic)
-
-        // for (let n of chatUsers) {
-        //     set.add(n)
-        // }
-        // console.log("localusers ",.length )
+        setChatUsers(set)
     }
 
     return (
         <div className='contacts'>
             <div className="chat-bar">
                 <Button onClick={action((e) => {
-                    // setDialogID(dialog.id)
-                    console.log("first tic", isTic)
                     setTic(!isTic)
-                    console.log("first tic2", isTic)
                     addUser()
-                    console.log("charUsers ", chatUsers.size)
-                    // console.log({isTic})
                 })} className={className}
                         style={{
                             borderRadius: "10px"

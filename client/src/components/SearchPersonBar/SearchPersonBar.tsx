@@ -25,9 +25,7 @@ function SearchPersonBar (props: SearchPersonBarProps) {
             const res1 = await fetch(apiVersion + `/users/${searchInput}`)
             const user1 = await res1.json()
             dialog = user1
-            console.log("lll", dialog.login)
             const res = await fetch(apiVersion + `/users/${dialog.id}/avatar`)
-            console.log(res)
             let imageNod = document.getElementById(dialog.id + "www")
             // @ts-ignore
             let imgUrl = res.url

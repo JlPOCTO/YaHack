@@ -105,6 +105,10 @@ function isMessageOwned(messageExtractor, userExtractor) {
     return databaseBinaryCheckTemplate(databaseChecks.isMessageFromUser, messageExtractor, userExtractor, 403)
 }
 
+function isReactionOwned(reactionExtractor, userExtractor) {
+    return databaseBinaryCheckTemplate(databaseChecks.isReactionFromUser, reactionExtractor, userExtractor, 403)
+}
+
 function isChatAccessible(chatExtractor, userExtractor) {
     return databaseBinaryCheckTemplate(databaseChecks.isUserInChat, chatExtractor, userExtractor, 403)
 }
@@ -167,6 +171,7 @@ module.exports = {
     isChatChangeable,
     isMessageAccessible,
     isMessageOwned,
+    isReactionOwned,
     isChatAccessible,
     isChatNotAccessible
 }

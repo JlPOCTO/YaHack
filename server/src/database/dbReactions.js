@@ -1,5 +1,6 @@
 const db = require("./launchDB")
 const {logError} = require("../utilities/logging")
+const {renameReactionFields} = require("../utilities/converters");
 
 async function getReaction(id) {
     const TAG = "getReaction"
@@ -10,7 +11,7 @@ async function getReaction(id) {
             logError(TAG, arguments, "Реакция с заданным id не существует")
             return
         }
-        return reaction
+        return renameReactionFields(reaction)
     } catch (e) {
         logError(TAG, arguments, e)
     }
@@ -19,7 +20,8 @@ async function getReaction(id) {
 async function getReactionsByMessage(messageId) {
     const TAG = "getReactionsByMessage"
     try {
-        return await db.database.all(`SELECT * FROM reactions WHERE message_id = ?`, messageId)
+        const entries = await db.database.all(`SELECT * FROM reactions WHERE message_id = ?`, messageId)
+        return entries.map(renameReactionFields)
     } catch (e) {
         logError(TAG, arguments, e)
     }
@@ -40,7 +42,7 @@ async function addReaction(messageId, userId, reaction) {
             return
         }
 
-        return newReaction
+        return renameReactionFields(newReaction)
     } catch (e) {
         logError(TAG, arguments, e)
     }
@@ -48,7 +50,6 @@ async function addReaction(messageId, userId, reaction) {
 
 async function deleteReactionById(id) {
     const TAG = "deleteReactionById"
-
     try {
         await db.database.run(`DELETE FROM reactions WHERE id = ?`, id)
         return true
@@ -57,33 +58,10 @@ async function deleteReactionById(id) {
     }
 }
 
-async function deleteReaction(messageId, userId, reaction) {
-    const TAG = "deleteReaction"
-
-    try {
-        await db.database.run(`DELETE FROM reactions WHERE message_id = ? AND user_id = ? AND reaction = ?`, messageId, userId, reaction)
-        return true
-    } catch (e) {
-        logError(TAG, arguments, e)
-    }
-}
-
-async function deleteReactionsFromMessage(messageId) {
-    const TAG = "deleteReactionsFromMessage"
-
-    try {
-        await db.database.run(`DELETE FROM reactions WHERE message_id = ?`, messageId)
-        return true
-    } catch (e) {
-        logError(TAG, arguments, e)
-    }
-}
 
 module.exports = {
     getReaction,
     addReaction,
     deleteReactionById,
-    deleteReaction,
-    deleteReactionsFromMessage,
     getReactionsByMessage
 }

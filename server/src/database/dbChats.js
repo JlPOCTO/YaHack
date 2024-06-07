@@ -63,6 +63,25 @@ async function getChatByMessageId(messageId) {
     }
 }
 
+async function getChatByReactionId(reactionId) {
+    const TAG = "getChatByReactionId"
+    try {
+        const reaction = await db.database.get(`SELECT message_id FROM reactions WHERE id = ?`, reactionId)
+        if (reaction === undefined) {
+            logError(TAG, arguments, "Не получилось достать реакцию")
+            return
+        }
+        const chat = await getChatByMessageId(reaction.message_id)
+        if (chat === undefined) {
+            logError(TAG, arguments, "Не получилось достать чат")
+            return
+        }
+        return chat
+    } catch (e) {
+        logError(TAG, arguments, e)
+    }
+}
+
 
 async function addChat(users, type, name, avatarPath) {
     await db.database.run("BEGIN TRANSACTION")
@@ -182,6 +201,7 @@ async function getChatsByUser(userId) {
 module.exports = {
     getChat,
     getChatByMessageId,
+    getChatByReactionId,
     deleteChat,
     addUserInChat,
     deleteUserFromChat,
