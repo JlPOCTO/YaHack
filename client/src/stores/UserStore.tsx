@@ -7,6 +7,18 @@ export default class UserStore {
         makeAutoObservable(this)
     }
 
+    storedContacts: Map<number, number> = new Map;
+    addContact = (userId: number, chatId: number) => {
+      if (!this.storedContacts.has(userId))
+        this.storedContacts.set(userId, chatId);
+    }
+    deleteContact = (userId: number) => {
+      this.storedContacts.delete(userId);
+    }
+    getContact = (userId: number) => {
+      return this.storedContacts.get(userId);
+    }
+
     state: string = ""
     setState = (state: string) => {
         this.state = state
@@ -24,7 +36,7 @@ export default class UserStore {
     setUserID = (userID: number | any) => {
         this.userID = userID
     }
-    currentUserID: number | any = 1
+    currentUserID: number | any = null
     setCurrentUserID = (currentUserID: number | any) => {
         this.currentUserID = currentUserID
     }

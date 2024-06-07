@@ -66,7 +66,7 @@ function SearchPersonBar (props: SearchPersonBarProps) {
                 </div>
             </Button>
             <Modal open={open} onClose={() => setOpen(false)}>
-                <ProfileOfEnotherUser dialog={dialog} />
+                <ProfileOfEnotherUser user={dialog} />
             </Modal>
         </div>
 

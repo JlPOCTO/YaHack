@@ -16,7 +16,7 @@ type DialogId = {
 
 
 function ModalGroupSettings(props: DialogId) {
-    let { setSearchInput, setDialogID, apiVersion, userID, currentUserID, dialogID } = useUserStore();
+    let { setSearchInput, setDialogID, apiVersion, userID, currentUserID, dialogID, deleteContact } = useUserStore();
   let { changedDialog } = useUserStore()
     const {chatId} = props;
     const {t, i18n} = useTranslation();
@@ -40,6 +40,14 @@ function ModalGroupSettings(props: DialogId) {
 
     const HandleDeleteChat = async () => {
         if (isDirect) {
+            const dialogInfo = await fetch(apiVersion + `/chats/${dialogID}`)
+            const parsed = await dialogInfo.json()
+            for (let user of parsed.users) {
+                if (user.id != currentUserID) {
+                    deleteContact(user.id);
+                    break;
+                }
+            }
             const res = await fetch(apiVersion + `/chats/${dialogID}`, {
                 method: 'DELETE',
                 headers: {

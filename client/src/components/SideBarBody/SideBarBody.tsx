@@ -26,7 +26,7 @@ function SideBarBody() {
     const [contacts, setMyContacts] = useState([])
     const [visible, setVisible] = useState(false);
     const { searchInput, setSearchInput, apiVersion } = useUserStore();
-    let { changedUserAvatar, changedDialogs } = useUserStore()
+    let { changedUserAvatar, changedDialogs, addContact, currentUserID, setCurrentUserID } = useUserStore()
     const {t, i18n} = useTranslation();
     const [dialogs, setDialogs] = useState([])
     const [user, setUser] = useState({})
@@ -40,7 +40,7 @@ function SideBarBody() {
     useEffect(() => {
 
         const getMyInfo = async () => {
-            const res = await fetch('/contacts')
+            const res = await fetch(apiVersion + '/users/contacts')
             const contacts = await res.json();
             setMyContacts(contacts)
         }
@@ -51,11 +51,29 @@ function SideBarBody() {
     useEffect(() => {
 
         const getDialogs = async () => {
+            if (!currentUserID) {
+                const resMe = await fetch(apiVersion + `/users/me`)
+                const meJson = await resMe.json()
+                setCurrentUserID(meJson.id)
+                currentUserID = meJson.id
+            }
             const res = await fetch(apiVersion + `/chats`)
             const dialogs1 = await res.json()
             setDialogs(dialogs1)
-      }
-      console.log("From sidebar: " + changedDialogs);
+            console.log("All dialogs: " )
+            console.log(dialogs1)
+            console.log(currentUserID)
+            dialogs1.map((dialog: any) => {
+                if (dialog.type == "direct") {
+                    for (let user of dialog.users) {
+                        if (user.id != currentUserID) {
+                            addContact(user.id, dialog.id);
+                            break;
+                        }
+                    }
+                }
+            })
+        }
         getDialogs()
     }, [changedDialogs])
 

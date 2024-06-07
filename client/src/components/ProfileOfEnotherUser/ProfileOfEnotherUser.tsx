@@ -8,12 +8,12 @@ import {useUserStore} from "../../stores/UserStore";
 import {observer} from "mobx-react-lite";
 
 type Profile = {
-    dialog: any;
+    user: any;
 }
 
 function ProfileOfEnotherUser(props: Profile) {
-    let {setSearchInput, setDialogID, apiVersion, userID, currentUserID, setChatName} = useUserStore();
-    const {dialog} = props;
+  let { setSearchInput, setDialogID, apiVersion, userID, currentUserID, setChatName, getContact, addContact, storedContacts } = useUserStore();
+    const {user} = props;
     const {t, i18n} = useTranslation();
     const [open, setOpen] = useState(false);
     const [contacts, setMyContacts] = useState([])
@@ -34,36 +34,44 @@ function ProfileOfEnotherUser(props: Profile) {
     }, [])
 
     const HandleChatAdd =
-        async () => {
-
-            const res = await fetch(apiVersion + `/chats`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: null,
-                    chatType: "direct",
-                    // @ts-ignore
-                    users: [me.id,dialog.id]
-                })
-            });
-            const newDialog = await res.json();
+      async () => {
             sessionStorage.setItem('currentMessage', '')
             setSearchInput("")
             sessionStorage.setItem('currentInput', '')
-            setDialogID(newDialog.id)
-            let partner = currentUserID
-            dialog.users.forEach((u: any) => {
-                if (u.id !== currentUserID) {
-                    if (!u.name) {
-                        partner = u.login
-                    } else {
-                        partner = u.name
-                    }
+            let dialogId = getContact(user.id);
+            if (dialogId) {
+                setDialogID(dialogId);
+            } else {
+                const res = await fetch(apiVersion + `/chats`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: null,
+                        chatType: "direct",
+                        // @ts-ignore
+                        users: [me.id, user.id]
+                    })
+                });
+                const newDialog = await res.json();
+                if (newDialog) {
+                    setDialogID(newDialog.id)
+                    addContact(user.id, newDialog.id);
+
+                    let partner = currentUserID
+                    user.users.forEach((u: any) => {
+                        if (u.id !== currentUserID) {
+                            if (!u.name) {
+                                partner = u.login
+                            } else {
+                                partner = u.name
+                            }
+                        }
+                    })
+                    setChatName(partner)
                 }
-            })
-            setChatName(partner)
+            }
         }
 
 
@@ -72,7 +80,7 @@ function ProfileOfEnotherUser(props: Profile) {
             <header>
                 <div className='userProfile'>
                     <div className='userPhoto'></div>
-                    <div className='profileName'>{dialog.login}</div>
+                    <div className='profileName'>{user.login}</div>
                 </div>
             </header>
             <main>
