@@ -1,5 +1,5 @@
 import '../../css/HeaderOfBodyMain.css';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../i18n/config';
 import {useTranslation} from 'react-i18next';
 import {useUserStore} from "../../stores/UserStore";
@@ -15,16 +15,19 @@ type DialogProps = {
 
 
 function HeaderOfBodyMain(props:  any) {
+
     const { apiVersion, chatName, dialogID, currentUserID } = useUserStore()
     const { t } = useTranslation();
     const [nameOfTheDialog, setName] = useState([])
     const [open, setOpen] = useState(false)
     const [isGroup, setIsGroup] = useState(false)
     const [counterMembers, setCount] = useState(1)
+    const [actualId, setId] = useState(0)
     useEffect(() => {
         const getDialog = async () => {
             const res = await fetch(apiVersion + `/chats/${dialogID}`)
             const dialog = await res.json()
+            setId(dialog.id)
             if (dialog.type === "direct") {
                 let partner = currentUserID
                 dialog.users.forEach((u: any) => {
@@ -47,12 +50,50 @@ function HeaderOfBodyMain(props:  any) {
         getDialog()
         setOpen(false)
     }, [dialogID])
-
+    useEffect(() => {
+        const getMyAvatar = async () => {
+            const res = await fetch(apiVersion + `/chats/${dialogID}`)
+            const dialog = await res.json()
+            if (dialog.type === "group") {
+                console.log("chatId", dialog.id)
+                const res = await fetch(apiVersion + `/chats/${dialog.id}/avatar`)
+                console.log(res)
+                let imageNod = document.getElementById(dialog.id + "ooo")
+                // @ts-ignore
+                let imgUrl = res.url
+                // @ts-ignore
+                imageNod.src = imgUrl
+            } else {
+                console.log("dialogId", dialog.id)
+                let partner ={}
+                dialog.users.forEach((u: any) => {
+                    if (u.id !== currentUserID) {
+                        partner = u
+                    }
+                })
+                // @ts-ignore
+                const res = await fetch(apiVersion + `/users/${partner.id}/avatar`)
+                console.log(res)
+                let imageNod = document.getElementById(dialog.id + "ooo")
+                // @ts-ignore
+                let imgUrl = res.url
+                // @ts-ignore
+                imageNod.src = imgUrl
+            }
+        }
+        getMyAvatar()
+    }, [])
       return (
 
         <div className="header-of-body-main-pro">
             <div className="someSpace">
-
+                <img id={actualId+ "ooo"} style={{
+                    width: "50px",
+                    height: "50px",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "50%",
+                    borderRadius: "50%"
+                }}/>
             </div>
             <div className="header-of-body-main">
                 <div className="info-chat">
