@@ -17,6 +17,7 @@ function Profile(props: Profile) {
   const { me } = props;
   const {t, i18n} = useTranslation();
   const [open, setOpen] = useState(false);
+  const [avatar, setAvatar] = useState("");
   const [contacts, setMyContacts] = useState([])
   function find(name : any) {
     if (name !== 'null') {
@@ -31,13 +32,25 @@ function Profile(props: Profile) {
       setMyContacts(contacts)
     }
     getMyInfo()
+  }, [])
+  useEffect(() => {
+
+    const getMyAvatar = async () => {
+      const res = await fetch(apiVersion + '/users/myAvatar')
+      const contacts = await res.json();
+      setAvatar(contacts)
+    }
+    getMyAvatar()
+  }, [])
   }, [changedUserAvatar])
 
   return (
     <div className='profile'>
       <header>
         <div className='userProfile'>
-          <div className='userPhoto'></div>
+          <div className='userPhoto'>
+            {avatar}
+          </div>
           <div className='userData'>
             {find(me.name)}
             <div className='profileLogin'>{me.login}</div>
