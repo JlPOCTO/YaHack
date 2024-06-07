@@ -25,32 +25,15 @@ function ContactBar(props: Contacts) {
 
     useEffect(() => {
         const getMyAvatar = async () => {
-            if (dialog.type === "group") {
-                console.log("chatId", dialog.id)
-                const res = await fetch(apiVersion + `/chats/${dialog.id}/avatar`)
+
+                const res = await fetch(apiVersion + `/users/${contact.id}/avatar`)
                 console.log(res)
-                let imageNod = document.getElementById(dialog.id + "kkk")
+                let imageNod = document.getElementById(contact.id + "aaa")
                 // @ts-ignore
                 let imgUrl = res.url
                 // @ts-ignore
                 imageNod.src = imgUrl
-            } else {
-                console.log("dialogId", dialog.id)
-                let partner ={}
-                dialog.users.forEach((u: any) => {
-                    if (u.id !== currentUserID) {
-                        partner = u
-                    }
-                })
-                // @ts-ignore
-                const res = await fetch(apiVersion + `/users/${partner.id}/avatar`)
-                console.log(res)
-                let imageNod = document.getElementById(dialog.id + "kkk")
-                // @ts-ignore
-                let imgUrl = res.url
-                // @ts-ignore
-                imageNod.src = imgUrl
-            }
+
         }
         getMyAvatar()
     }, [])
@@ -96,8 +79,14 @@ function ContactBar(props: Contacts) {
                     <div className="chat-bar-pro">
                         {!isTic && <Icon className="square" data={Square}/>}
                         {isTic && <Icon className="square" data={SquareCheck}/>}
-                        <div className="space-for-avatar">
-
+                        <div className="space-for-avata" style={{paddingLeft: "8px"}}>
+                            <img id={contact.id + "aaa"} style={{
+                                width: "40px",
+                                height: "40px",
+                                backgroundRepeat: "no-repeat",
+                                backgroundPosition: "50%",
+                                borderRadius: "50%"
+                            }}/>
                         </div>
                         <div id="chat-information">
                             <div id="chatName-time">

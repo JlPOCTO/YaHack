@@ -34,6 +34,47 @@ function ProfileOfEnotherUser(props: Profile) {
     }, [])
 
     const HandleChatAdd =
+        async () => {
+
+            const res = await fetch(apiVersion + `/chats`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: null,
+                    chatType: "direct",
+                    // @ts-ignore
+                    users: [me.id,dialog.id]
+                })
+            });
+            const newDialog = await res.json();
+            sessionStorage.setItem('currentMessage', '')
+            setSearchInput("")
+            sessionStorage.setItem('currentInput', '')
+            setDialogID(newDialog.id)
+            let partner = currentUserID
+            // dialog.users.forEach((u: any) => {
+            //     if (u.id !== currentUserID) {
+            //         if (!u.name) {
+            //             partner = u.login
+            //         } else {
+            //             partner = u.name
+            //         }
+            //     }
+            // })
+            setChatName(partner)
+        }
+    useEffect(() => {
+        const getMyAvatar = async () => {
+
+            const res = await fetch(apiVersion + `/users/${dialog.id}/avatar`)
+            console.log(res)
+            let imageNod = document.getElementById(dialog.id + "bbb")
+            // @ts-ignore
+            let imgUrl = res.url
+            // @ts-ignore
+            imageNod.src = imgUrl
       async () => {
             sessionStorage.setItem('currentMessage', '')
             setSearchInput("")
@@ -74,13 +115,22 @@ function ProfileOfEnotherUser(props: Profile) {
             }
         }
 
+        }
+        getMyAvatar()
+    }, [])
 
     return (
         <div className='profile'>
             <header>
                 <div className='userProfile'>
-                    <div className='userPhoto'></div>
-                    <div className='profileName'>{user.login}</div>
+                    <div className='userPhoto'>
+                        <img id = {dialog.id + "bbb"} style = {{width: "100px",
+                            height: "100px",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "50%",
+                            borderRadius: "50%"}} />
+                    </div>
+                    <div className='profileName'>{dialog.login}</div>
                 </div>
             </header>
             <main>

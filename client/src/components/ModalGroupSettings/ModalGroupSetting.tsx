@@ -48,6 +48,7 @@ function ModalGroupSettings(props: DialogId) {
                     break;
                 }
             }
+            setDialogID(0)
             const res = await fetch(apiVersion + `/chats/${dialogID}`, {
                 method: 'DELETE',
                 headers: {
@@ -58,6 +59,7 @@ function ModalGroupSettings(props: DialogId) {
                 })
             });
         } else {
+            setDialogID(0)
             console.log(me)
             // @ts-ignore
             const res = await fetch(apiVersion + `/chats/${dialogID}/user?userId=${me.id}`, {
@@ -68,6 +70,7 @@ function ModalGroupSettings(props: DialogId) {
             });
             await res.json();
         }
+        setDialogID(0)
     }
 
     useEffect(() => {

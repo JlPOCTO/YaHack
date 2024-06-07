@@ -3,7 +3,7 @@ import '../../css/ChatBar.css';
 import {Button, Modal} from "@gravity-ui/uikit";
 // import settings from "../../settings-svgrepo-com.svg";
 import Profile from "../Profile/Profile";
-import Dialog from "../Dialog/Dialog";
+
 import {useUserStore} from "../../stores/UserStore";
 import {action} from "mobx";
 import {observer} from "mobx-react-lite";
@@ -15,26 +15,29 @@ type SearchPersonBarProps = {
 }
 
 function SearchPersonBar (props: SearchPersonBarProps) {
-    const { dialog } = props;
-    // const {dialog} = props;
-    const { dialogID, setDialogID, apiVersion } = useUserStore()
-
-    const [isActual, setIsActual] = useState(false);
-    const handleClick = (event: any) => {
-        setIsActual(current => dialog.id === dialogID);
-    };
+    let { dialog } = props;
+    const { dialogID, setDialogID, apiVersion, searchInput } = useUserStore()
     const className = ["button", dialog.id === dialogID ? "notactual" : ""].join("");
-
     const [open, setOpen] = useState(false);
-    const [me, setMyInfo] = useState([])
+
     useEffect(() => {
-        const getMyInfo = async () => {
-            const res = await fetch(apiVersion + '/users/me')
-            const me = await res.json();
-            setMyInfo(me)
+        const getMyAvatar = async () => {
+            const res1 = await fetch(apiVersion + `/users/${searchInput}`)
+            const user1 = await res1.json()
+            dialog = user1
+            console.log("lll", dialog.login)
+            const res = await fetch(apiVersion + `/users/${dialog.id}/avatar`)
+            console.log(res)
+            let imageNod = document.getElementById(dialog.id + "www")
+            // @ts-ignore
+            let imgUrl = res.url
+            // @ts-ignore
+            imageNod.src = imgUrl
+
         }
-        getMyInfo()
+        getMyAvatar()
     }, [])
+
     return (
         <div className="chat-bar">
             <Button onClick={action((e) => {
@@ -45,8 +48,12 @@ function SearchPersonBar (props: SearchPersonBarProps) {
                         borderRadius:"10px"
                     }}>
                 <div className="chat-bar-pro">
-                    <div className="space-for-avatar">
-
+                    <div className="space-for-avata">
+                        <img id = {dialog.id + "www"} style = {{width: "60px",
+                            height: "60px",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "50%",
+                            borderRadius: "50%"}} />
                     </div>
                     <div id="chat-information">
                         <div id="chatName-time">
