@@ -13,6 +13,7 @@ type Profile = {
 function Profile(props: Profile) {
 
   let { apiVersion } = useUserStore();
+  let { changedUserAvatar } = useUserStore()
   const { me } = props;
   const {t, i18n} = useTranslation();
   const [open, setOpen] = useState(false);
@@ -31,8 +32,7 @@ function Profile(props: Profile) {
       setMyContacts(contacts)
     }
     getMyInfo()
-  }, [])
-
+  }, [changedUserAvatar])
   useEffect(() => {
 
     const getMyAvatar = async () => {
@@ -46,6 +46,7 @@ function Profile(props: Profile) {
     }
     getMyAvatar()
   }, [])
+
 
   return (
     <div className='profile'>

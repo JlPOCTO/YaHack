@@ -4,7 +4,7 @@ import {useTranslation} from 'react-i18next';
 import {Icon, Modal} from "@gravity-ui/uikit";
 import {TrashBin} from '@gravity-ui/icons';
 import {Persons} from '@gravity-ui/icons';
-import {useUserStore} from "../../stores/UserStore";
+import { useUserStore } from "../../stores/UserStore";
 import {useEffect, useState} from "react";
 import Contacts from "../Contacts/Contacts";
 import Subscribers from "../Subscribers/Subscribers";
@@ -16,7 +16,8 @@ type DialogId = {
 
 
 function ModalGroupSettings(props: DialogId) {
-    let {setSearchInput, setDialogID, apiVersion, userID, currentUserID, dialogID} = useUserStore();
+    let { setSearchInput, setDialogID, apiVersion, userID, currentUserID, dialogID, deleteContact } = useUserStore();
+  let { changedDialog } = useUserStore()
     const {chatId} = props;
     const {t, i18n} = useTranslation();
     const [open, setOpen] = useState(false);
@@ -39,6 +40,15 @@ function ModalGroupSettings(props: DialogId) {
 
     const HandleDeleteChat = async () => {
         if (isDirect) {
+            const dialogInfo = await fetch(apiVersion + `/chats/${dialogID}`)
+            const parsed = await dialogInfo.json()
+            for (let user of parsed.users) {
+                if (user.id != currentUserID) {
+                    deleteContact(user.id);
+                    break;
+                }
+            }
+            setDialogID(0)
             const res = await fetch(apiVersion + `/chats/${dialogID}`, {
                 method: 'DELETE',
                 headers: {
@@ -49,6 +59,7 @@ function ModalGroupSettings(props: DialogId) {
                 })
             });
         } else {
+            setDialogID(0)
             console.log(me)
             // @ts-ignore
             const res = await fetch(apiVersion + `/chats/${dialogID}/user?userId=${me.id}`, {
@@ -59,6 +70,7 @@ function ModalGroupSettings(props: DialogId) {
             });
             await res.json();
         }
+        setDialogID(0)
     }
 
     useEffect(() => {
@@ -78,7 +90,7 @@ function ModalGroupSettings(props: DialogId) {
         }
         getDialog()
         setOpen(false)
-    }, [dialogID])
+    }, [dialogID, changedDialog])
 
     return (
         <div className='chat-buttons'>

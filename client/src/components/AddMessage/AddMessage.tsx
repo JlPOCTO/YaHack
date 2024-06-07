@@ -19,7 +19,7 @@ function AddMessage() {
     const {t, i18n} = useTranslation();
     const [messages, setMessage] = useState([])
     const [isOpen, setOpen] = useState(false)
-    const [currrentMessage, setCurrentMessage] = useState(getInitialCurrentMessage())
+    const [currentMessage, setCurrentMessage] = useState(getInitialCurrentMessage())
     const onEmojiClick = (curEmoji: EmojiClickData) => {
         const currentMessage = sessionStorage.getItem('currentMessage')
         const newMessage = currentMessage ? currentMessage + curEmoji.emoji : curEmoji.emoji
@@ -31,14 +31,16 @@ function AddMessage() {
         const g = !flag
         setFlag(g)
 
-        if (currrentMessage !== "") {
+        const date = Date.now();
+        const showTime = date
+        if (currentMessage !== "") {
             const res = await fetch(apiVersion + `/messages`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    content: currrentMessage,
+                    content: currentMessage,
                     chatId: dialogID,
                     imageContent: ""
                 })
@@ -56,16 +58,6 @@ function AddMessage() {
         setCurrentMessage(e.target.value)
         sessionStorage.setItem('currentMessage', e.target.value)
     }
-
-    // useEffect(() => {
-    //     const changeHeight = () => {
-    //         if (ref.current) {
-    //             ref.current.style.height = 'auto';
-    //             ref.current.style.height = ref.current.scrollHeight + 'px';
-    //         }
-    //     };
-    //     changeHeight();
-    // }, [currrentMessage]);
 
 
     function isPhotoBoxOpen() {
@@ -96,8 +88,7 @@ function AddMessage() {
                 </button>
                 <form>
                 <textarea
-                    value={currrentMessage}
-                    // ref={ref}
+                    value={currentMessage}
                     maxLength={1000}
                     onChange={handleSetCurrentMessage}
                     onKeyDown={handleKeyDown}

@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 import '../../css/SideBarBody.css';
 // import '../../css/ChatBar.css';
 import ChatBar from "../ChatBar/ChatBar";
-import {Button, Icon} from "@gravity-ui/uikit";
-import {useUserStore} from "../../stores/UserStore";
+import { Button, Icon } from "@gravity-ui/uikit";
+import { useUserStore } from "../../stores/UserStore";
 import {observer} from "mobx-react-lite";
 import {action} from "mobx";
 import SearchPersonBar from "../SearchPersonBar/SearchPersonBar";
@@ -21,6 +21,7 @@ function SideBarBody() {
 
     const [contacts, setMyContacts] = useState([])
     const [visible, setVisible] = useState(false);
+    let { changedUserAvatar, changedDialogs, addContact, currentUserID, setCurrentUserID } = useUserStore()
     const { searchInput, setSearchInput, apiVersion, setIdNames } = useUserStore();
     const {t, i18n} = useTranslation();
     const [dialogs, setDialogs] = useState([])
@@ -34,20 +35,39 @@ function SideBarBody() {
     useEffect(() => {
 
         const getMyInfo = async () => {
-            const res = await fetch('/contacts')
+            const res = await fetch(apiVersion + '/users/contacts')
             const contacts = await res.json();
             setMyContacts(contacts)
         }
         getMyInfo()
-    }, [])
+    }, [changedUserAvatar])
 
 
     useEffect(() => {
         const idNames = new Map()
         const getDialogs = async () => {
+            if (!currentUserID) {
+                const resMe = await fetch(apiVersion + `/users/me`)
+                const meJson = await resMe.json()
+                setCurrentUserID(meJson.id)
+                currentUserID = meJson.id
+            }
             const res = await fetch(apiVersion + `/chats`)
             const dialogs1 = await res.json()
             setDialogs(dialogs1)
+            console.log("All dialogs: " )
+            console.log(dialogs1)
+            console.log(currentUserID)
+            dialogs1.map((dialog: any) => {
+                if (dialog.type == "direct") {
+                    for (let user of dialog.users) {
+                        if (user.id != currentUserID) {
+                            addContact(user.id, dialog.id);
+                            break;
+                        }
+                    }
+                }
+            })
             dialogs1.forEach((d: any) => {
                 if (d.users) {
                     d.users.forEach((u: any) => {
@@ -58,7 +78,7 @@ function SideBarBody() {
         }
         setIdNames(idNames)
         getDialogs()
-    }, [])
+    }, [changedDialogs])
 
     useEffect(() => {
         const getUser = async () => {
@@ -70,7 +90,7 @@ function SideBarBody() {
         }
 
         getUser()
-    }, [searchInput])
+    }, [searchInput, changedUserAvatar])
     return (
         <>
             {isSearchInputEmpty() && <div style={{

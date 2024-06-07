@@ -2,7 +2,7 @@ import '../../css/HeaderOfBodyMain.css';
 import React, { useEffect, useState } from 'react';
 import '../../i18n/config';
 import {useTranslation} from 'react-i18next';
-import {useUserStore} from "../../stores/UserStore";
+import {useUserStore } from "../../stores/UserStore";
 import {observer} from "mobx-react-lite";
 import {Icon, Modal} from "@gravity-ui/uikit";
 import {EllipsisVertical} from "@gravity-ui/icons";
@@ -15,8 +15,9 @@ type DialogProps = {
 
 
 function HeaderOfBodyMain(props:  any) {
-
+    const {dialogId} = props;
     const { apiVersion, chatName, dialogID, currentUserID } = useUserStore()
+    const { changedDialog } = useUserStore()
     const { t } = useTranslation();
     const [nameOfTheDialog, setName] = useState([])
     const [open, setOpen] = useState(false)
@@ -49,16 +50,17 @@ function HeaderOfBodyMain(props:  any) {
         }
         getDialog()
         setOpen(false)
-    }, [dialogID])
+    }, [dialogID, changedDialog])
     useEffect(() => {
         const getMyAvatar = async () => {
             const res = await fetch(apiVersion + `/chats/${dialogID}`)
             const dialog = await res.json()
+            setId(dialog.id)
             if (dialog.type === "group") {
                 console.log("chatId", dialog.id)
-                const res = await fetch(apiVersion + `/chats/${dialog.id}/avatar`)
+                const res = await fetch(apiVersion + `/chats/${dialogID}/avatar`)
                 console.log(res)
-                let imageNod = document.getElementById(dialog.id + "ooo")
+                let imageNod = document.getElementById(dialogID + "ooo")
                 // @ts-ignore
                 let imgUrl = res.url
                 // @ts-ignore
@@ -74,7 +76,7 @@ function HeaderOfBodyMain(props:  any) {
                 // @ts-ignore
                 const res = await fetch(apiVersion + `/users/${partner.id}/avatar`)
                 console.log(res)
-                let imageNod = document.getElementById(dialog.id + "ooo")
+                let imageNod = document.getElementById(dialogID+ "ooo")
                 // @ts-ignore
                 let imgUrl = res.url
                 // @ts-ignore
@@ -82,14 +84,14 @@ function HeaderOfBodyMain(props:  any) {
             }
         }
         getMyAvatar()
-    }, [])
+    }, [dialogID, changedDialog])
       return (
 
         <div className="header-of-body-main-pro">
             <div className="someSpace">
-                <img id={actualId+ "ooo"} style={{
-                    width: "50px",
-                    height: "50px",
+                <img id={dialogID+ "ooo"} style={{
+                    width: "40px",
+                    height: "40px",
                     backgroundRepeat: "no-repeat",
                     backgroundPosition: "50%",
                     borderRadius: "50%"

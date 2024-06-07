@@ -17,10 +17,27 @@ function DialogWithMessages(props: DialogWithMessages) {
     const { messages, dialogId } = props;
     const lastMessage = useRef<null | HTMLDivElement>(null)
     const [len, setLen] = useState(0)
+    const [dialogType, setType] = useState('')
+    const { apiVersion } = useUserStore()
+    const { changedDialog } = useUserStore()
 
     useEffect(() => {
         setLen(messages.length);
     }, [messages]);
+
+    const [nameOfTheDialog, setName] = useState([])
+    useEffect(() => {
+        const getDialogType = async () => {
+            const res = await fetch(apiVersion + `/chats/${dialogId}`)
+            const dialog = await res.json()
+            if (dialog.type === "direct") {
+                setType("direct")
+            } else {
+                setType("group")
+            }
+        }
+        getDialogType() 
+    }, [dialogId, changedDialog])
 
 
     useLayoutEffect(() => {

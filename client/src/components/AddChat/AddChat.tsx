@@ -10,7 +10,8 @@ import {observer} from "mobx-react-lite";
 
 
 function AddChat() {
-    let {apiVersion, visible, setVisible} = useUserStore()
+    let { apiVersion, visible, setVisible } = useUserStore()
+  let { changedUserAvatar } = useUserStore()
     const [contacts, setMyContacts] = useState([])
     // const [visible, setVisible] = useState(false);
     useEffect(() => {
@@ -24,7 +25,7 @@ function AddChat() {
             // console.log(contacts)
         }
         getMyInfo()
-    }, [])
+    }, [changedUserAvatar])
     return (
         <div>
             <button onClick={() => setVisible(true)} className="add-chat">
