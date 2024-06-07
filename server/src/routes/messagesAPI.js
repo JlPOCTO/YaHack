@@ -151,6 +151,8 @@ routers.post(
     validate.isCorrectId(x => x.params.id),
     validate.isMessageExists(x => x.params.id),
     validate.isMessageAccessible(x => x.params.id, x => x.user.id),
+    validate.isChatAccessible(x => x.body.chatId, x => x.user.id),
+    accessChat(x => x.body.chatId),
     (req, res) => {
         reactions.addReaction(req.params.id, req.user.id, req.body.reaction).then(
             result => {
@@ -181,6 +183,8 @@ routers.delete(
     validate.isCorrectId(x => x.params.id),
     validate.isMessageExists(x => x.params.id),
     validate.isMessageAccessible(x => x.params.id, x => x.user.id),
+    validate.isChatAccessible(x => x.body.chatId, x => x.user.id),
+    accessChat(x => x.body.chatId),
     (req, res) => {
         maybeId = req.body.reaction
         if (maybeId && Number.isInteger(maybeId) && Number(maybeId) > 0) {

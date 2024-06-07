@@ -722,6 +722,11 @@ paths:
           required: true
           schema:
             type: integer
+        - name: chatId
+          in: body
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
           description: Успешно
@@ -739,7 +744,6 @@ paths:
           description: Сообщения не существует
         '500':
           description: Ошибка на сервере
-
     delete:
       tags:
         - reaction
@@ -751,6 +755,11 @@ paths:
           in: query
           required: true
           schema: 
+            type: integer
+        - name: chatId
+          in: body
+          required: true
+          schema:
             type: integer
       responses: 
         '200':
@@ -839,6 +848,11 @@ paths:
             required: true
             schema: 
               type: integer
+          - name: chatId
+            in: body
+            required: true
+            schema:
+              type: integer
         responses: 
           '200':
             description: Успешно
@@ -862,6 +876,11 @@ paths:
             in: path
             required: true
             schema: 
+              type: integer
+          - name: chatId
+            in: body
+            required: true
+            schema:
               type: integer
         responses: 
           '200':

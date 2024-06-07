@@ -25,49 +25,29 @@ routers.delete(
     isAuthenticatedAPI,
     wrapWithNext(x => x.params.id = Number.parseInt(x.params.id)),
     validate.isCorrectId(x => x.params.id),
+    validate.isReactionOwned(x => x.params.id, x.user.id),
+    validate.isChatAccessible(x => x.body.chatId, x => x.user.id),
+    accessChat(x => x.body.chatId),
     (req, res) => {
-        maybeId = req.body.reaction
-        if (maybeId && Number.isInteger(maybeId) && Number(maybeId) > 0) {
-            reactions.deleteReactionById(req.body.reaction).then(
-                result => {
-                    if (result) {
-                        websockets.sendByUserArray(
-                            req.chat.users,
-                            websockets.createResponse(
-                                "/api/v2/reactions/:id",
-                                "DELETE",
-                                "/api/v2/reactions",
-                                {reactionId: req.params.id}
-                            ),
-                            req.user.id
-                        )
-                        res.status(200).send()
-                    } else {
-                        res.status(500).send()
-                    }
+        reactions.deleteReactionById(req.body.reaction).then(
+            result => {
+                if (result) {
+                    websockets.sendByUserArray(
+                        req.chat.users,
+                        websockets.createResponse(
+                            "/api/v2/reactions/:id",
+                            "DELETE",
+                            "/api/v2/reactions",
+                            {reactionId: req.params.id}
+                        ),
+                        req.user.id
+                    )
+                    res.status(200).send()
+                } else {
+                    res.status(500).send()
                 }
-            )
-        } else {
-            reactions.deleteReactionById(req.params.id).then(
-                result => {
-                    if (result) {
-                        websockets.sendByUserArray(
-                            req.chat.users,
-                            websockets.createResponse(
-                                "/api/v2/reactions/:id",
-                                "DELETE",
-                                "/api/v2/reactions",
-                                {reactionId: req.params.id}
-                            ),
-                            req.user.id
-                        )
-                        res.status(200).send()
-                    } else {
-                        res.status(500).send()
-                    }
-                }
-            )
-        }
+            }
+        )
     }
 )
 
@@ -76,6 +56,8 @@ routers.post(
     isAuthenticatedAPI,
     wrapWithNext(x => x.params.id = Number.parseInt(x.params.id)),
     validate.isCorrectId(x => x.params.id),
+    validate.isChatAccessible(x => x.body.chatId, x => x.user.id),
+    accessChat(x => x.body.chatId),
     (req, res) => {
         reactions.addReaction(req.params.id, req.user.id, req.body.reaction).then(
             result => {
