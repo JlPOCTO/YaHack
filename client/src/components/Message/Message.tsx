@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import '../../css/Message.css';
-import { useUserStore } from "../../stores/UserStore";
+import { useUserStore, useFlagsStore } from "../../stores/UserStore";
 import { Icon } from "@gravity-ui/uikit";
 import Picker, { EmojiClickData } from "emoji-picker-react";
 import Popup from "reactjs-popup";
@@ -19,6 +19,7 @@ const getInitialCurrentMessage = () => {
 function Message(props: Message) {
     const { message, dialogType } = props;
     let { apiVersion, currentUserID } = useUserStore()
+    const { changedUserAvatar } = useFlagsStore()
     const [scrollPos, setScrollPos] = useState(0)
     const [userName, setName] = useState([])
     function isMine() {
@@ -37,7 +38,7 @@ function Message(props: Message) {
             setName(user)
         }
         getUserName()
-    }, [])
+    }, [changedUserAvatar])
 
     const [isReaction, setIsReaction] = useState(false);
     // const ref = useRef<null | HTMLDivElement>(null)

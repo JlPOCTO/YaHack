@@ -19,7 +19,7 @@ function AddMessage() {
     const {t, i18n} = useTranslation();
     const [messages, setMessage] = useState([])
     const [isOpen, setOpen] = useState(false)
-    const [currrentMessage, setCurrentMessage] = useState(getInitialCurrentMessage())
+    const [currentMessage, setCurrentMessage] = useState(getInitialCurrentMessage())
     const onEmojiClick = (curEmoji: EmojiClickData) => {
         const currentMessage = sessionStorage.getItem('currentMessage')
         const newMessage = currentMessage ? currentMessage + curEmoji.emoji : curEmoji.emoji
@@ -33,14 +33,14 @@ function AddMessage() {
 
         const date = Date.now();
         const showTime = date
-        if (currrentMessage !== "") {
+        if (currentMessage !== "") {
             const res = await fetch(apiVersion + `/messages`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    content: currrentMessage,
+                    content: currentMessage,
                     chatId: dialogID,
                     imageContent: ""
                 })
@@ -67,7 +67,7 @@ function AddMessage() {
             }
         };
         changeHeight();
-    }, [currrentMessage]);
+    }, [currentMessage]);
 
 
     function isPhotoBoxOpen() {
@@ -98,7 +98,7 @@ function AddMessage() {
                 </button>
                 <form>
                 <textarea
-                    value={currrentMessage}
+                    value={currentMessage}
                     ref={ref}
                     maxLength={1000}
                     onChange={handleSetCurrentMessage}

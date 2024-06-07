@@ -57,10 +57,46 @@ export default class UserStore {
         this.visible = input
     }
 }
+
+export class FlagsStore {
+  constructor() {
+    makeAutoObservable(this)
+  }
+  
+  changedMessages: boolean | any = false
+  setChangedMessages = (input: boolean | any) => {
+    this.changedMessages = input
+  }
+  changedUserAvatar: boolean | any = false
+  setChangedUserAvatar = (input: boolean | any) => {
+    this.changedUserAvatar = input
+  }
+  changedChatAvatar: boolean | any = false
+  setChangedChatAvatar = (input: boolean | any) => {
+    this.changedChatAvatar = input
+  }
+  changedDialogs: boolean | any = false
+  setChangedDialogs = (input: boolean | any) => {
+    this.changedDialogs = input
+  }
+  changedDialog: boolean | any = false
+  setChangedDialog = (input: boolean | any) => {
+    this.changedDialog = input
+  }
+  changedMessage: boolean | any = false
+  setChangedMessage = (input: boolean | any) => {
+    this.changedMessage = input
+  }
+}
+
 const UserStoreContext = React.createContext<UserStore>(
-    null as unknown as UserStore
+  null as unknown as UserStore
+);
+const FlagsStoreContext = React.createContext<FlagsStore>(
+  null as unknown as FlagsStore
 )
 export const useUserStore = () => useContext(UserStoreContext)
+export const useFlagsStore = () => useContext(FlagsStoreContext)
 type Props = {
     children: React.ReactNode,
     dialogID: number

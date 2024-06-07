@@ -3,12 +3,13 @@ import '../../css/Dialog.css';
 import HeaderOfBodyMain from "../HeaderOfBodyMain/HeaderOfBodyMain";
 import AddMessage from "../AddMessage/AddMessage";
 import DialogWithMessages from "../DialogWithMessages/DialogWithMessages";
-import {useUserStore} from "../../stores/UserStore";
+import { useUserStore, useFlagsStore} from "../../stores/UserStore";
 import {observer} from "mobx-react-lite";
 
 
 function Dialog() {
-    const {dialogID, flag, apiVersion, chatName} = useUserStore()
+    const { dialogID, flag, apiVersion, chatName } = useUserStore()
+    const { changedDialog } = useFlagsStore()
     const [messages, setMessages] = useState([])
     useEffect(() => {
 
@@ -18,7 +19,7 @@ function Dialog() {
             setMessages(messages)
         }
         getMessages()
-    }, [dialogID, flag])
+    }, [dialogID, flag, changedDialog])
 
     function isDefault() {
         return dialogID === 0

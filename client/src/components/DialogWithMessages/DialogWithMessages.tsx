@@ -1,6 +1,6 @@
 
 import { useEffect, useRef, useState, useLayoutEffect } from 'react';
-import { useUserStore } from "../../stores/UserStore";
+import { useUserStore, useFlagsStore } from "../../stores/UserStore";
 
 
 import '../../css/DialogWithMessages.css';
@@ -19,6 +19,7 @@ function DialogWithMessages(props: DialogWithMessages) {
     const [len, setLen] = useState(0)
     const [dialogType, setType] = useState('')
     const { apiVersion } = useUserStore()
+    const { changedDialog } = useFlagsStore()
 
     useEffect(() => {
         setLen(messages.length);
@@ -36,7 +37,7 @@ function DialogWithMessages(props: DialogWithMessages) {
             }
         }
         getDialogType() 
-    }, [dialogId])
+    }, [dialogId, changedDialog])
 
 
     useLayoutEffect(() => {

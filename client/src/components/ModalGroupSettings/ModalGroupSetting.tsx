@@ -4,7 +4,7 @@ import {useTranslation} from 'react-i18next';
 import {Icon, Modal} from "@gravity-ui/uikit";
 import {TrashBin} from '@gravity-ui/icons';
 import {Persons} from '@gravity-ui/icons';
-import {useUserStore} from "../../stores/UserStore";
+import { useUserStore, useFlagsStore } from "../../stores/UserStore";
 import {useEffect, useState} from "react";
 import Contacts from "../Contacts/Contacts";
 import Subscribers from "../Subscribers/Subscribers";
@@ -16,7 +16,8 @@ type DialogId = {
 
 
 function ModalGroupSettings(props: DialogId) {
-    let {setSearchInput, setDialogID, apiVersion, userID, currentUserID, dialogID} = useUserStore();
+    let { setSearchInput, setDialogID, apiVersion, userID, currentUserID, dialogID } = useUserStore();
+    let { changedDialog } = useFlagsStore()
     const {chatId} = props;
     const {t, i18n} = useTranslation();
     const [open, setOpen] = useState(false);
@@ -78,7 +79,7 @@ function ModalGroupSettings(props: DialogId) {
         }
         getDialog()
         setOpen(false)
-    }, [dialogID])
+    }, [dialogID, changedDialog])
 
     return (
         <div className='chat-buttons'>
