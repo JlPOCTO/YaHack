@@ -50,7 +50,7 @@ function HeaderOfBodyMain(props:  any) {
         }
         getDialog()
         setOpen(false)
-    }, [dialogID])
+    }, [dialogID, changedDialog])
     useEffect(() => {
         const getMyAvatar = async () => {
             const res = await fetch(apiVersion + `/chats/${dialogID}`)
@@ -84,7 +84,7 @@ function HeaderOfBodyMain(props:  any) {
             }
         }
         getMyAvatar()
-    }, [dialogID])
+    }, [dialogID, changedDialog])
       return (
 
         <div className="header-of-body-main-pro">
