@@ -22,7 +22,7 @@ type Contacts = {
     contacts: any;
 }
 const getInitialcurrentName = () => {
-    return localStorage.getItem('currentcurrentName') || "";
+    return sessionStorage.getItem('currentName') || "";
 }
 
 
@@ -35,22 +35,20 @@ function AddChatComponents(props: Contacts) {
     const [currentName, setcurrentName] = useState(getInitialcurrentName())
 
     const handleSetcurrentName = (e: any) => {
-        // console.log("handleSetCurrentInput"+ e.target.value)
         setcurrentName(e.target.value)
         sessionStorage.setItem('currentName', e.target.value)
     }
 
-    const [me, setMyInfo] = useState([])
+    const [meId, setMyInfo] = useState(0)
     useEffect(() => {
 
         const getMyInfo = async () => {
-            // console.log(apiVersion + '/users/me');
             const res = await fetch(apiVersion + '/users/me')
             const me = await res.json();
             if (!me.name) {
                 me.name = me.login;
             }
-            setMyInfo(me)
+            setMyInfo(me.id)
         }
         getMyInfo()
     }, [])
@@ -59,13 +57,12 @@ function AddChatComponents(props: Contacts) {
     const HandleChatAdd =
         async () => {
             const users = []
-            // @ts-ignore
-            const m = await me.id
+            const m = meId
             users.push(m)
             for (let n of chatUsers) {
                 users.push(n)
-                // console.log("n",n)
             }
+            console.log(users, "users")
             if (users.length > 1) {
                 setFlag(false)
                 const res = await fetch(apiVersion + `/chats`, {
@@ -76,14 +73,10 @@ function AddChatComponents(props: Contacts) {
                     body: JSON.stringify({
                         name: currentName,
                         chatType: "group",
-                        // @ts-ignore
                         users: users
                     })
                 });
                 const newDialog = await res.json();
-                // console.log("newChat", newDialog.id)
-
-                // sessionStorage.setItem('currentMessage', '')
                 setSearchInput("")
                 sessionStorage.setItem('currentInput', '')
                 setVisible(false)
