@@ -1,25 +1,60 @@
-.body-main {
-    width: 80%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
-    position: relative;
+@media (min-width: 481px) {
+    .body-main, .body-empty {
+        width: 80%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        position: relative;
+    }
+
+    .Img {
+        object-fit: cover;
+        background-size: cover;
+        border-radius: 8px;
+        height: 100%;
+        width: 100%;
+        background-image: url('../picture.jpg');
+    }
+
+    .just-picture {
+        /* background-color: dimgrey; */
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        position: relative;
+    }
 }
 
-.Img {
-    object-fit: cover;
-    background-size: cover;
-    border-radius: 8px;
-    height: 100%;
-    width: 100%;
-    background-image: url('../picture.jpg');
-}
-.just-picture{
-    /* background-color: dimgrey; */
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
-    position: relative;
+@media (max-width: 480px) {
+    .body-main {
+        width: 80%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        position: relative;
+    }
+    .body-empty {
+        width: 0%;
+    }
+
+    .Img {
+        object-fit: cover;
+        background-size: cover;
+        border-radius: 8px;
+        height: 100%;
+        width: 100%;
+        background-image: url('../picture.jpg');
+    }
+
+    .just-picture {
+        /* background-color: dimgrey; */
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        position: relative;
+    }
 }
