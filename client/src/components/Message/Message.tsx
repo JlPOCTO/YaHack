@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import '../../css/Message.css';
-import { useUserStore } from "../../stores/UserStore";
-import { Icon } from "@gravity-ui/uikit";
-import Picker, { EmojiClickData } from "emoji-picker-react";
+import {useUserStore} from "../../stores/UserStore";
+import {Icon} from "@gravity-ui/uikit";
+import Picker, {EmojiClickData} from "emoji-picker-react";
 import Popup from "reactjs-popup";
-import { Heart } from "@gravity-ui/icons";
-import { observer } from "mobx-react-lite";
+import {Heart} from "@gravity-ui/icons";
+import {observer} from "mobx-react-lite";
 
 
 type Message = {
@@ -13,12 +13,40 @@ type Message = {
 }
 
 function Message(props: Message) {
-    const { message } = props;
-    let { apiVersion, currentUserID, idNames } = useUserStore()
+    const {message} = props;
+    let {apiVersion, currentUserID, idNames} = useUserStore()
+    const [isContent, setCOntent] = useState(false)
+
     function isMine() {
         return message.senderId === currentUserID;
     }
 
+    useEffect(() => {
+
+        const getMyInfo = async () => {
+            const res = await fetch(apiVersion + `/messages/${message.id}`)
+            const isExist = await res.json();
+            console.log(message.id, isExist.imageContent, "ты должен выводиться каждый раз")
+            setCOntent(isExist.imageContent)
+        }
+        getMyInfo()
+    }, [])
+
+    useEffect(() => {
+        const getMyAvatar = async () => {
+
+            const res = await fetch(apiVersion + `/messages/${message.id}/image`)
+            console.log(res)
+            let imageNod = document.getElementById(message.id + "z")
+            console.log("Я нашел", imageNod)
+            // @ts-ignore
+            let imgUrl = res.url
+            // @ts-ignore
+            imageNod.src = imgUrl
+
+        }
+        getMyAvatar()
+    }, [isContent])
     const onEmojiClick = async (curEmoji: EmojiClickData) => {
         if (curEmoji.emoji !== "") {
             const res = await fetch(apiVersion + `/messages/${message.id}/reactions`, {
@@ -81,10 +109,22 @@ function Message(props: Message) {
                                     <p>{getMessageTime(message.sendingTime)}</p>
                                 </div>}
                             </div>
+                            {isContent &&
+                            <div className="test">
+                                <img id={message.id + "z"} style={{
+                                    width: "100px",
+                                    height: "100px",
+                                    backgroundRepeat: "no-repeat",
+                                    backgroundPosition: "50%",
+
+                                }}/>
+                            </div>
+                            }
                             {message.reactions.length !== 0 && <div className="block-of-reaction">
                                 <div className='reactionsAndTime'>
                                     {message.reactions.map((r: any) =>
-                                        <button className='reactionsBlock' onClick={() => deleteReaction(r)}>{getReactions(r)}</button>
+                                        <button className='reactionsBlock'
+                                                onClick={() => deleteReaction(r)}>{getReactions(r)}</button>
                                     )}
                                 </div>
                                 <div className="data_reaction">
@@ -98,12 +138,12 @@ function Message(props: Message) {
                         <Popup
                             trigger={
                                 <button className='currentSettingsMessage'>
-                                    <Icon className='Settings' data={Heart} />
+                                    <Icon className='Settings' data={Heart}/>
                                 </button>}
                             position="top left"
                         >
                             <div className='emojiPopupMyReaction'>
-                                <Picker onEmojiClick={onEmojiClick} />
+                                <Picker onEmojiClick={onEmojiClick}/>
                             </div>
                         </Popup>
                     </div>
@@ -129,10 +169,21 @@ function Message(props: Message) {
                                     <p>{getMessageTime(message.sendingTime)}</p>
                                 </div>}
                             </div>
+                            {isContent &&
+                            <div className="test">
+                                <img id={message.id + "z"} style={{
+                                    width: "100px",
+                                    height: "100px",
+                                    backgroundRepeat: "no-repeat",
+                                    backgroundPosition: "50%",
+
+                                }}/>
+                            </div>}
                             {message.reactions.length !== 0 && <div className="block-of-reaction">
                                 <div className='reactionsAndTime'>
                                     {message.reactions.map((r: any) =>
-                                        <button className='reactionsBlock' onClick={() => deleteReaction(r)}>{getReactions(r)}</button>
+                                        <button className='reactionsBlock'
+                                                onClick={() => deleteReaction(r)}>{getReactions(r)}</button>
                                     )}
                                 </div>
                                 <div className="data_reaction">
@@ -146,12 +197,12 @@ function Message(props: Message) {
                         <Popup
                             trigger={
                                 <button className='currentSettingsMessage'>
-                                    <Icon className='Settings' data={Heart} />
+                                    <Icon className='Settings' data={Heart}/>
                                 </button>}
                             position="top left"
                         >
                             <div className='emojiPopupMyReaction'>
-                                <Picker onEmojiClick={onEmojiClick} />
+                                <Picker onEmojiClick={onEmojiClick}/>
                             </div>
                         </Popup>
                     </div>

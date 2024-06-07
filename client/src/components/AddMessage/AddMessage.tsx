@@ -3,11 +3,13 @@ import {FaceSmile, File, ArrowShapeRight} from '@gravity-ui/icons';
 import {Icon} from '@gravity-ui/uikit';
 import Popup from 'reactjs-popup';
 import Picker, {EmojiClickData} from 'emoji-picker-react';
-import {useState, useRef } from 'react';
+import {useState, useRef} from 'react';
 import {useUserStore} from "../../stores/UserStore";
 import '../../i18n/config';
 import {useTranslation} from 'react-i18next';
 import {ChevronDown} from '@gravity-ui/icons';
+import message from "../Message/Message";
+import {blob} from "stream/consumers";
 
 const getInitialCurrentMessage = () => {
     return sessionStorage.getItem('currentMessage') || '';
@@ -19,6 +21,7 @@ function AddMessage() {
     const {t, i18n} = useTranslation();
     const [messages, setMessage] = useState([])
     const [isOpen, setOpen] = useState(false)
+    const [picture, setPicture] = useState({})
     const [currentMessage, setCurrentMessage] = useState(getInitialCurrentMessage())
     const onEmojiClick = (curEmoji: EmojiClickData) => {
         const currentMessage = sessionStorage.getItem('currentMessage')
@@ -33,20 +36,35 @@ function AddMessage() {
 
         const date = Date.now();
         const showTime = date
+        let formData = new FormData();
+        formData.append(
+            "content", currentMessage
+        );
+        formData.append(
+            "chatId", dialogID
+        );
+        // @ts-ignore
+
+        console.log("picture", picture)
+        formData.append(
+            // @ts-ignore
+            "imageContent", picture
+            // "imageContent", picture.blob, picture.name
+        );
         if (currentMessage !== "") {
             const res = await fetch(apiVersion + `/messages`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    content: currentMessage,
-                    chatId: dialogID,
-                    imageContent: ""
-                })
+                // headers: {
+                //     'Content-Type': 'application/json'
+                // },
+                body: formData
+
             });
+            // let h = res.json()
+            // console.log("все хорошо")
             const messages = await res.json();
             setMessage(messages)
+            console.log( "ну пожалуйста", messages.imageContent)
 
             setCurrentMessage('')
 
@@ -76,10 +94,52 @@ function AddMessage() {
 
     };
 
+    function getBinaryData(file: any, callback: any) {
+        const reader = new FileReader();
+
+        // Это событие срабатывает, когда чтение завершено успешно
+        reader.onload = function (evt) {
+            // Получаем и возвращаем бинарные данные
+            // @ts-ignore
+            const binaryData = evt.target.result;
+
+            // Вызываем callback с бинарными данными
+            callback(binaryData);
+        };
+
+        // Чтение файла как ArrayBuffer для получения бинарных данных
+        reader.readAsArrayBuffer(file);
+    }
+
+    const handleOnChange = (event: any) => {
+        event.preventDefault();
+        console.log("mmmm", event.target.files[0])
+        const file = event.target.files[0];
+        // if (file) {
+        //     getBinaryData(file, function (binaryData: any) {
+        //         console.log( "bbb",binaryData);
+        //         let bomb = new Blob([binaryData]);
+        //         console.log("bomb", bomb)
+        //         bomb.type = file.type
+        //         setPicture(bomb)
+        //     });
+        // }
+        setPicture(file)
+
+
+
+    }
+
     return (
         <div className="box">
             {isOpen &&
                 <div className="photo-box">
+                    <form>
+                        <input
+                            type="file"
+                            onChange={handleOnChange}
+                        />
+                    </form>
                 </div>}
             <div className='messageContainer'>
                 <button type="submit" className='firstCurrentSettings' onClick={isPhotoBoxOpen}>
