@@ -1,5 +1,5 @@
-import {makeAutoObservable} from "mobx";
-import React, {useContext, useRef} from "react";
+import { makeAutoObservable } from "mobx";
+import React, { useContext, useRef } from "react";
 
 export default class UserStore {
     constructor(dialogID: number) {
@@ -19,6 +19,11 @@ export default class UserStore {
     chatName: string | any = ""
     setChatName = (chatName: string | any) => {
         this.chatName = chatName
+    }
+
+    idNames: Map<any, any> | any;
+    setIdNames = (idNames: Map<any, any> | any) => {
+        this.idNames = idNames
     }
     userID: number | any = 1
     setUserID = (userID: number | any) => {
@@ -40,7 +45,7 @@ export default class UserStore {
     setSearchInput = (input: string | any) => {
         this.searchInput = input
     }
-    flag: boolean| any = true
+    flag: boolean | any = true
     setFlag = (input: boolean | any) => {
         this.flag = input
     }
@@ -48,8 +53,8 @@ export default class UserStore {
     setApiVersion = (input: string | any) => {
         this.apiVersion = input
     }
-    chatUsers : Set<number>|any = []
-    setChatUsers = (input:Set<number>|any)=>{
+    chatUsers: Set<number> | any = []
+    setChatUsers = (input: Set<number> | any) => {
         this.chatUsers = input
     }
 }
@@ -62,7 +67,7 @@ type Props = {
     dialogID: number
 }
 
-export function UserStoreProvider({children, dialogID}: Props) {
+export function UserStoreProvider({ children, dialogID }: Props) {
     const store = useRef(new UserStore(dialogID))
     return (
         <UserStoreContext.Provider value={store.current}>

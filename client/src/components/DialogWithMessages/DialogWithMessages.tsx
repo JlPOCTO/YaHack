@@ -17,36 +17,21 @@ function DialogWithMessages(props: DialogWithMessages) {
     const { messages, dialogId } = props;
     const lastMessage = useRef<null | HTMLDivElement>(null)
     const [len, setLen] = useState(0)
-    const [dialogType, setType] = useState('')
-    const { apiVersion } = useUserStore()
 
     useEffect(() => {
         setLen(messages.length);
     }, [messages]);
 
-    useEffect(() => {
-        const getDialogType = async () => {
-            const res = await fetch(apiVersion + `/chats/${dialogId}`)
-            const dialog = await res.json()
-            if (dialog.type === "direct") {
-                setType("direct")
-            } else {
-                setType("group")
-            }
-        }
-        getDialogType() 
-    }, [dialogId])
-
 
     useLayoutEffect(() => {
         // setTimeout(() => {
-            // console.log("text", lastMessage.current, lastMessage.current?.scrollHeight)
-            if ((lastMessage.current)) {
-                setLen(messages.length)
-                lastMessage.current.scrollTop = lastMessage.current.scrollHeight
-            }
+        // console.log("text", lastMessage.current, lastMessage.current?.scrollHeight)
+        if ((lastMessage.current)) {
+            setLen(messages.length)
+            lastMessage.current.scrollTop = lastMessage.current.scrollHeight
+        }
         // }, 0)
-        
+
     }, [messages]);
 
 
@@ -54,7 +39,7 @@ function DialogWithMessages(props: DialogWithMessages) {
         <div className='dialog-container'>
             <div className='dialog-with-messages' ref={lastMessage}>
                 {messages.map((message: any) =>
-                    <Message message={message} dialogType={dialogType}/>
+                    <Message message={message} />
                 )}
             </div>
         </div>

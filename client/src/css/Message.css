@@ -1,5 +1,6 @@
 .container {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    margin-top: 2px;
     clear: both;
     position: relative;
     display: flex;
@@ -70,13 +71,15 @@
 }
 
 .myContainer {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    margin-top: 2px;
     clear: both;
     position: relative;
     display: flex;
     flex-direction: row-reverse;
     align-items: flex-end;
 }
+
 
 .myContainer .arrow {
     width: 12px;

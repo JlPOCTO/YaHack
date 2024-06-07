@@ -12,10 +12,6 @@ import SearchPersonBar from "../SearchPersonBar/SearchPersonBar";
 // import load = Simulate.load;
 import '../../i18n/config';
 import {useTranslation} from 'react-i18next';
-import {ArrowRotateRight, Pencil} from '@gravity-ui/icons';
-import Profile from "../Profile/Profile";
-import {Sidebar} from 'primereact/sidebar';
-import Contacts from "../Contacts/Contacts";
 import AddChat from "../AddChat/AddChat";
 
 const API_HOST = 'http://localhost:3000';
@@ -25,11 +21,10 @@ function SideBarBody() {
 
     const [contacts, setMyContacts] = useState([])
     const [visible, setVisible] = useState(false);
-    const { searchInput, setSearchInput, apiVersion } = useUserStore();
+    const { searchInput, setSearchInput, apiVersion, setIdNames } = useUserStore();
     const {t, i18n} = useTranslation();
     const [dialogs, setDialogs] = useState([])
     const [user, setUser] = useState({})
-    const [open, setOpen] = useState(false);
 
     function isSearchInputEmpty() {
         return searchInput === "";
@@ -48,13 +43,20 @@ function SideBarBody() {
 
 
     useEffect(() => {
-
+        const idNames = new Map()
         const getDialogs = async () => {
             const res = await fetch(apiVersion + `/chats`)
             const dialogs1 = await res.json()
             setDialogs(dialogs1)
+            dialogs1.forEach((d: any) => {
+                if (d.users) {
+                    d.users.forEach((u: any) => {
+                        idNames.set(u.id, u.login);
+                    })
+                }
+            })
         }
-
+        setIdNames(idNames)
         getDialogs()
     }, [])
 

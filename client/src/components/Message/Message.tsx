@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import '../../css/Message.css';
 import { useUserStore } from "../../stores/UserStore";
 import { Icon } from "@gravity-ui/uikit";
@@ -10,39 +10,15 @@ import { observer } from "mobx-react-lite";
 
 type Message = {
     message: any;
-    dialogType: any;
 }
 
 function Message(props: Message) {
-    const { message, dialogType } = props;
-    let { apiVersion, currentUserID } = useUserStore()
-    const [scrollPos, setScrollPos] = useState(0)
-    const [userName, setName] = useState([])
+    const { message } = props;
+    let { apiVersion, currentUserID, idNames } = useUserStore()
     function isMine() {
         return message.senderId === currentUserID;
     }
-    useEffect(() => {
-        const getUserName = async () => {
-            const res = await fetch(apiVersion + `/users/${message.senderId}`)
-            const curMessage = await res.json()
-            let user = currentUserID
-            if (!curMessage.name) {
-                user = curMessage.login
-            } else {
-                user = curMessage.name
-            }
-            setName(user)
-        }
-        getUserName()
-    }, [])
 
-    const [isReaction, setIsReaction] = useState(false);
-    // const ref = useRef<null | HTMLDivElement>(null)
-    const [currentReaction, setCurrentReaction] = useState('😄');
-    // const onEmojiClick = (curEmoji: EmojiClickData) => {
-    //     setIsReaction(true)
-    //     setCurrentReaction(curEmoji.emoji)
-    // }
     const onEmojiClick = async (curEmoji: EmojiClickData) => {
         if (curEmoji.emoji !== "") {
             const res = await fetch(apiVersion + `/messages/${message.id}/reactions`, {
@@ -62,21 +38,6 @@ function Message(props: Message) {
     function getReactions(r: any) {
         return r.reaction
     }
-
-    // useEffect(() => {
-    //     const getReactions = async () => {
-    //         const res = await fetch(apiVersion + `/messages/${message.id}/reactions`)
-    //         const reactions = await res.json()
-    //         // setIsReaction(true)
-    //         console.log(reactions)
-    //         // setCurrentReaction(reactions)
-    //     }
-    //     getReactions() 
-    // }, [])
-
-    // function deleteReaction() {
-    //     setIsReaction(false)
-    // }
 
     const deleteReaction = async (r: any) => {
         const res = await fetch(apiVersion + `/messages/${message.id}/reactions`, {
@@ -110,9 +71,9 @@ function Message(props: Message) {
                         </div>
                         <div className="message-body">
                             <div className="block-of-message">
-                                {dialogType === "group" && <div className="author">
-                                    <p>{userName}</p>
-                                </div>}
+                                <div className="author">
+                                    <p>{idNames.get(message.senderId)}</p>
+                                </div>
                                 <div className="text">
                                     <p>{message.content}</p>
                                 </div>
@@ -158,9 +119,9 @@ function Message(props: Message) {
                         </div>
                         <div className="message-body">
                             <div className="block-of-message">
-                                {dialogType === "group" && <div className="author">
-                                    <p>{userName}</p>
-                                </div>}
+                                <div className="author">
+                                    <p>{idNames.get(message.senderId)}</p>
+                                </div>
                                 <div className="text">
                                     <p>{message.content}</p>
                                 </div>
